@@ -1,19 +1,42 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import SectionTitle from "@/components/SectionTitle";
 import { CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+function CountUp({ to, suffix }: { to: number; suffix: string }) {
+  const [val, setVal] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (!inView) return;
+    const duration = 1800;
+    const frameMs = 1000 / 60;
+    const totalFrames = duration / frameMs;
+    let frame = 0;
+    const timer = setInterval(() => {
+      frame++;
+      const eased = 1 - Math.pow(1 - frame / totalFrames, 3);
+      setVal(Math.min(Math.round(to * eased), to));
+      if (frame >= totalFrames) clearInterval(timer);
+    }, frameMs);
+    return () => clearInterval(timer);
+  }, [inView, to]);
+
+  return <span ref={ref}>{val}{suffix}</span>;
+}
+
 export default function AboutSection() {
   const { t } = useLanguage();
 
   const stats = [
-    { value: "15+", label: t("Năm kinh nghiệm", "Years Experience") },
-    { value: "200+", label: t("Dự án hoàn thành", "Projects Completed") },
-    { value: "50+", label: t("Thiết bị công trình", "Equipment Units") },
-    { value: "300+", label: t("Cán bộ nhân viên", "Staff Members") },
+    { value: 200, suffix: "+", label: t("Dự án hoàn thành", "Projects Completed") },
+    { value: 50,  suffix: "+", label: t("Thiết bị công trình", "Equipment Units") },
+    { value: 300, suffix: "+", label: t("Cán bộ nhân viên", "Staff Members") },
   ];
 
   const highlights = [
@@ -27,6 +50,7 @@ export default function AboutSection() {
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
           {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -81,18 +105,21 @@ export default function AboutSection() {
               ))}
             </div>
 
-            <div className="mt-10 grid grid-cols-2 gap-6">
+            {/* Stats */}
+            <div className="mt-10 grid grid-cols-3">
               {stats.map((stat, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="border border-slate-100 rounded-xl p-5"
+                  className="flex flex-col items-center justify-center py-6 px-4 text-center"
                 >
-                  <div className="text-3xl font-bold text-orange-500">{stat.value}</div>
-                  <div className="text-sm text-slate-500 mt-1">{stat.label}</div>
+                  <div className="text-4xl font-black text-orange-500 leading-none">
+                    <CountUp to={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <div className="text-xs text-slate-500 mt-2 leading-snug">{stat.label}</div>
                 </motion.div>
               ))}
             </div>

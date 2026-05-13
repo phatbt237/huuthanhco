@@ -5,12 +5,12 @@ import SectionTitle from "@/components/SectionTitle";
 import { Eye, Target, Heart, Award } from "lucide-react";
 
 const timeline = [
-  { year: "2009", title: "Thành lập công ty", desc: "Công ty TNHH Xây dựng Hữu Thành chính thức được thành lập tại TP. Hồ Chí Minh với vốn điều lệ 10 tỷ đồng." },
-  { year: "2012", title: "Mở rộng quy mô", desc: "Đầu tư thêm phương tiện thủy và mở rộng hoạt động sang lĩnh vực nạo vét luồng hàng hải." },
-  { year: "2015", title: "Dự án cảng biển đầu tiên", desc: "Trúng thầu và hoàn thành thành công dự án cảng tổng hợp Cát Lái, đánh dấu bước ngoặt quan trọng." },
-  { year: "2018", title: "Chứng nhận ISO 9001:2015", desc: "Nhận chứng chỉ ISO 9001:2015 về hệ thống quản lý chất lượng, khẳng định tiêu chuẩn quốc tế." },
-  { year: "2020", title: "100+ dự án hoàn thành", desc: "Cột mốc 100 dự án hoàn thành, tổng giá trị hợp đồng vượt 500 tỷ đồng." },
   { year: "2024", title: "Nhà thầu uy tín quốc gia", desc: "Được vinh danh là Nhà thầu uy tín toàn quốc, tiếp tục khẳng định vị thế hàng đầu trong ngành." },
+  { year: "2020", title: "100+ dự án hoàn thành", desc: "Cột mốc 100 dự án hoàn thành, tổng giá trị hợp đồng vượt 500 tỷ đồng." },
+  { year: "2018", title: "Chứng nhận ISO 9001:2015", desc: "Nhận chứng chỉ ISO 9001:2015 về hệ thống quản lý chất lượng, khẳng định tiêu chuẩn quốc tế." },
+  { year: "2015", title: "Dự án cảng biển đầu tiên", desc: "Trúng thầu và hoàn thành thành công dự án cảng tổng hợp Cát Lái, đánh dấu bước ngoặt quan trọng." },
+  { year: "2012", title: "Mở rộng quy mô", desc: "Đầu tư thêm phương tiện thủy và mở rộng hoạt động sang lĩnh vực nạo vét luồng hàng hải." },
+  { year: "2009", title: "Thành lập công ty", desc: "Công ty TNHH Xây dựng Hữu Thành chính thức được thành lập tại TP. Hồ Chí Minh với vốn điều lệ 10 tỷ đồng." },
 ];
 
 const values = [
@@ -113,10 +113,10 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle label="Lịch sử" title="Hành trình phát triển" center />
           <div className="mt-14 relative">
-            {/* Center line */}
-            <div className="absolute left-1/2 -translate-x-0.5 top-0 bottom-0 w-0.5 bg-slate-200 hidden md:block" />
+            {/* Đường dọc giữa */}
+            <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-0.5 bg-slate-200 hidden md:block" />
 
-            <div className="space-y-10">
+            <div className="space-y-8">
               {timeline.map((item, i) => (
                 <motion.div
                   key={item.year}
@@ -124,18 +124,32 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className={`flex items-start gap-8 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
+                  className={`flex items-center ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
                 >
-                  <div className="flex-1">
-                    <div className={`bg-white rounded-2xl p-6 shadow-sm border border-slate-100 ${i % 2 === 0 ? "md:text-right" : ""}`}>
+                  {/*
+                    Card + line nằm trong cùng flex-1.
+                    Với item lẻ dùng md:flex-row-reverse nội bộ
+                    để line luôn nằm giữa card và chấm.
+                    Dot nằm giữa 2 flex-1 bằng nhau → center = đúng 50%.
+                  */}
+                  <div className={`flex-1 flex items-center ${i % 2 === 0 ? "" : "md:flex-row-reverse"}`}>
+                    <div className={`flex-1 bg-white rounded-2xl p-6 shadow-sm
+                      border-l-4 border-orange-500
+                      md:border-l-0 md:border md:border-slate-100
+                      ${i % 2 === 0 ? "md:text-right" : ""}`}
+                    >
                       <span className="text-orange-500 font-bold text-xl">{item.year}</span>
                       <h3 className="font-bold text-slate-900 text-lg mt-1 mb-2">{item.title}</h3>
                       <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
                     </div>
+                    {/* Đường ngang nối card → chấm */}
+                    <div className="hidden md:block w-10 h-0.5 bg-slate-300 shrink-0" />
                   </div>
-                  <div className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-orange-500 text-white font-bold text-sm shrink-0 shadow-lg">
-                    {i + 1}
-                  </div>
+
+                  {/* Chấm tròn — nằm giữa 2 flex-1 nên center = 50% = đúng trên đường dọc */}
+                  <div className="hidden md:block w-4 h-4 rounded-full bg-orange-500 shrink-0 relative z-10 ring-4 ring-slate-50 shadow-md" />
+
+                  {/* Nửa còn lại trống */}
                   <div className="flex-1 hidden md:block" />
                 </motion.div>
               ))}

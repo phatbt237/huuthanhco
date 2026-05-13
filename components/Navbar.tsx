@@ -63,16 +63,16 @@ export default function Navbar() {
   }, [pathname]);
 
   const LangToggle = ({ small }: { small?: boolean }) => (
-    <div className={`flex items-center border border-white/20 rounded overflow-hidden font-bold ${small ? "text-xs" : "text-xs"}`}>
+    <div className={`flex items-center border border-white/20 rounded overflow-hidden font-bold text-xs ${small ? "h-8" : "h-10"}`}>
       <button
         onClick={() => setLang("vi")}
-        className={`px-3 py-1.5 transition-all duration-200 ${lang === "vi" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"}`}
+        className={`h-full px-3 transition-all duration-200 ${lang === "vi" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"}`}
       >
         VI
       </button>
       <button
         onClick={() => setLang("en")}
-        className={`px-3 py-1.5 transition-all duration-200 ${lang === "en" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"}`}
+        className={`h-full px-3 transition-all duration-200 ${lang === "en" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"}`}
       >
         EN
       </button>
@@ -111,7 +111,7 @@ export default function Navbar() {
             <div className="relative" ref={desktopMenuRef}>
               <button
                 onClick={() => setDesktopMenuOpen(!desktopMenuOpen)}
-                className="flex items-center gap-2 text-white/80 hover:text-white text-sm font-semibold border border-white/20 hover:border-white/50 px-4 py-2 rounded transition-all duration-200"
+                className="h-10 flex items-center gap-2 text-white/80 hover:text-white text-sm font-semibold border border-white/20 hover:border-white/50 px-4 rounded transition-all duration-200"
               >
                 {desktopMenuOpen ? <X size={15} /> : <Menu size={15} />}
                 Menu
@@ -192,7 +192,7 @@ export default function Navbar() {
 
             <Link
               href="/lien-he"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded text-sm font-semibold transition-colors duration-200"
+              className="h-10 flex items-center bg-orange-500 hover:bg-orange-600 text-white px-5 rounded text-sm font-semibold transition-colors duration-200"
             >
               {t("Liên hệ ngay", "Contact Us")}
             </Link>
