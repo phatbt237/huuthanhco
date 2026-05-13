@@ -6,8 +6,10 @@ import { Calendar, ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
 import { news } from "@/data/news";
 import { formatDate } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function NewsSection() {
+  const { t } = useLanguage();
   const latest = news.slice(0, 3);
 
   return (
@@ -15,15 +17,15 @@ export default function NewsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
           <SectionTitle
-            label="Tin tức"
-            title="Tin tức & Sự kiện"
-            subtitle="Cập nhật những thông tin mới nhất từ Hữu Thành."
+            label={t("Tin tức", "News")}
+            title={t("Tin tức & Sự kiện", "News & Events")}
+            subtitle={t("Cập nhật những thông tin mới nhất từ Hữu Thành.", "Stay updated with the latest news from Huu Thanh.")}
           />
           <Link
             href="/tin-tuc"
             className="flex items-center gap-2 text-orange-500 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
           >
-            Xem tất cả <ArrowRight size={16} />
+            {t("Xem tất cả", "View All")} <ArrowRight size={16} />
           </Link>
         </div>
 
@@ -61,7 +63,7 @@ export default function NewsSection() {
                   href={`/tin-tuc/${item.slug}`}
                   className="inline-flex items-center gap-1 mt-4 text-orange-500 text-sm font-semibold hover:gap-2 transition-all duration-200"
                 >
-                  Đọc thêm <ArrowRight size={14} />
+                  {t("Đọc thêm", "Read More")} <ArrowRight size={14} />
                 </Link>
               </div>
             </motion.article>

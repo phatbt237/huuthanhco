@@ -15,7 +15,8 @@ export const projects: Project[] = [
     location: "Đồng Nai",
     year: 2024,
     category: "Cầu đường",
-    image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&q=80",
+    // Bridge spanning a river
+    image: "https://images.unsplash.com/photo-1608237963573-ba0790bc6404?w=800&q=80",
     description: "Thi công cầu vượt dài 1.2km qua sông Đồng Nai với tải trọng H30-XB80.",
   },
   {
@@ -24,6 +25,7 @@ export const projects: Project[] = [
     location: "TP. Hồ Chí Minh",
     year: 2024,
     category: "Thủy lợi",
+    // River with industrial barges — waterway construction context
     image: "https://images.unsplash.com/photo-1707681008672-b26aa30f18bc?w=800&q=80",
     description: "Gia cố bờ sông Sài Gòn đoạn qua quận Bình Thạnh, chiều dài 2.5km.",
   },
@@ -33,7 +35,8 @@ export const projects: Project[] = [
     location: "Bà Rịa - Vũng Tàu",
     year: 2023,
     category: "Cảng biển",
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80",
+    // Port cranes alongside a river — port construction
+    image: "https://images.unsplash.com/photo-1716197755180-1a60c49cd260?w=800&q=80",
     description: "Thi công bến cảng tổng hợp Cái Mép giai đoạn 2, năng lực tiếp nhận tàu 50.000 DWT.",
   },
   {
@@ -42,7 +45,8 @@ export const projects: Project[] = [
     location: "Trà Vinh",
     year: 2023,
     category: "Nạo vét",
-    image: "https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=800&q=80",
+    // Actual dredger vessel operating at sea
+    image: "https://images.unsplash.com/photo-1655366493773-d7d73e536c44?w=800&q=80",
     description: "Nạo vét, duy tu luồng hàng hải Định An - Cần Thơ chiều dài 130km.",
   },
   {
@@ -60,7 +64,7 @@ export const projects: Project[] = [
     location: "Cần Thơ",
     year: 2022,
     category: "Cảng biển",
-    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1598194501777-edbff942e501?w=800&q=80",
     description: "Cải tạo và mở rộng bến phà Cần Thơ phục vụ vận chuyển hàng hóa.",
   },
   {

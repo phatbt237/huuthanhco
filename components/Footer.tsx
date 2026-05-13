@@ -1,11 +1,35 @@
+"use client";
+
 import Link from "next/link";
 import { Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLanguage();
+
+  const quickLinks = [
+    { href: "/gioi-thieu", label: t("Giới thiệu", "About") },
+    { href: "/du-an", label: t("Dự án", "Projects") },
+    { href: "/thiet-bi", label: t("Thiết bị", "Equipment") },
+    { href: "/tin-tuc", label: t("Tin tức", "News") },
+    { href: "/tuyen-dung", label: t("Tuyển dụng", "Careers") },
+    { href: "/lien-he", label: t("Liên hệ", "Contact") },
+  ];
+
+  const services = [
+    t("Thi công cầu đường", "Road & Bridge Construction"),
+    t("Xây dựng cảng biển", "Port Construction"),
+    t("Công trình thủy lợi", "Hydraulic Works"),
+    t("Nạo vét luồng hàng hải", "Maritime Channel Dredging"),
+    t("Kè bờ sông", "Riverbank Reinforcement"),
+    t("Ép cọc bê tông", "Concrete Pile Driving"),
+  ];
+
   return (
     <footer style={{ backgroundColor: "#0A1628" }} className="text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
@@ -20,7 +44,10 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
-              Công ty TNHH Xây dựng Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển và hạ tầng uy tín tại Việt Nam.
+              {t(
+                "Công ty TNHH Xây dựng Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển và hạ tầng uy tín tại Việt Nam.",
+                "Huu Thanh Construction Co., Ltd. — A trusted contractor for hydraulic works, port construction and infrastructure in Vietnam."
+              )}
             </p>
             <div className="flex gap-3">
               <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200" aria-label="Facebook">
@@ -38,17 +65,10 @@ export default function Footer() {
           {/* Quick links */}
           <div>
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-6 pb-3 border-b border-white/10">
-              Liên kết nhanh
+              {t("Liên kết nhanh", "Quick Links")}
             </h3>
             <ul className="space-y-3">
-              {[
-                { href: "/gioi-thieu", label: "Giới thiệu" },
-                { href: "/du-an", label: "Dự án" },
-                { href: "/thiet-bi", label: "Thiết bị" },
-                { href: "/tin-tuc", label: "Tin tức" },
-                { href: "/tuyen-dung", label: "Tuyển dụng" },
-                { href: "/lien-he", label: "Liên hệ" },
-              ].map((link) => (
+              {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -65,17 +85,10 @@ export default function Footer() {
           {/* Services */}
           <div>
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-6 pb-3 border-b border-white/10">
-              Lĩnh vực
+              {t("Lĩnh vực", "Services")}
             </h3>
             <ul className="space-y-3">
-              {[
-                "Thi công cầu đường",
-                "Xây dựng cảng biển",
-                "Công trình thủy lợi",
-                "Nạo vét luồng hàng hải",
-                "Kè bờ sông",
-                "Ép cọc bê tông",
-              ].map((item) => (
+              {services.map((item) => (
                 <li key={item} className="text-white/60 text-sm flex items-center gap-2">
                   <span className="w-1 h-1 rounded-full bg-orange-500 inline-block" />
                   {item}
@@ -87,13 +100,16 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-6 pb-3 border-b border-white/10">
-              Liên hệ
+              {t("Liên hệ", "Contact")}
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="text-orange-400 mt-0.5 shrink-0" />
                 <span className="text-white/60 text-sm">
-                  123 Đường Nguyễn Hữu Thọ, Phường Tân Phong, Quận 7, TP. Hồ Chí Minh
+                  {t(
+                    "123 Đường Nguyễn Hữu Thọ, Phường Tân Phong, Quận 7, TP. Hồ Chí Minh",
+                    "123 Nguyen Huu Tho St., Tan Phong Ward, District 7, Ho Chi Minh City"
+                  )}
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -116,10 +132,13 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-sm">
-            © 2024 Công ty TNHH Xây dựng Hữu Thành. Bảo lưu mọi quyền.
+            {t(
+              "© 2024 Công ty TNHH Xây dựng Hữu Thành. Bảo lưu mọi quyền.",
+              "© 2024 Huu Thanh Construction Co., Ltd. All rights reserved."
+            )}
           </p>
           <p className="text-white/40 text-sm">
-            MST: 0123456789 | ĐKKD: Sở KH&ĐT TP.HCM
+            {t("MST: 0123456789 | ĐKKD: Sở KH&ĐT TP.HCM", "Tax ID: 0123456789 | Business Reg.: HCMC Dept. of Planning")}
           </p>
         </div>
       </div>

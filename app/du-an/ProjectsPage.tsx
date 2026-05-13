@@ -1,19 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { MapPin, Calendar } from "lucide-react";
 import { projects } from "@/data/projects";
 
 const years = ["Tất cả", "2024", "2023", "2022", "Trước 2022"];
 
+const categoryMap: Record<string, string> = {
+  "cau-duong": "Cầu đường",
+  "cang-bien": "Cảng biển",
+  "thuy-loi": "Thủy lợi",
+  "nao-vet": "Nạo vét",
+};
+
 export default function ProjectsPage() {
+  const searchParams = useSearchParams();
+  const loaiParam = searchParams.get("loai");
+  const initialCategory = loaiParam ? (categoryMap[loaiParam] ?? "Tất cả") : "Tất cả";
+
   const [activeYear, setActiveYear] = useState("Tất cả");
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
+
+  // Sync category when URL param changes
+  useEffect(() => {
+    const category = loaiParam ? (categoryMap[loaiParam] ?? "Tất cả") : "Tất cả";
+    setActiveCategory(category);
+  }, [loaiParam]);
+
+  const categories = ["Tất cả", ...Array.from(new Set(projects.map((p) => p.category)))];
 
   const filtered = projects.filter((p) => {
-    if (activeYear === "Tất cả") return true;
-    if (activeYear === "Trước 2022") return p.year < 2022;
-    return p.year === parseInt(activeYear);
+    const matchYear =
+      activeYear === "Tất cả" ||
+      (activeYear === "Trước 2022" ? p.year < 2022 : p.year === parseInt(activeYear));
+    const matchCategory = activeCategory === "Tất cả" || p.category === activeCategory;
+    return matchYear && matchCategory;
   });
 
   return (
@@ -42,21 +65,45 @@ export default function ProjectsPage() {
       {/* Filter + Grid */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Filter tabs */}
-          <div className="flex flex-wrap gap-3 mb-12">
-            {years.map((y) => (
-              <button
-                key={y}
-                onClick={() => setActiveYear(y)}
-                className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${
-                  activeYear === y
-                    ? "bg-orange-500 text-white shadow-md"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                {y}
-              </button>
-            ))}
+
+          {/* Category filter */}
+          <div className="mb-6">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Lọc theo chủ đề</p>
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                    activeCategory === cat
+                      ? "bg-orange-500 text-white shadow-md"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Year filter */}
+          <div className="mb-12">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Lọc theo năm</p>
+            <div className="flex flex-wrap gap-2">
+              {years.map((y) => (
+                <button
+                  key={y}
+                  onClick={() => setActiveYear(y)}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                    activeYear === y
+                      ? "bg-slate-800 text-white shadow-md"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  {y}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Grid */}
@@ -102,7 +149,7 @@ export default function ProjectsPage() {
 
           {filtered.length === 0 && (
             <div className="text-center py-20 text-slate-400">
-              Không có dự án nào trong năm này.
+              Không có dự án nào phù hợp với bộ lọc đã chọn.
             </div>
           )}
         </div>

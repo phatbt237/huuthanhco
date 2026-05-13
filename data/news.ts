@@ -16,7 +16,7 @@ export const news: NewsItem[] = [
     slug: "huu-thanh-hoan-thanh-cau-vuot-song-dong-nai",
     date: "2024-11-15",
     category: "Tin tức",
-    thumbnail: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1608237963573-ba0790bc6404?w=600&q=80",
     excerpt: "Công ty Hữu Thành vừa hoàn thành thi công cầu vượt sông Đồng Nai trước tiến độ 2 tháng, đảm bảo chất lượng vượt yêu cầu kỹ thuật.",
     content: "Chi tiết bài viết...",
   },

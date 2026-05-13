@@ -5,22 +5,28 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
 import { equipment } from "@/data/equipment";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function EquipmentSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
           <SectionTitle
-            label="Thiết bị"
-            title="Hệ thống thiết bị hiện đại"
-            subtitle="Đội ngũ phương tiện và máy móc đồng bộ, đáp ứng mọi yêu cầu thi công."
+            label={t("Thiết bị", "Equipment")}
+            title={t("Hệ thống thiết bị hiện đại", "Modern Equipment Fleet")}
+            subtitle={t(
+              "Đội ngũ phương tiện và máy móc đồng bộ, đáp ứng mọi yêu cầu thi công.",
+              "A synchronized fleet of vehicles and machinery meeting all construction requirements."
+            )}
           />
           <Link
             href="/thiet-bi"
             className="flex items-center gap-2 text-orange-500 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
           >
-            Xem tất cả <ArrowRight size={16} />
+            {t("Xem tất cả", "View All")} <ArrowRight size={16} />
           </Link>
         </div>
 
@@ -47,9 +53,7 @@ export default function EquipmentSection() {
                 <h3 className="font-bold text-slate-900 text-base mb-2 group-hover:text-orange-500 transition-colors">
                   {item.name}
                 </h3>
-                <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">
-                  {item.description}
-                </p>
+                <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{item.description}</p>
                 <div className="mt-4 space-y-1">
                   {item.specs.slice(0, 2).map((spec) => (
                     <div key={spec} className="flex items-center gap-2 text-xs text-slate-400">

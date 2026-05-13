@@ -1,26 +1,42 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
-
-const navLinks = [
-  { href: "/", label: "Trang chủ" },
-  { href: "/gioi-thieu", label: "Giới thiệu" },
-  { href: "/du-an", label: "Dự án" },
-  { href: "/thiet-bi", label: "Thiết bị" },
-  { href: "/tin-tuc", label: "Tin tức" },
-  { href: "/tuyen-dung", label: "Tuyển dụng" },
-  { href: "/lien-he", label: "Liên hệ" },
-];
+import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Navbar() {
+  const { lang, setLang, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [projectHovered, setProjectHovered] = useState(false);
+  const [mobileProjectsOpen, setMobileProjectsOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const desktopMenuRef = useRef<HTMLDivElement>(null);
+
+  const navLinks = [
+    { href: "/", label: t("Trang chủ", "Home") },
+    { href: "/gioi-thieu", label: t("Giới thiệu", "About") },
+    {
+      href: "/du-an",
+      label: t("Dự án", "Projects"),
+      children: [
+        { label: t("Tất cả dự án", "All Projects"), href: "/du-an" },
+        { label: t("Cầu đường", "Roads & Bridges"), href: "/du-an?loai=cau-duong" },
+        { label: t("Cảng biển", "Ports & Harbors"), href: "/du-an?loai=cang-bien" },
+        { label: t("Thủy lợi", "Hydraulics"), href: "/du-an?loai=thuy-loi" },
+        { label: t("Nạo vét", "Dredging"), href: "/du-an?loai=nao-vet" },
+      ],
+    },
+    { href: "/thiet-bi", label: t("Thiết bị", "Equipment") },
+    { href: "/tin-tuc", label: t("Tin tức", "News") },
+    { href: "/tuyen-dung", label: t("Tuyển dụng", "Careers") },
+    { href: "/lien-he", label: t("Liên hệ", "Contact") },
+  ];
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 50);
@@ -28,21 +44,52 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navBg =
-    isScrolled || !isHome
-      ? "bg-navy-900 shadow-lg"
-      : "bg-transparent";
+  // Close desktop dropdown on outside click — does NOT affect mobile menu
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (desktopMenuRef.current && !desktopMenuRef.current.contains(e.target as Node)) {
+        setDesktopMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  // Close both menus on route change
+  useEffect(() => {
+    setDesktopMenuOpen(false);
+    setMobileMenuOpen(false);
+    setMobileProjectsOpen(false);
+  }, [pathname]);
+
+  const LangToggle = ({ small }: { small?: boolean }) => (
+    <div className={`flex items-center border border-white/20 rounded overflow-hidden font-bold ${small ? "text-xs" : "text-xs"}`}>
+      <button
+        onClick={() => setLang("vi")}
+        className={`px-3 py-1.5 transition-all duration-200 ${lang === "vi" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"}`}
+      >
+        VI
+      </button>
+      <button
+        onClick={() => setLang("en")}
+        className={`px-3 py-1.5 transition-all duration-200 ${lang === "en" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"}`}
+      >
+        EN
+      </button>
+    </div>
+  );
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
-        backgroundColor:
-          isScrolled || !isHome ? "#0D1B2A" : "transparent",
+        backgroundColor: isScrolled || !isHome ? "#0D1B2A" : "transparent",
+        boxShadow: isScrolled || !isHome ? "0 2px 20px rgba(0,0,0,0.3)" : "none",
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
+
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <img
@@ -51,52 +98,123 @@ export default function Navbar() {
               className="w-10 h-10 object-contain rounded"
             />
             <div>
-              <div className="text-white font-bold text-lg leading-tight">
-                Hữu Thành
-              </div>
-              <div className="text-orange-400 text-xs tracking-widest uppercase">
-                Construction
-              </div>
+              <div className="text-white font-bold text-lg leading-tight">Hữu Thành</div>
+              <div className="text-orange-400 text-xs tracking-widest uppercase">Construction</div>
             </div>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-sm font-medium transition-colors duration-200 ${
-                  pathname === link.href
-                    ? "text-orange-400"
-                    : "text-white/80 hover:text-white"
-                }`}
+          {/* Desktop right */}
+          <div className="hidden lg:flex items-center gap-3">
+            <LangToggle />
+
+            {/* Menu dropdown */}
+            <div className="relative" ref={desktopMenuRef}>
+              <button
+                onClick={() => setDesktopMenuOpen(!desktopMenuOpen)}
+                className="flex items-center gap-2 text-white/80 hover:text-white text-sm font-semibold border border-white/20 hover:border-white/50 px-4 py-2 rounded transition-all duration-200"
               >
-                {link.label}
-              </Link>
-            ))}
+                {desktopMenuOpen ? <X size={15} /> : <Menu size={15} />}
+                Menu
+                <ChevronDown size={13} className={`transition-transform duration-200 ${desktopMenuOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              <AnimatePresence>
+                {desktopMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                    transition={{ duration: 0.18 }}
+                    className="absolute top-full right-0 mt-2 w-52 rounded-xl overflow-visible"
+                    style={{
+                      backgroundColor: "#0D1B2A",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+                    }}
+                  >
+                    {navLinks.map((link) =>
+                      link.children ? (
+                        <div
+                          key={link.href}
+                          className="relative"
+                          onMouseEnter={() => setProjectHovered(true)}
+                          onMouseLeave={() => setProjectHovered(false)}
+                        >
+                          <div className="flex items-center justify-between px-5 py-3 text-sm text-white/80 hover:text-white hover:bg-white/5 transition-colors cursor-default select-none">
+                            {link.label}
+                            <ChevronRight size={13} className="opacity-60" />
+                          </div>
+
+                          <AnimatePresence>
+                            {projectHovered && (
+                              <motion.div
+                                initial={{ opacity: 0, x: -6 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -6 }}
+                                transition={{ duration: 0.15 }}
+                                className="absolute left-full top-0 ml-1 w-48 rounded-xl overflow-hidden"
+                                style={{
+                                  backgroundColor: "#0D1B2A",
+                                  border: "1px solid rgba(255,255,255,0.1)",
+                                  boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+                                }}
+                              >
+                                {link.children.map((child) => (
+                                  <Link
+                                    key={child.href}
+                                    href={child.href}
+                                    className="flex items-center gap-2.5 px-5 py-3 text-sm text-white/70 hover:text-orange-400 hover:bg-white/5 transition-colors"
+                                  >
+                                    <span className="w-1 h-1 rounded-full bg-orange-500 shrink-0" />
+                                    {child.label}
+                                  </Link>
+                                ))}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      ) : (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className={`flex items-center px-5 py-3 text-sm transition-colors hover:bg-white/5 ${
+                            pathname === link.href ? "text-orange-400" : "text-white/80 hover:text-white"
+                          }`}
+                        >
+                          {link.label}
+                        </Link>
+                      )
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <Link
               href="/lien-he"
               className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded text-sm font-semibold transition-colors duration-200"
             >
-              Liên hệ ngay
+              {t("Liên hệ ngay", "Contact Us")}
             </Link>
-          </nav>
+          </div>
 
-          {/* Mobile toggle */}
-          <button
-            className="lg:hidden text-white p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile right */}
+          <div className="lg:hidden flex items-center gap-2">
+            <LangToggle />
+            <button
+              className="text-white p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile slide-down — completely separate from desktop */}
       <AnimatePresence>
-        {mobileOpen && (
+        {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -105,7 +223,7 @@ export default function Navbar() {
             className="lg:hidden overflow-hidden"
             style={{ backgroundColor: "#0D1B2A" }}
           >
-            <nav className="px-4 py-4 flex flex-col gap-2">
+            <nav className="px-4 py-4 flex flex-col gap-1">
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.href}
@@ -113,17 +231,56 @@ export default function Navbar() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <Link
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={`block py-3 px-4 rounded text-sm font-medium transition-colors ${
-                      pathname === link.href
-                        ? "text-orange-400 bg-white/5"
-                        : "text-white/80 hover:text-white hover:bg-white/5"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
+                  {link.children ? (
+                    <>
+                      {/* Bấm vào "Dự án" chỉ toggle sub-menu, KHÔNG đóng mobile menu */}
+                      <button
+                        onClick={() => setMobileProjectsOpen((prev) => !prev)}
+                        className="w-full flex items-center justify-between py-3 px-4 rounded text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 transition-colors"
+                      >
+                        {link.label}
+                        <ChevronDown
+                          size={14}
+                          className={`transition-transform duration-200 ${mobileProjectsOpen ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                      <AnimatePresence>
+                        {mobileProjectsOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            {link.children.map((child) => (
+                              <Link
+                                key={child.href}
+                                href={child.href}
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="flex items-center gap-2.5 pl-8 pr-4 py-2.5 text-sm text-white/60 hover:text-orange-400 hover:bg-white/5 rounded transition-colors"
+                              >
+                                <span className="w-1 h-1 rounded-full bg-orange-500 shrink-0" />
+                                {child.label}
+                              </Link>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`block py-3 px-4 rounded text-sm font-medium transition-colors ${
+                        pathname === link.href
+                          ? "text-orange-400 bg-white/5"
+                          : "text-white/80 hover:text-white hover:bg-white/5"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </motion.div>
               ))}
             </nav>

@@ -5,8 +5,10 @@ import Link from "next/link";
 import { MapPin, Calendar, ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
 import { projects } from "@/data/projects";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ProjectsSection() {
+  const { t } = useLanguage();
   const featured = projects.slice(0, 4);
 
   return (
@@ -14,15 +16,18 @@ export default function ProjectsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
           <SectionTitle
-            label="Dự án nổi bật"
-            title="Những công trình tiêu biểu"
-            subtitle="Chúng tôi tự hào với danh mục dự án đa dạng trải dài khắp khu vực miền Nam."
+            label={t("Dự án nổi bật", "Featured Projects")}
+            title={t("Những công trình tiêu biểu", "Our Landmark Works")}
+            subtitle={t(
+              "Chúng tôi tự hào với danh mục dự án đa dạng trải dài khắp khu vực miền Nam.",
+              "We take pride in a diverse project portfolio spanning across Southern Vietnam."
+            )}
           />
           <Link
             href="/du-an"
             className="flex items-center gap-2 text-orange-500 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
           >
-            Xem tất cả <ArrowRight size={16} />
+            {t("Xem tất cả", "View All")} <ArrowRight size={16} />
           </Link>
         </div>
 
@@ -36,7 +41,6 @@ export default function ProjectsSection() {
               transition={{ delay: i * 0.1, duration: 0.5 }}
               className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white shadow-sm hover:shadow-xl transition-shadow duration-300"
             >
-              {/* Image */}
               <div className="relative h-56 overflow-hidden">
                 <img
                   src={project.image}
@@ -45,27 +49,17 @@ export default function ProjectsSection() {
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                {/* Category badge */}
                 <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
                   {project.category}
                 </span>
               </div>
-
-              {/* Content */}
               <div className="p-5">
                 <h3 className="font-bold text-slate-900 text-base leading-tight mb-3 line-clamp-2 group-hover:text-orange-500 transition-colors duration-200">
                   {project.name}
                 </h3>
                 <div className="flex items-center gap-4 text-xs text-slate-400">
-                  <span className="flex items-center gap-1.5">
-                    <MapPin size={12} />
-                    {project.location}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Calendar size={12} />
-                    {project.year}
-                  </span>
+                  <span className="flex items-center gap-1.5"><MapPin size={12} />{project.location}</span>
+                  <span className="flex items-center gap-1.5"><Calendar size={12} />{project.year}</span>
                 </div>
               </div>
             </motion.div>
