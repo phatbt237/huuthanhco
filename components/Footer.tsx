@@ -1,0 +1,128 @@
+import Link from "next/link";
+import { Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
+
+export default function Footer() {
+  return (
+    <footer style={{ backgroundColor: "#0A1628" }} className="text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-3 mb-6">
+              <img
+                src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/69ba7546394f41773827398.jpg"
+                alt="Logo Hữu Thành"
+                className="w-12 h-12 object-contain rounded"
+              />
+              <div>
+                <div className="text-white font-bold text-xl leading-tight">Hữu Thành</div>
+                <div className="text-orange-400 text-xs tracking-widest uppercase">Construction</div>
+              </div>
+            </div>
+            <p className="text-white/60 text-sm leading-relaxed mb-6">
+              Công ty TNHH Xây dựng Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển và hạ tầng uy tín tại Việt Nam.
+            </p>
+            <div className="flex gap-3">
+              <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200" aria-label="Facebook">
+                <Globe size={16} />
+              </a>
+              <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200" aria-label="Youtube">
+                <Video size={16} />
+              </a>
+              <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200" aria-label="LinkedIn">
+                <Share2 size={16} />
+              </a>
+            </div>
+          </div>
+
+          {/* Quick links */}
+          <div>
+            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-6 pb-3 border-b border-white/10">
+              Liên kết nhanh
+            </h3>
+            <ul className="space-y-3">
+              {[
+                { href: "/gioi-thieu", label: "Giới thiệu" },
+                { href: "/du-an", label: "Dự án" },
+                { href: "/thiet-bi", label: "Thiết bị" },
+                { href: "/tin-tuc", label: "Tin tức" },
+                { href: "/tuyen-dung", label: "Tuyển dụng" },
+                { href: "/lien-he", label: "Liên hệ" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-white/60 hover:text-orange-400 text-sm transition-colors duration-200 flex items-center gap-2"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-orange-500 inline-block" />
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-6 pb-3 border-b border-white/10">
+              Lĩnh vực
+            </h3>
+            <ul className="space-y-3">
+              {[
+                "Thi công cầu đường",
+                "Xây dựng cảng biển",
+                "Công trình thủy lợi",
+                "Nạo vét luồng hàng hải",
+                "Kè bờ sông",
+                "Ép cọc bê tông",
+              ].map((item) => (
+                <li key={item} className="text-white/60 text-sm flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-orange-500 inline-block" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-6 pb-3 border-b border-white/10">
+              Liên hệ
+            </h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <MapPin size={16} className="text-orange-400 mt-0.5 shrink-0" />
+                <span className="text-white/60 text-sm">
+                  123 Đường Nguyễn Hữu Thọ, Phường Tân Phong, Quận 7, TP. Hồ Chí Minh
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone size={16} className="text-orange-400 shrink-0" />
+                <a href="tel:0901234567" className="text-white/60 hover:text-orange-400 text-sm transition-colors">
+                  0901 234 567
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail size={16} className="text-orange-400 shrink-0" />
+                <a href="mailto:info@huuthanh.vn" className="text-white/60 hover:text-orange-400 text-sm transition-colors">
+                  info@huuthanh.vn
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-white/40 text-sm">
+            © 2024 Công ty TNHH Xây dựng Hữu Thành. Bảo lưu mọi quyền.
+          </p>
+          <p className="text-white/40 text-sm">
+            MST: 0123456789 | ĐKKD: Sở KH&ĐT TP.HCM
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
