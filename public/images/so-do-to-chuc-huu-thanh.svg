@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+    <style>
+      .title { font: 700 28px Arial, sans-serif; fill: #111827; }
+      .brand { font: 700 28px Arial, sans-serif; fill: #e3342f; }
+      .boxText { font: 700 20px Arial, sans-serif; text-anchor: middle; dominant-baseline: middle; }
+      .smallText { font: 700 18px Arial, sans-serif; text-anchor: middle; dominant-baseline: middle; }
+      .note { font: italic 20px Arial, sans-serif; fill: #111827; }
+      .sign { font: 700 20px Arial, sans-serif; fill: #111827; }
+      .line { stroke: #7a8f1a; stroke-width: 2.2; fill: none; marker-end: url(#arrow); }
+      .lineNoArrow { stroke: #7a8f1a; stroke-width: 2.2; fill: none; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7a8f1a"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="1080" fill="#ffffff"/>
+
+  <g transform="translate(34 24)">
+    <rect x="0" y="0" width="18" height="58" fill="#e11d24"/>
+    <rect x="26" y="0" width="18" height="58" fill="#e11d24"/>
+    <path d="M54 8 L104 2 L50 28 L104 24 L54 48" fill="none" stroke="#e11d24" stroke-width="5"/>
+    <text x="128" y="22" class="brand">CÔNG TY CỔ PHẦN</text>
+    <text x="128" y="56" class="brand">XÂY DỰNG HỮU THÀNH</text>
+  </g>
+
+  <text x="800" y="55" class="title" text-anchor="middle">SƠ ĐỒ TỔ CHỨC CÔNG TY</text>
+
+  <g filter="url(#shadow)">
+    <rect x="670" y="78" width="260" height="68" fill="#ba2c2c" stroke="#8fa21d" stroke-width="3"/>
+    <text x="800" y="102" class="boxText" fill="#fff">HỘI ĐỒNG</text>
+    <text x="800" y="130" class="boxText" fill="#fff">CỔ ĐÔNG</text>
+
+    <rect x="956" y="150" width="250" height="66" fill="#f20d0d" stroke="#8fa21d" stroke-width="3"/>
+    <text x="1081" y="174" class="boxText" fill="#fff">BAN</text>
+    <text x="1081" y="202" class="boxText" fill="#fff">KIỂM SOÁT</text>
+
+    <rect x="670" y="232" width="260" height="68" fill="#d90404" stroke="#8fa21d" stroke-width="3"/>
+    <text x="800" y="256" class="boxText" fill="#fff">HỘI ĐỒNG</text>
+    <text x="800" y="284" class="boxText" fill="#fff">QUẢN TRỊ</text>
+
+    <rect x="670" y="338" width="260" height="70" fill="#ffc400" stroke="#8fa21d" stroke-width="3"/>
+    <text x="800" y="362" class="boxText" fill="#111827">BAN</text>
+    <text x="800" y="392" class="boxText" fill="#111827">TỔNG GIÁM ĐỐC</text>
+
+    <rect x="340" y="402" width="270" height="68" fill="#739b00" stroke="#556b00" stroke-width="3"/>
+    <text x="475" y="426" class="boxText" fill="#fff">CÔNG TY</text>
+    <text x="475" y="454" class="boxText" fill="#fff">THÀNH VIÊN</text>
+
+    <rect x="990" y="402" width="250" height="68" fill="#739b00" stroke="#556b00" stroke-width="3"/>
+    <text x="1115" y="426" class="boxText" fill="#fff">CÁC</text>
+    <text x="1115" y="454" class="boxText" fill="#fff">CHI NHÁNH</text>
+  </g>
+
+  <path d="M800 146 V232" class="line"/>
+  <path d="M800 112 H956 V183" class="line"/>
+  <path d="M800 300 V338" class="line"/>
+  <path d="M800 408 V506" class="lineNoArrow"/>
+  <path d="M670 440 H610" class="line"/>
+  <path d="M930 440 H990" class="line"/>
+  <path d="M130 506 H1470" class="lineNoArrow"/>
+
+  <g filter="url(#shadow)">
+    <g transform="translate(18 530)">
+      <rect width="240" height="66" fill="#bddb4f" stroke="#7a8f1a" stroke-width="3"/>
+      <text x="120" y="25" class="smallText" fill="#111827">PHÒNG</text>
+      <text x="120" y="50" class="smallText" fill="#111827">HÀNH CHÍNH - NHÂN SỰ</text>
+    </g>
+    <g transform="translate(300 530)">
+      <rect width="250" height="66" fill="#bddb4f" stroke="#7a8f1a" stroke-width="3"/>
+      <text x="125" y="25" class="smallText" fill="#111827">PHÒNG</text>
+      <text x="125" y="50" class="smallText" fill="#111827">TÀI CHÍNH - KẾ TOÁN</text>
+    </g>
+    <g transform="translate(585 530)">
+      <rect width="250" height="66" fill="#bddb4f" stroke="#7a8f1a" stroke-width="3"/>
+      <text x="125" y="25" class="smallText" fill="#111827">PHÒNG</text>
+      <text x="125" y="50" class="smallText" fill="#111827">KẾ HOẠCH</text>
+    </g>
+    <g transform="translate(865 530)">
+      <rect width="250" height="66" fill="#bddb4f" stroke="#7a8f1a" stroke-width="3"/>
+      <text x="125" y="25" class="smallText" fill="#111827">PHÒNG</text>
+      <text x="125" y="50" class="smallText" fill="#111827">KỸ THUẬT</text>
+    </g>
+    <g transform="translate(1146 530)">
+      <rect width="250" height="66" fill="#bddb4f" stroke="#7a8f1a" stroke-width="3"/>
+      <text x="125" y="25" class="smallText" fill="#111827">PHÒNG</text>
+      <text x="125" y="50" class="smallText" fill="#111827">VẬT TƯ - THIẾT BỊ</text>
+    </g>
+    <g transform="translate(1428 530)">
+      <rect width="152" height="66" fill="#bddb4f" stroke="#7a8f1a" stroke-width="3"/>
+      <text x="76" y="25" class="smallText" fill="#111827">CÁC BAN CHỈ HUY</text>
+      <text x="76" y="50" class="smallText" fill="#111827">CÔNG TRÌNH</text>
+    </g>
+  </g>
+
+  <path d="M130 506 V530" class="line"/>
+  <path d="M425 506 V530" class="line"/>
+  <path d="M710 506 V530" class="line"/>
+  <path d="M990 506 V530" class="line"/>
+  <path d="M1271 506 V530" class="line"/>
+  <path d="M1504 506 V530" class="line"/>
+
+  <g fill="#f8fafc" stroke="#7a8f1a" stroke-width="2.5" filter="url(#shadow)">
+    <rect x="28" y="640" width="220" height="66"/>
+    <rect x="28" y="730" width="220" height="66"/>
+    <rect x="28" y="820" width="220" height="66"/>
+    <rect x="28" y="910" width="220" height="66"/>
+
+    <rect x="318" y="640" width="220" height="66"/>
+    <rect x="318" y="730" width="220" height="66"/>
+    <rect x="318" y="820" width="220" height="66"/>
+    <rect x="318" y="910" width="220" height="66"/>
+
+    <rect x="600" y="640" width="220" height="66"/>
+    <rect x="600" y="730" width="220" height="66"/>
+    <rect x="600" y="820" width="220" height="66"/>
+
+    <rect x="882" y="640" width="220" height="66"/>
+    <rect x="882" y="730" width="220" height="66"/>
+    <rect x="882" y="820" width="220" height="66"/>
+
+    <rect x="1164" y="640" width="220" height="66"/>
+    <rect x="1164" y="730" width="220" height="66"/>
+
+    <rect x="1360" y="640" width="220" height="66"/>
+    <rect x="1360" y="730" width="220" height="66"/>
+    <rect x="1360" y="820" width="220" height="66"/>
+    <rect x="1360" y="910" width="220" height="66"/>
+  </g>
+
+  <g class="smallText" fill="#111827">
+    <text x="138" y="665">Tuyển dụng</text><text x="138" y="690">Đào tạo</text>
+    <text x="138" y="755">Lao động</text><text x="138" y="780">Tiền lương</text>
+    <text x="138" y="845">Hành chính</text><text x="138" y="870">Lễ tân</text>
+    <text x="138" y="935">IT</text><text x="138" y="960">Truyền thông</text>
+
+    <text x="428" y="665">Kế hoạch</text><text x="428" y="690">Tài chính</text>
+    <text x="428" y="755">Tài chính</text><text x="428" y="780">Ngân hàng &amp; Tín dụng</text>
+    <text x="428" y="845">Kế toán</text><text x="428" y="870">Tổng hợp &amp; Thuế</text>
+    <text x="428" y="935">Kế toán</text><text x="428" y="960">Công trình</text>
+
+    <text x="710" y="665">Kế hoạch</text><text x="710" y="690">Phát triển Dự án</text>
+    <text x="710" y="755">Quản lý</text><text x="710" y="780">Hợp đồng</text>
+    <text x="710" y="845">Đầu tư</text><text x="710" y="870">Mua sắm</text>
+
+    <text x="992" y="665">Quản lý</text><text x="992" y="690">Dự án</text>
+    <text x="992" y="755">Quản lý</text><text x="992" y="780">QC &amp; QS</text>
+    <text x="992" y="845">Quản lý</text><text x="992" y="870">HSE</text>
+
+    <text x="1274" y="665">Cung ứng</text><text x="1274" y="690">Vật tư</text>
+    <text x="1274" y="755">Quản lý</text><text x="1274" y="780">Thiết bị</text>
+
+    <text x="1470" y="665">Đội</text><text x="1470" y="690">Thiết bị</text>
+    <text x="1470" y="755">Đội thi công</text><text x="1470" y="780">Bê tông cốt thép</text>
+    <text x="1470" y="845">Đội thi công</text><text x="1470" y="870">M&amp;E</text>
+    <text x="1470" y="935">Đội thi công</text><text x="1470" y="960">Lắp đặt hoàn thiện</text>
+  </g>
+
+  <g>
+    <path d="M138 596 V620 H28 V673" class="lineNoArrow"/>
+    <path d="M28 673 H8" class="line"/>
+    <path d="M28 763 H8" class="line"/>
+    <path d="M28 853 H8" class="line"/>
+    <path d="M28 943 H8" class="line"/>
+
+    <path d="M425 596 V620 H300 V673" class="lineNoArrow"/>
+    <path d="M300 673 H280" class="line"/>
+    <path d="M300 763 H280" class="line"/>
+    <path d="M300 853 H280" class="line"/>
+    <path d="M300 943 H280" class="line"/>
+
+    <path d="M710 596 V620 H585 V673" class="lineNoArrow"/>
+    <path d="M585 673 H565" class="line"/>
+    <path d="M585 763 H565" class="line"/>
+    <path d="M585 853 H565" class="line"/>
+
+    <path d="M990 596 V620 H865 V673" class="lineNoArrow"/>
+    <path d="M865 673 H845" class="line"/>
+    <path d="M865 763 H845" class="line"/>
+    <path d="M865 853 H845" class="line"/>
+
+    <path d="M1271 596 V620 H1146 V673" class="lineNoArrow"/>
+    <path d="M1146 673 H1126" class="line"/>
+    <path d="M1146 763 H1126" class="line"/>
+
+    <path d="M1504 596 V620 H1428 V673" class="lineNoArrow"/>
+    <path d="M1428 673 H1408" class="line"/>
+    <path d="M1428 763 H1408" class="line"/>
+    <path d="M1428 853 H1408" class="line"/>
+    <path d="M1428 943 H1408" class="line"/>
+  </g>
+
+  <text x="980" y="1008" class="note">Hữu Thành, ngày... tháng 05 năm 2026</text>
+  <text x="1090" y="1042" class="sign">TỔNG GIÁM ĐỐC</text>
+  <text x="1084" y="1070" class="sign">Nguyễn Thanh Nhàn</text>
+</svg>
