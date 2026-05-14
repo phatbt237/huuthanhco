@@ -1,23 +1,93 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+const heroImages = [
+  "/images/hero/Flash-4_132827290261925965.jpg",
+  "/images/hero/Flash-5_132827290406613154.jpg",
+  "/images/hero/Flash-6_132827290576435207.jpg",
+  "/images/hero/Flash-7_132827290711634447.jpg",
+  "/images/hero/Flash-8_132827290841017153.jpg",
+];
+
+const INTERVAL = 5000;
 
 export default function HeroSection() {
   const { t } = useLanguage();
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDirection(1);
+      setCurrent((prev) => (prev + 1) % heroImages.length);
+    }, INTERVAL);
+    return () => clearInterval(timer);
+  }, []);
+
+  const goTo = (index: number) => {
+    setDirection(index > current ? 1 : -1);
+    setCurrent(index);
+  };
+
+  const prev = () => {
+    setDirection(-1);
+    setCurrent((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+  };
+
+  const next = () => {
+    setDirection(1);
+    setCurrent((prev) => (prev + 1) % heroImages.length);
+  };
 
   return (
     <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=90')" }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+      {/* Slideshow background */}
+      <AnimatePresence initial={false} custom={direction}>
+        <motion.div
+          key={current}
+          custom={direction}
+          variants={{
+            enter: (d: number) => ({ x: d * 80, opacity: 0, scale: 1.04 }),
+            center: { x: 0, opacity: 1, scale: 1 },
+            exit: (d: number) => ({ x: d * -80, opacity: 0, scale: 0.98 }),
+          }}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url('${heroImages[current]}')` }}
+        />
+      </AnimatePresence>
+
+      {/* Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80 z-10" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent z-10" />
+
+      {/* Prev / Next buttons */}
+      <button
+        onClick={prev}
+        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 border border-white/20 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
+        aria-label="Previous"
+      >
+        <ChevronLeft size={20} />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 border border-white/20 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
+        aria-label="Next"
+      >
+        <ChevronRight size={20} />
+      </button>
+
+      {/* Content */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
           <span className="inline-block text-orange-400 text-xs font-bold uppercase tracking-[0.3em] mb-6 border border-orange-400/30 px-4 py-2 rounded-full">
             {t("Công ty TNHH Xây dựng Hữu Thành", "Huu Thanh Construction Co., Ltd.")}
@@ -88,8 +158,24 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
+      {/* Dot indicators */}
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {heroImages.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className={`transition-all duration-300 rounded-full ${
+              i === current
+                ? "w-6 h-2 bg-orange-400"
+                : "w-2 h-2 bg-white/40 hover:bg-white/70"
+            }`}
+            aria-label={`Slide ${i + 1}`}
+          />
+        ))}
+      </div>
+
       <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 1.5, repeat: Infinity }}
       >

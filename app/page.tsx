@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import HeroSection from "@/sections/HeroSection";
 import AboutSection from "@/sections/AboutSection";
+import ServicesSection from "@/sections/ServicesSection";
 import ProjectsSection from "@/sections/ProjectsSection";
 import EquipmentSection from "@/sections/EquipmentSection";
 import NewsSection from "@/sections/NewsSection";
+import PartnersSection from "@/sections/PartnersSection";
 import CtaSection from "@/sections/CtaSection";
 
 export const metadata: Metadata = {
@@ -18,9 +20,11 @@ export default function HomePage() {
     <>
       <HeroSection />
       <AboutSection />
+      <ServicesSection />
       <ProjectsSection />
       <EquipmentSection />
       <NewsSection />
+      <PartnersSection />
       <CtaSection />
     </>
   );

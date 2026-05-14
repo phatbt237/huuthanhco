@@ -5,37 +5,52 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { MapPin, Calendar } from "lucide-react";
 import { projects } from "@/data/projects";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const years = ["Tất cả", "2024", "2023", "2022", "Trước 2022"];
-
-const categoryMap: Record<string, string> = {
-  "cau-duong": "Cầu đường",
+const categoryMapVi: Record<string, string> = {
   "cang-bien": "Cảng biển",
   "thuy-loi": "Thủy lợi",
   "nao-vet": "Nạo vét",
+  "ha-tang": "Hạ tầng",
+  "dich-vu": "Dịch vụ",
 };
 
 export default function ProjectsPage() {
+  const { lang, t } = useLanguage();
   const searchParams = useSearchParams();
   const loaiParam = searchParams.get("loai");
-  const initialCategory = loaiParam ? (categoryMap[loaiParam] ?? "Tất cả") : "Tất cả";
+  const initialCategory = loaiParam ? (categoryMapVi[loaiParam] ?? "all") : "all";
 
-  const [activeYear, setActiveYear] = useState("Tất cả");
+  const [activeYear, setActiveYear] = useState("all");
   const [activeCategory, setActiveCategory] = useState(initialCategory);
 
-  // Sync category when URL param changes
   useEffect(() => {
-    const category = loaiParam ? (categoryMap[loaiParam] ?? "Tất cả") : "Tất cả";
+    const category = loaiParam ? (categoryMapVi[loaiParam] ?? "all") : "all";
     setActiveCategory(category);
   }, [loaiParam]);
 
-  const categories = ["Tất cả", ...Array.from(new Set(projects.map((p) => p.category)))];
+  const years = [
+    { key: "all", label: t("Tất cả", "All") },
+    { key: "2024", label: "2024" },
+    { key: "2023", label: "2023" },
+    { key: "2022", label: "2022" },
+    { key: "before2022", label: t("Trước 2022", "Before 2022") },
+  ];
+
+  const allCategoryKeys = Array.from(new Set(projects.map((p) => p.category)));
+  const categories = [
+    { key: "all", label: t("Tất cả", "All") },
+    ...allCategoryKeys.map((key) => {
+      const proj = projects.find((p) => p.category === key)!;
+      return { key, label: lang === "vi" ? proj.category : proj.categoryEn };
+    }),
+  ];
 
   const filtered = projects.filter((p) => {
     const matchYear =
-      activeYear === "Tất cả" ||
-      (activeYear === "Trước 2022" ? p.year < 2022 : p.year === parseInt(activeYear));
-    const matchCategory = activeCategory === "Tất cả" || p.category === activeCategory;
+      activeYear === "all" ||
+      (activeYear === "before2022" ? p.year < 2022 : p.year === parseInt(activeYear));
+    const matchCategory = activeCategory === "all" || p.category === activeCategory;
     return matchYear && matchCategory;
   });
 
@@ -54,9 +69,14 @@ export default function ProjectsPage() {
             transition={{ duration: 0.7 }}
           >
             <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">Portfolio</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">Dự án tiêu biểu</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
+              {t("Dự án tiêu biểu", "Featured Projects")}
+            </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">
-              Hơn 200 dự án hoàn thành trải dài khắp miền Nam Việt Nam.
+              {t(
+                "Hơn 200 dự án hoàn thành trải dài khắp miền Nam Việt Nam.",
+                "Over 200 completed projects spanning across Southern Vietnam."
+              )}
             </p>
           </motion.div>
         </div>
@@ -68,19 +88,21 @@ export default function ProjectsPage() {
 
           {/* Category filter */}
           <div className="mb-6">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Lọc theo chủ đề</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+              {t("Lọc theo chủ đề", "Filter by category")}
+            </p>
             <div className="flex flex-wrap gap-2">
               {categories.map((cat) => (
                 <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  key={cat.key}
+                  onClick={() => setActiveCategory(cat.key)}
                   className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                    activeCategory === cat
+                    activeCategory === cat.key
                       ? "bg-orange-500 text-white shadow-md"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
-                  {cat}
+                  {cat.label}
                 </button>
               ))}
             </div>
@@ -88,19 +110,21 @@ export default function ProjectsPage() {
 
           {/* Year filter */}
           <div className="mb-12">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Lọc theo năm</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+              {t("Lọc theo năm", "Filter by year")}
+            </p>
             <div className="flex flex-wrap gap-2">
               {years.map((y) => (
                 <button
-                  key={y}
-                  onClick={() => setActiveYear(y)}
+                  key={y.key}
+                  onClick={() => setActiveYear(y.key)}
                   className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                    activeYear === y
+                    activeYear === y.key
                       ? "bg-slate-800 text-white shadow-md"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
-                  {y}
+                  {y.label}
                 </button>
               ))}
             </div>
@@ -120,20 +144,22 @@ export default function ProjectsPage() {
                 <div className="relative h-60 overflow-hidden">
                   <img
                     src={project.image}
-                    alt={project.name}
+                    alt={lang === "vi" ? project.name : project.nameEn}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                    {project.category}
+                    {lang === "vi" ? project.category : project.categoryEn}
                   </span>
                 </div>
                 <div className="p-6">
                   <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-orange-500 transition-colors">
-                    {project.name}
+                    {lang === "vi" ? project.name : project.nameEn}
                   </h2>
-                  <p className="text-slate-500 text-sm mb-4 line-clamp-2">{project.description}</p>
+                  <p className="text-slate-500 text-sm mb-4 line-clamp-2">
+                    {lang === "vi" ? project.description : project.descriptionEn}
+                  </p>
                   <div className="flex items-center gap-5 text-xs text-slate-400">
                     <span className="flex items-center gap-1.5">
                       <MapPin size={13} /> {project.location}
@@ -149,7 +175,10 @@ export default function ProjectsPage() {
 
           {filtered.length === 0 && (
             <div className="text-center py-20 text-slate-400">
-              Không có dự án nào phù hợp với bộ lọc đã chọn.
+              {t(
+                "Không có dự án nào phù hợp với bộ lọc đã chọn.",
+                "No projects match the selected filters."
+              )}
             </div>
           )}
         </div>

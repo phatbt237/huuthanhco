@@ -3,35 +3,37 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
-
-const contactInfo = [
-  {
-    icon: MapPin,
-    title: "Địa chỉ",
-    value: "123 Đường Nguyễn Hữu Thọ, Phường Tân Phong, Quận 7, TP. Hồ Chí Minh",
-  },
-  {
-    icon: Phone,
-    title: "Hotline",
-    value: "0901 234 567",
-    href: "tel:0901234567",
-  },
-  {
-    icon: Mail,
-    title: "Email",
-    value: "info@huuthanh.vn",
-    href: "mailto:info@huuthanh.vn",
-  },
-  {
-    icon: Clock,
-    title: "Giờ làm việc",
-    value: "Thứ 2 - Thứ 7: 7:30 - 17:30",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ContactPage() {
+  const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
+
+  const contactInfo = [
+    {
+      icon: MapPin,
+      title: t("Địa chỉ", "Address"),
+      value: "123 Đường Nguyễn Hữu Thọ, Phường Tân Phong, Quận 7, TP. Hồ Chí Minh",
+    },
+    {
+      icon: Phone,
+      title: t("Hotline", "Hotline"),
+      value: "0901 234 567",
+      href: "tel:0901234567",
+    },
+    {
+      icon: Mail,
+      title: "Email",
+      value: "info@huuthanh.vn",
+      href: "mailto:info@huuthanh.vn",
+    },
+    {
+      icon: Clock,
+      title: t("Giờ làm việc", "Working Hours"),
+      value: t("Thứ 2 - Thứ 7: 7:30 - 17:30", "Mon - Sat: 7:30 AM - 5:30 PM"),
+    },
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,10 +54,17 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">Liên hệ</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">Liên hệ với chúng tôi</h1>
+            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">
+              {t("Liên hệ", "Contact")}
+            </span>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
+              {t("Liên hệ với chúng tôi", "Contact Us")}
+            </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">
-              Chúng tôi luôn sẵn sàng hỗ trợ và giải đáp mọi thắc mắc của bạn.
+              {t(
+                "Chúng tôi luôn sẵn sàng hỗ trợ và giải đáp mọi thắc mắc của bạn.",
+                "We are always ready to support and answer any of your questions."
+              )}
             </p>
           </motion.div>
         </div>
@@ -71,7 +80,9 @@ export default function ContactPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-2xl font-bold text-slate-900 mb-8">Thông tin liên hệ</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-8">
+                {t("Thông tin liên hệ", "Contact Information")}
+              </h2>
               <div className="space-y-6 mb-10">
                 {contactInfo.map((info) => (
                   <div key={info.title} className="flex items-start gap-4">
@@ -79,7 +90,9 @@ export default function ContactPage() {
                       <info.icon className="text-orange-500" size={20} />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{info.title}</p>
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+                        {info.title}
+                      </p>
                       {info.href ? (
                         <a href={info.href} className="text-slate-700 font-medium hover:text-orange-500 transition-colors">
                           {info.value}
@@ -102,7 +115,7 @@ export default function ContactPage() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Bản đồ Hữu Thành"
+                  title={t("Bản đồ Hữu Thành", "Huu Thanh Map")}
                 />
               </div>
             </motion.div>
@@ -114,14 +127,21 @@ export default function ContactPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-2xl font-bold text-slate-900 mb-8">Gửi yêu cầu tư vấn</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-8">
+                {t("Gửi yêu cầu tư vấn", "Send a Consultation Request")}
+              </h2>
 
               {submitted ? (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
                   <CheckCircle2 className="text-green-500 mb-4" size={56} />
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Gửi thành công!</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">
+                    {t("Gửi thành công!", "Sent successfully!")}
+                  </h3>
                   <p className="text-slate-500 text-sm">
-                    Chúng tôi đã nhận được yêu cầu của bạn và sẽ liên hệ lại trong vòng 24 giờ.
+                    {t(
+                      "Chúng tôi đã nhận được yêu cầu của bạn và sẽ liên hệ lại trong vòng 24 giờ.",
+                      "We have received your request and will get back to you within 24 hours."
+                    )}
                   </p>
                 </div>
               ) : (
@@ -129,7 +149,7 @@ export default function ContactPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                        Họ và tên <span className="text-orange-500">*</span>
+                        {t("Họ và tên", "Full Name")} <span className="text-orange-500">*</span>
                       </label>
                       <input
                         required
@@ -137,12 +157,12 @@ export default function ContactPage() {
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
                         className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 text-slate-700 text-sm"
-                        placeholder="Nguyễn Văn A"
+                        placeholder={t("Nguyễn Văn A", "John Smith")}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                        Số điện thoại <span className="text-orange-500">*</span>
+                        {t("Số điện thoại", "Phone Number")} <span className="text-orange-500">*</span>
                       </label>
                       <input
                         required
@@ -166,7 +186,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                      Nội dung <span className="text-orange-500">*</span>
+                      {t("Nội dung", "Message")} <span className="text-orange-500">*</span>
                     </label>
                     <textarea
                       required
@@ -174,7 +194,7 @@ export default function ContactPage() {
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 text-slate-700 text-sm resize-none"
-                      placeholder="Mô tả dự án bạn cần tư vấn..."
+                      placeholder={t("Mô tả dự án bạn cần tư vấn...", "Describe the project you need consultation for...")}
                     />
                   </div>
                   <button
@@ -182,7 +202,7 @@ export default function ContactPage() {
                     className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-xl font-semibold text-sm transition-colors duration-200 shadow-md hover:shadow-orange-500/30"
                   >
                     <Send size={16} />
-                    Gửi yêu cầu
+                    {t("Gửi yêu cầu", "Send Request")}
                   </button>
                 </form>
               )}

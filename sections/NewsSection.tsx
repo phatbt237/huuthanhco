@@ -9,7 +9,7 @@ import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function NewsSection() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const latest = news.slice(0, 3);
 
   return (
@@ -42,12 +42,12 @@ export default function NewsSection() {
               <div className="relative h-52 overflow-hidden">
                 <img
                   src={item.thumbnail}
-                  alt={item.title}
+                  alt={lang === "vi" ? item.title : item.titleEn}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
                 <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                  {item.category}
+                  {lang === "vi" ? item.category : item.categoryEn}
                 </span>
               </div>
               <div className="p-6">
@@ -56,9 +56,11 @@ export default function NewsSection() {
                   {formatDate(item.date)}
                 </div>
                 <h3 className="font-bold text-slate-900 text-base leading-snug line-clamp-2 group-hover:text-orange-500 transition-colors duration-200">
-                  {item.title}
+                  {lang === "vi" ? item.title : item.titleEn}
                 </h3>
-                <p className="text-slate-500 text-sm mt-3 line-clamp-2">{item.excerpt}</p>
+                <p className="text-slate-500 text-sm mt-3 line-clamp-2">
+                  {lang === "vi" ? item.excerpt : item.excerptEn}
+                </p>
                 <Link
                   href={`/tin-tuc/${item.slug}`}
                   className="inline-flex items-center gap-1 mt-4 text-orange-500 text-sm font-semibold hover:gap-2 transition-all duration-200"

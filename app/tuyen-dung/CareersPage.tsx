@@ -4,8 +4,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Briefcase, DollarSign, ChevronDown, CheckCircle2 } from "lucide-react";
 import { jobs } from "@/data/jobs";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function CareersPage() {
+  const { lang, t } = useLanguage();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [applied, setApplied] = useState<string | null>(null);
 
@@ -23,10 +25,17 @@ export default function CareersPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">Gia nhập đội ngũ</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">Tuyển dụng</h1>
+            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">
+              {t("Gia nhập đội ngũ", "Join Our Team")}
+            </span>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
+              {t("Tuyển dụng", "Careers")}
+            </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">
-              Cùng Hữu Thành xây dựng những công trình để đời cho đất nước.
+              {t(
+                "Cùng Hữu Thành xây dựng những công trình để đời cho đất nước.",
+                "Join Huu Thanh in building lasting infrastructure for the nation."
+              )}
             </p>
           </motion.div>
         </div>
@@ -50,13 +59,16 @@ export default function CareersPage() {
                   onClick={() => setExpanded(expanded === job.id ? null : job.id)}
                 >
                   <div className="flex-1">
-                    <h2 className="font-bold text-slate-900 text-lg mb-3">{job.title}</h2>
+                    <h2 className="font-bold text-slate-900 text-lg mb-3">
+                      {lang === "vi" ? job.title : job.titleEn}
+                    </h2>
                     <div className="flex flex-wrap gap-4 text-sm text-slate-500">
                       <span className="flex items-center gap-1.5">
                         <MapPin size={14} className="text-orange-400" /> {job.location}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <Briefcase size={14} className="text-orange-400" /> {job.type}
+                        <Briefcase size={14} className="text-orange-400" />
+                        {lang === "vi" ? job.type : job.typeEn}
                       </span>
                       <span className="flex items-center gap-1.5">
                         <DollarSign size={14} className="text-orange-400" /> {job.salary}
@@ -80,10 +92,14 @@ export default function CareersPage() {
                       className="overflow-hidden"
                     >
                       <div className="px-6 pb-6 border-t border-slate-100">
-                        <p className="text-slate-600 text-sm leading-relaxed mt-4 mb-4">{job.description}</p>
-                        <p className="font-semibold text-slate-800 text-sm mb-3">Yêu cầu:</p>
+                        <p className="text-slate-600 text-sm leading-relaxed mt-4 mb-4">
+                          {lang === "vi" ? job.description : job.descriptionEn}
+                        </p>
+                        <p className="font-semibold text-slate-800 text-sm mb-3">
+                          {t("Yêu cầu:", "Requirements:")}
+                        </p>
                         <ul className="space-y-2 mb-6">
-                          {job.requirements.map((req) => (
+                          {(lang === "vi" ? job.requirements : job.requirementsEn).map((req) => (
                             <li key={req} className="flex items-start gap-2 text-sm text-slate-600">
                               <CheckCircle2 size={15} className="text-orange-500 shrink-0 mt-0.5" />
                               {req}
@@ -98,7 +114,9 @@ export default function CareersPage() {
                               : "bg-orange-500 hover:bg-orange-600 text-white"
                           }`}
                         >
-                          {applied === job.id ? "✓ Đã ứng tuyển thành công" : "Ứng tuyển ngay"}
+                          {applied === job.id
+                            ? t("✓ Đã ứng tuyển thành công", "✓ Application submitted")
+                            : t("Ứng tuyển ngay", "Apply Now")}
                         </button>
                       </div>
                     </motion.div>
@@ -111,11 +129,14 @@ export default function CareersPage() {
           {/* Bottom note */}
           <div className="mt-12 bg-slate-50 rounded-2xl p-8 text-center">
             <p className="text-slate-600 text-sm leading-relaxed">
-              Không tìm thấy vị trí phù hợp? Gửi CV của bạn đến{" "}
+              {t(
+                "Không tìm thấy vị trí phù hợp? Gửi CV của bạn đến",
+                "Didn't find a suitable position? Send your CV to"
+              )}{" "}
               <a href="mailto:tuyendung@huuthanh.vn" className="text-orange-500 font-semibold">
                 tuyendung@huuthanh.vn
               </a>{" "}
-              — chúng tôi luôn chào đón nhân tài.
+              {t("— chúng tôi luôn chào đón nhân tài.", "— we always welcome talented candidates.")}
             </p>
           </div>
         </div>
