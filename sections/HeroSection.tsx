@@ -45,7 +45,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <section className="relative flex h-screen min-h-[620px] w-full items-center overflow-hidden">
 
       {/* Slideshow background */}
       <AnimatePresence initial={false} custom={direction}>
@@ -67,38 +67,40 @@ export default function HeroSection() {
       </AnimatePresence>
 
       {/* Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80 z-10" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent z-10" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/58 via-slate-950/16 to-slate-950/8" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-slate-950/12 via-transparent to-slate-950/28" />
+      <div className="absolute bottom-0 left-0 right-0 z-10 h-28 bg-gradient-to-t from-slate-50 to-transparent" />
 
       {/* Prev / Next buttons */}
       <button
         onClick={prev}
-        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 border border-white/20 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
+        className="absolute left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-slate-950/20 text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/25 md:left-8"
         aria-label="Previous"
       >
         <ChevronLeft size={20} />
       </button>
       <button
         onClick={next}
-        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 border border-white/20 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
+        className="absolute right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-slate-950/20 text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/25 md:right-8"
         aria-label="Next"
       >
         <ChevronRight size={20} />
       </button>
 
       {/* Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
-          <span className="inline-block text-orange-400 text-xs font-bold uppercase tracking-[0.3em] mb-6 border border-orange-400/30 px-4 py-2 rounded-full">
-            {t("Công ty TNHH Xây dựng Hữu Thành", "Huu Thanh Construction Co., Ltd.")}
+      <div className="relative z-20 mx-auto w-full max-w-7xl px-6 text-left text-white sm:px-8 lg:px-12">
+        <div className="max-w-2xl pt-16 md:pt-20 lg:pt-24">
+        <motion.div initial={{ opacity: 0, x: -18 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, delay: 0.15 }}>
+          <span className="mb-5 inline-block rounded-full border border-orange-300/45 bg-slate-950/18 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.26em] text-orange-200 shadow-sm backdrop-blur-sm">
+            {t("Công Ty Cổ phần Xây Dựng Hữu Thành", "Huu Thanh Construction Co., Ltd.")}
           </span>
         </motion.div>
 
         <motion.h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
-          initial={{ opacity: 0, y: 30 }}
+          className="mb-5 max-w-xl text-3xl font-extrabold uppercase leading-tight drop-shadow-[0_3px_10px_rgba(0,0,0,0.55)] sm:text-4xl md:text-5xl lg:text-[54px]"
+          initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
+          transition={{ duration: 0.65, delay: 0.25 }}
         >
           {t("Đơn vị thi công", "Professional")}
           <br />
@@ -107,10 +109,10 @@ export default function HeroSection() {
         </motion.h1>
 
         <motion.p
-          className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-10"
-          initial={{ opacity: 0, y: 20 }}
+          className="mb-8 max-w-xl text-base font-medium leading-8 text-white/86 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] md:text-lg"
+          initial={{ opacity: 0, x: -18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ duration: 0.55, delay: 0.4 }}
         >
           {t(
             "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
@@ -119,28 +121,28 @@ export default function HeroSection() {
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          initial={{ opacity: 0, y: 20 }}
+          className="flex flex-col items-start gap-3 sm:flex-row"
+          initial={{ opacity: 0, x: -18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
+          transition={{ duration: 0.55, delay: 0.55 }}
         >
           <Link
             href="/du-an"
-            className="group flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded font-semibold text-base transition-all duration-200 shadow-lg hover:shadow-orange-500/30"
+            className="group flex items-center gap-2 rounded bg-orange-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-950/20 transition-all duration-200 hover:bg-orange-600 hover:shadow-orange-500/30"
           >
             {t("Xem dự án", "View Projects")}
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="/lien-he"
-            className="flex items-center gap-2 border border-white/30 hover:border-white text-white px-8 py-4 rounded font-semibold text-base transition-all duration-200 hover:bg-white/10 backdrop-blur-sm"
+            className="flex items-center gap-2 rounded border border-white/35 bg-slate-950/18 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white hover:bg-white/10"
           >
             {t("Liên hệ ngay", "Contact Us")}
           </Link>
         </motion.div>
 
         <motion.div
-          className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
+          className="mt-12 grid max-w-md grid-cols-3 gap-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1 }}
@@ -150,16 +152,17 @@ export default function HeroSection() {
             { value: "200+", label: t("Dự án hoàn thành", "Projects Completed") },
             { value: "50+", label: t("Thiết bị công trình", "Equipment Units") },
           ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-3xl font-bold text-orange-400">{stat.value}</div>
-              <div className="text-xs text-white/60 mt-1">{stat.label}</div>
+            <div key={stat.label} className="border-l border-white/25 pl-4">
+              <div className="text-2xl font-bold text-orange-300 md:text-3xl">{stat.value}</div>
+              <div className="mt-1 text-[11px] text-white/70">{stat.label}</div>
             </div>
           ))}
         </motion.div>
+        </div>
       </div>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+      <div className="absolute bottom-16 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
         {heroImages.map((_, i) => (
           <button
             key={i}
@@ -175,7 +178,7 @@ export default function HeroSection() {
       </div>
 
       <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
+        className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2"
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 1.5, repeat: Infinity }}
       >

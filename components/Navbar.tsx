@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Search } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Navbar() {
@@ -13,7 +13,11 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpenItems, setMobileOpenItems] = useState<Set<string>>(new Set());
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === "/";
 
   const navLinks = [
@@ -66,7 +70,28 @@ export default function Navbar() {
     setMobileMenuOpen(false);
     setMobileOpenItems(new Set());
     setOpenDropdown(null);
+    setSearchOpen(false);
+    setSearchQuery("");
   }, [pathname]);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+
+    const focusTimer = window.setTimeout(() => searchInputRef.current?.focus(), 80);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSearchOpen(false);
+        setSearchQuery("");
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.clearTimeout(focusTimer);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [searchOpen]);
 
   const toggleMobileItem = (href: string) => {
     setMobileOpenItems((prev) => {
@@ -75,6 +100,15 @@ export default function Navbar() {
       else next.add(href);
       return next;
     });
+  };
+
+  const submitSearch = () => {
+    const query = searchQuery.trim();
+    if (!query) return;
+
+    setSearchOpen(false);
+    setSearchQuery("");
+    router.push(`/tim-kiem?q=${encodeURIComponent(query)}`);
   };
 
   const LangToggle = ({ small }: { small?: boolean }) => (
@@ -136,7 +170,8 @@ export default function Navbar() {
                   onMouseEnter={() => setOpenDropdown(link.href)}
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
-                  <button
+                  <Link
+                    href={link.href}
                     className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded transition-colors ${
                       pathname.startsWith(link.href) && link.href !== "/"
                         ? "text-orange-400"
@@ -150,7 +185,7 @@ export default function Navbar() {
                         openDropdown === link.href ? "rotate-180" : ""
                       }`}
                     />
-                  </button>
+                  </Link>
 
                   <AnimatePresence>
                     {openDropdown === link.href && (
@@ -170,9 +205,8 @@ export default function Navbar() {
                           <Link
                             key={child.href}
                             href={child.href}
-                            className="flex items-center gap-2.5 px-5 py-3 text-sm text-white/70 hover:text-orange-400 hover:bg-white/5 transition-colors"
+                            className="block px-5 py-3 text-sm text-white/70 hover:text-orange-400 hover:bg-white/5 transition-colors"
                           >
-                            <span className="w-1 h-1 rounded-full bg-orange-500 shrink-0" />
                             {child.label}
                           </Link>
                         ))}
@@ -198,6 +232,14 @@ export default function Navbar() {
 
           {/* Desktop right */}
           <div className="hidden lg:flex items-center gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={() => setSearchOpen((open) => !open)}
+              className="flex h-10 w-10 items-center justify-center rounded border border-white/20 text-white/75 transition-colors duration-200 hover:border-orange-400/60 hover:text-white"
+              aria-label={t("Tìm kiếm", "Search")}
+            >
+              <Search size={19} />
+            </button>
             <LangToggle />
             <Link
               href="/lien-he"
@@ -209,6 +251,14 @@ export default function Navbar() {
 
           {/* Mobile right */}
           <div className="lg:hidden flex items-center gap-2">
+            <button
+              type="button"
+              className="p-2 text-white"
+              onClick={() => setSearchOpen((open) => !open)}
+              aria-label={t("Tìm kiếm", "Search")}
+            >
+              <Search size={22} />
+            </button>
             <LangToggle small />
             <button
               className="text-white p-2"
@@ -242,18 +292,28 @@ export default function Navbar() {
                 >
                   {link.children ? (
                     <>
-                      <button
-                        onClick={() => toggleMobileItem(link.href)}
-                        className="w-full flex items-center justify-between py-3 px-4 rounded text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 transition-colors"
-                      >
-                        {link.label}
-                        <ChevronDown
-                          size={14}
-                          className={`transition-transform duration-200 ${
-                            mobileOpenItems.has(link.href) ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
+                      <div className="flex items-center rounded text-white/80 transition-colors hover:bg-white/5 hover:text-white">
+                        <Link
+                          href={link.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex-1 py-3 pl-4 pr-2 text-sm font-medium"
+                        >
+                          {link.label}
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => toggleMobileItem(link.href)}
+                          className="flex h-11 w-12 items-center justify-center"
+                          aria-label={t("Mở menu con", "Open submenu")}
+                        >
+                          <ChevronDown
+                            size={14}
+                            className={`transition-transform duration-200 ${
+                              mobileOpenItems.has(link.href) ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
                       <AnimatePresence>
                         {mobileOpenItems.has(link.href) && (
                           <motion.div
@@ -268,9 +328,8 @@ export default function Navbar() {
                                 key={child.href}
                                 href={child.href}
                                 onClick={() => setMobileMenuOpen(false)}
-                                className="flex items-center gap-2.5 pl-8 pr-4 py-2.5 text-sm text-white/60 hover:text-orange-400 hover:bg-white/5 rounded transition-colors"
+                                className="block rounded py-2.5 pl-8 pr-4 text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-orange-400"
                               >
-                                <span className="w-1 h-1 rounded-full bg-orange-500 shrink-0" />
                                 {child.label}
                               </Link>
                             ))}
@@ -294,6 +353,42 @@ export default function Navbar() {
                 </motion.div>
               ))}
             </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {searchOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.16, ease: "easeOut" }}
+            className="absolute right-4 top-full z-[80] mt-3 w-[calc(100vw-2rem)] max-w-md bg-white p-3 shadow-2xl ring-1 ring-slate-200 lg:right-8"
+          >
+            <div className="absolute -top-2 right-16 h-4 w-4 rotate-45 bg-white ring-1 ring-slate-200" />
+            <form
+              className="relative flex items-center bg-slate-100"
+              onSubmit={(event) => {
+                event.preventDefault();
+                submitSearch();
+              }}
+            >
+              <input
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder={t("Tìm kiếm dự án, thiết bị, tin tức ...", "Search projects, equipment, news ...")}
+                className="h-14 min-w-0 flex-1 bg-transparent px-5 text-base text-slate-900 outline-none placeholder:text-slate-500"
+              />
+              <button
+                type="submit"
+                className="flex h-14 w-14 shrink-0 items-center justify-center text-slate-600 transition-colors hover:text-orange-500"
+                aria-label={t("Tìm kiếm", "Search")}
+              >
+                <Search size={22} />
+              </button>
+            </form>
           </motion.div>
         )}
       </AnimatePresence>

@@ -59,14 +59,13 @@ export default function AboutSection() {
             transition={{ duration: 0.7 }}
             className="relative"
           >
-            <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
+            <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-100">
               <img
-                src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80"
-                alt={t("Công trình Hữu Thành", "Huu Thanh Construction Project")}
-                className="w-full h-full object-cover"
+                src="/images/gioi-thieu/le-khoi-cong-cang-dong-nai.jpg"
+                alt={t("Lễ khởi công công trình Hữu Thành", "Huu Thanh project groundbreaking ceremony")}
+                className="h-full w-full object-contain"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-navy-900/20 to-transparent" />
             </div>
             <div
               className="absolute -bottom-6 -right-6 rounded-2xl p-6 text-white shadow-2xl"

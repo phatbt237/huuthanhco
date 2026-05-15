@@ -61,31 +61,33 @@ export default function EquipmentSection() {
                   transition={{ delay: i * 0.08, duration: 0.4 }}
                   className="group bg-slate-50 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
                 >
-                  <div className="relative h-52 overflow-hidden">
-                    <img
-                      src={item.image}
-                      alt={lang === "vi" ? item.name : item.nameEn}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-bold text-slate-900 text-base mb-2 group-hover:text-orange-500 transition-colors duration-200">
-                      {lang === "vi" ? item.name : item.nameEn}
-                    </h3>
-                    <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 mb-4">
-                      {lang === "vi" ? item.description : item.descriptionEn}
-                    </p>
-                    <div className="space-y-1">
-                      {(lang === "vi" ? item.specs : item.specsEn).map((spec) => (
-                        <div key={spec} className="flex items-center gap-2 text-xs text-slate-400">
-                          <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
-                          {spec}
-                        </div>
-                      ))}
+                  <Link href={`/thiet-bi#thiet-bi-${item.id}`} className="block">
+                    <div className="relative h-52 overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={lang === "vi" ? item.name : item.nameEn}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                     </div>
-                  </div>
+                    <div className="p-5">
+                      <h3 className="font-bold text-slate-900 text-base mb-2 group-hover:text-orange-500 transition-colors duration-200">
+                        {lang === "vi" ? item.name : item.nameEn}
+                      </h3>
+                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 mb-4">
+                        {lang === "vi" ? item.description : item.descriptionEn}
+                      </p>
+                      <div className="space-y-1">
+                        {(lang === "vi" ? item.specs : item.specsEn).map((spec) => (
+                          <div key={spec} className="flex items-center gap-2 text-xs text-slate-400">
+                            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
+                            {spec}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </Link>
                 </motion.div>
               ))}
             </motion.div>

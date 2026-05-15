@@ -75,11 +75,12 @@ export default function NewsPage() {
                 {filtered.map((item, i) => (
                   <motion.article
                     key={item.id}
+                    id={`tin-tuc-${item.id}`}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1, duration: 0.5 }}
-                    className="group flex gap-6 p-4 rounded-2xl hover:bg-slate-50 transition-colors duration-200"
+                    className="group flex scroll-mt-28 gap-6 p-4 rounded-2xl hover:bg-slate-50 transition-colors duration-200"
                   >
                     <div className="relative w-36 h-28 rounded-xl overflow-hidden shrink-0">
                       <img

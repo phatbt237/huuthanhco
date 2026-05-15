@@ -2,19 +2,18 @@
 
 import { motion } from "framer-motion";
 import SectionTitle from "@/components/SectionTitle";
-import { Eye, Target, Heart, Award } from "lucide-react";
+import { Download, ExternalLink, Eye, Target, Heart, Award } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AboutPage() {
   const { t } = useLanguage();
 
   const timeline = [
-    { year: "2024", title: t("Nhà thầu uy tín quốc gia", "National Reputable Contractor"), desc: t("Được vinh danh là Nhà thầu uy tín toàn quốc, tiếp tục khẳng định vị thế hàng đầu trong ngành.", "Honored as the National Reputable Contractor, further cementing a leading position in the industry.") },
-    { year: "2020", title: t("100+ dự án hoàn thành", "100+ Projects Completed"), desc: t("Cột mốc 100 dự án hoàn thành, tổng giá trị hợp đồng vượt 500 tỷ đồng.", "Milestone of 100 completed projects, with total contract value exceeding VND 500 billion.") },
-    { year: "2018", title: t("Chứng nhận ISO 9001:2015", "ISO 9001:2015 Certified"), desc: t("Nhận chứng chỉ ISO 9001:2015 về hệ thống quản lý chất lượng, khẳng định tiêu chuẩn quốc tế.", "Awarded ISO 9001:2015 certification for quality management, affirming international standards.") },
-    { year: "2015", title: t("Dự án cảng biển đầu tiên", "First Port Project"), desc: t("Trúng thầu và hoàn thành thành công dự án cảng tổng hợp Cát Lái, đánh dấu bước ngoặt quan trọng.", "Won and successfully completed the Cat Lai general port project — a major turning point.") },
-    { year: "2012", title: t("Mở rộng quy mô", "Scale Expansion"), desc: t("Đầu tư thêm phương tiện thủy và mở rộng hoạt động sang lĩnh vực nạo vét luồng hàng hải.", "Invested in additional watercraft and expanded into maritime channel dredging.") },
-    { year: "2009", title: t("Thành lập công ty", "Company Founded"), desc: t("Công ty TNHH Xây dựng Hữu Thành chính thức được thành lập tại TP. Hồ Chí Minh với vốn điều lệ 10 tỷ đồng.", "Huu Thanh Construction Co., Ltd. was officially established in Ho Chi Minh City with charter capital of VND 10 billion.") },
+    { year: "2024", title: t("Khẳng định năng lực nhà thầu chuyên nghiệp", "Affirming professional contractor capability"), desc: t("Tiếp tục mở rộng năng lực thi công công trình cảng biển, thủy lợi, đường thủy và hạ tầng kỹ thuật.", "Continued strengthening construction capability across seaports, hydraulic works, waterways and infrastructure.") },
+    { year: "2021", title: t("Thi công cầu cảng 30.000DWT", "30,000DWT wharf construction"), desc: t("Tham gia thi công gói thầu cầu cảng 30.000DWT thuộc dự án Cảng Gò Dầu B, Đồng Nai.", "Participated in the 30,000DWT wharf package at Go Dau B Port, Dong Nai.") },
+    { year: "2020", title: t("Dấu ấn công trình 80.000DWT", "80,000DWT project milestone"), desc: t("Tự hào là nhà thầu đầu tiên của Việt Nam xây dựng công trình cảng chuyên dụng xuất nhập xăng dầu và khí LNG quy mô lên đến 80.000DWT.", "Proud to be the first Vietnamese contractor to build a specialized petroleum and LNG import-export port project up to 80,000DWT.") },
+    { year: "2015", title: t("Mở rộng lĩnh vực thi công", "Expanding construction scope"), desc: t("Tăng cường đội ngũ kỹ thuật, thiết bị và kinh nghiệm thi công công trình thủy lợi, giao thông hàng hải, đường thủy.", "Strengthened technical teams, equipment and experience in hydraulic, maritime and inland waterway construction.") },
+    { year: "2009", title: t("Thành lập công ty", "Company founded"), desc: t("Công ty Cổ phần Xây dựng Hữu Thành được thành lập, xác định Uy Tín và Chất Lượng là mục tiêu chiến lược.", "Huu Thanh Construction Joint Stock Company was founded, setting Prestige and Quality as strategic goals.") },
   ];
 
   const values = [
@@ -51,6 +50,103 @@ export default function AboutPage() {
               {t(
                 "Hơn 15 năm xây dựng niềm tin, gắn kết với từng công trình trên khắp Việt Nam.",
                 "Over 15 years of building trust, committed to every project across Vietnam."
+              )}
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Company overview */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-[0.95fr_1.05fr]">
+            <motion.div
+              initial={{ opacity: 0, x: -28 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-500">
+                {t("Tổng quan công ty", "Company Overview")}
+              </span>
+              <h2 className="mt-4 max-w-2xl text-3xl font-extrabold leading-tight text-slate-800 md:text-5xl">
+                {t(
+                  "Công ty Cổ phần Xây dựng Hữu Thành",
+                  "Huu Thanh Construction Joint Stock Company"
+                )}
+              </h2>
+              <div className="mt-8 space-y-6 text-[17px] leading-8 text-slate-600">
+                <p>
+                  {t(
+                    "Công ty Cổ phần Xây dựng Hữu Thành là một trong những doanh nghiệp hàng đầu về xây dựng các công trình giao thông hàng hải, cảng biển; cảng thủy nội địa; thủy lợi; đê, kè và các công trình cơ sở hạ tầng của Việt Nam, được thành lập năm 2009.",
+                    "Huu Thanh Construction Joint Stock Company, established in 2009, is one of Vietnam's leading enterprises in maritime transport works, seaports, inland waterway ports, hydraulic structures, dikes, embankments and infrastructure projects."
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "Trong suốt quá trình hoạt động, Hữu Thành đã xây dựng được đội ngũ cán bộ kỹ thuật và quản lý công trình có trình độ chuyên môn cao, có bề dày kinh nghiệm về thi công công trình thủy lợi, giao thông hàng hải, đường thủy.",
+                    "Throughout its operation, Huu Thanh has built a team of highly qualified technical and project management personnel with extensive experience in hydraulic, maritime and inland waterway construction."
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "Nhiều công trình tiêu biểu do Hữu Thành thực hiện đã góp phần vào sự nghiệp công nghiệp hóa hiện đại hóa đất nước, trong đó tự hào là nhà thầu đầu tiên của Việt Nam xây dựng công trình cảng chuyên dụng xuất nhập xăng dầu và khí LNG quy mô lên đến 80.000DWT.",
+                    "Many signature projects delivered by Huu Thanh have contributed to Vietnam's industrialization and modernization, including the proud milestone of being the first Vietnamese contractor to build a specialized petroleum and LNG import-export port project up to 80,000DWT."
+                  )}
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 28 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="overflow-hidden bg-white shadow-2xl ring-1 ring-slate-100"
+            >
+              <img
+                src="/images/gioi-thieu/le-khoi-cong-cang-dong-nai.jpg"
+                alt={t("Lễ khởi công công trình Hữu Thành", "Huu Thanh project groundbreaking ceremony")}
+                className="h-auto w-full object-contain"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* History intro */}
+      <section className="bg-slate-50 py-20">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 sm:px-6 lg:grid-cols-[0.75fr_1.25fr] lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
+          >
+            <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-500">
+              {t("Lịch sử hình thành và phát triển", "History and Development")}
+            </span>
+            <h2 className="mt-4 text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
+              {t("Uy Tín và Chất Lượng là mục tiêu chiến lược", "Prestige and Quality as strategic goals")}
+            </h2>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.1 }}
+            className="space-y-6 text-[17px] leading-8 text-slate-600"
+          >
+            <p>
+              {t(
+                "Từ khi thành lập, Hữu Thành đã xác định mục tiêu chiến lược của mình là Uy Tín và Chất Lượng để trở thành một nhà thầu chuyên nghiệp hàng đầu của Việt Nam và khu vực trong lĩnh vực xây dựng các công trình thủy lợi; giao thông hàng hải, đường thủy.",
+                "Since its establishment, Huu Thanh has defined Prestige and Quality as strategic goals to become a leading professional contractor in Vietnam and the region in hydraulic, maritime and inland waterway construction."
+              )}
+            </p>
+            <p>
+              {t(
+                "Hữu Thành sẽ liên tục không ngừng đổi mới về công nghệ, thiết bị, nâng cao trình độ quản lý, cải thiện điều kiện làm việc nhằm nâng cao an toàn - chất lượng - tiến độ và hạ giá thành sản phẩm, bảo vệ sức khoẻ người lao động, bảo vệ môi trường.",
+                "Huu Thanh continuously innovates technology and equipment, improves management capability and working conditions to enhance safety, quality and schedule performance, reduce costs, protect worker health and preserve the environment."
               )}
             </p>
           </motion.div>
@@ -123,6 +219,82 @@ export default function AboutPage() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Company profile */}
+      <section id="ho-so-nang-luc" className="bg-white py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
+            className="overflow-hidden rounded-[2rem] bg-slate-950 text-white shadow-2xl"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr]">
+              <div className="bg-white p-4 sm:p-6">
+                <div className="relative h-[420px] overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200 md:h-[560px]">
+                  <iframe
+                    src="/docs/ho-so-nang-luc-huu-thanh-2026.pdf#toolbar=0&navpanes=0&view=FitH"
+                    title={t("Xem online hồ sơ năng lực Hữu Thành 2026", "Online view of Huu Thanh Company Profile 2026")}
+                    className="h-full w-full"
+                  />
+                  <div className="pointer-events-none absolute left-4 top-4 rounded-full bg-slate-950/80 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
+                    PDF 2026
+                  </div>
+                </div>
+              </div>
+              <div className="relative p-8 md:p-12 lg:p-14">
+                <div className="absolute right-0 top-0 h-36 w-36 bg-orange-500/10 blur-3xl" />
+                <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-400">
+                  {t("Hồ sơ năng lực", "Company Profile")}
+                </span>
+                <h2 className="mt-4 text-3xl font-extrabold leading-tight md:text-5xl">
+                  {t("Hồ sơ năng lực Hữu Thành 2026", "Huu Thanh Company Profile 2026")}
+                </h2>
+                <p className="mt-6 max-w-2xl leading-8 text-white/70">
+                  {t(
+                    "Tài liệu tổng hợp thông tin pháp lý, năng lực nhân sự, thiết bị, kinh nghiệm thi công và các dự án tiêu biểu của Công ty Cổ phần Xây dựng Hữu Thành.",
+                    "A consolidated document covering legal information, personnel capability, equipment, construction experience and featured projects of Huu Thanh Construction Joint Stock Company."
+                  )}
+                </p>
+                <div className="mt-8 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
+                  <div className="rounded-2xl bg-white/7 p-4 ring-1 ring-white/10">
+                    <div className="text-2xl font-black text-orange-400">200+</div>
+                    <div className="mt-1 text-white/55">{t("Dự án", "Projects")}</div>
+                  </div>
+                  <div className="rounded-2xl bg-white/7 p-4 ring-1 ring-white/10">
+                    <div className="text-2xl font-black text-orange-400">50+</div>
+                    <div className="mt-1 text-white/55">{t("Thiết bị", "Equipment")}</div>
+                  </div>
+                  <div className="rounded-2xl bg-white/7 p-4 ring-1 ring-white/10">
+                    <div className="text-2xl font-black text-orange-400">15+</div>
+                    <div className="mt-1 text-white/55">{t("Năm", "Years")}</div>
+                  </div>
+                </div>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <a
+                    href="/docs/ho-so-nang-luc-huu-thanh-2026.pdf"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded bg-orange-500 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-orange-600"
+                  >
+                    <ExternalLink size={18} />
+                    {t("Xem online", "View Online")}
+                  </a>
+                  <a
+                    href="/docs/ho-so-nang-luc-huu-thanh-2026.pdf"
+                    download
+                    className="inline-flex items-center justify-center gap-2 rounded border border-white/20 px-6 py-3 text-sm font-bold text-white transition-colors hover:border-white hover:bg-white/10"
+                  >
+                    <Download size={18} />
+                    {t("Tải hồ sơ năng lực", "Download Profile")}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

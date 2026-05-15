@@ -9,6 +9,14 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ServicesSection() {
   const { lang, t } = useLanguage();
+  const serviceLinks = [
+    "/du-an?loai=cang-bien",
+    "/du-an?loai=cang-bien",
+    "/du-an?loai=thuy-loi",
+    "/du-an?loai=nao-vet",
+    "/du-an?loai=ha-tang",
+    "/thiet-bi",
+  ];
 
   return (
     <section className="py-24 bg-slate-50">
@@ -38,33 +46,35 @@ export default function ServicesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300"
+              className="group relative overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 hover:shadow-xl"
             >
-              {/* Image */}
-              <div className="relative h-60 overflow-hidden">
-                <img
-                  src={service.image}
-                  alt={lang === "vi" ? service.name : service.nameEn}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-              </div>
-
-              {/* Text overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <div className="flex items-end justify-between gap-3">
-                  <h3 className="font-bold text-white text-base leading-snug line-clamp-2 flex-1">
-                    {lang === "vi" ? service.name : service.nameEn}
-                  </h3>
-                  <div className="shrink-0 w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                    <ArrowRight size={14} className="text-white" />
-                  </div>
+              <Link href={serviceLinks[i] ?? "/du-an"} className="block">
+                {/* Image */}
+                <div className="relative h-60 overflow-hidden">
+                  <img
+                    src={service.image}
+                    alt={lang === "vi" ? service.name : service.nameEn}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 </div>
-                <p className="text-white/70 text-xs mt-2 line-clamp-2">
-                  {lang === "vi" ? service.description : service.descriptionEn}
-                </p>
-              </div>
+
+                {/* Text overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <div className="flex items-end justify-between gap-3">
+                    <h3 className="font-bold text-white text-base leading-snug line-clamp-2 flex-1">
+                      {lang === "vi" ? service.name : service.nameEn}
+                    </h3>
+                    <div className="shrink-0 w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                      <ArrowRight size={14} className="text-white" />
+                    </div>
+                  </div>
+                  <p className="text-white/70 text-xs mt-2 line-clamp-2">
+                    {lang === "vi" ? service.description : service.descriptionEn}
+                  </p>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>

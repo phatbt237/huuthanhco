@@ -12,9 +12,10 @@ export default function EquipmentPage() {
       {/* Hero */}
       <section style={{ backgroundColor: "#0D1B2A" }} className="relative py-32">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=1600&q=80')" }}
+          className="absolute inset-0 bg-cover bg-center opacity-45"
+          style={{ backgroundImage: "url('/images/thiet-bi/huu-thanh-co_132830581726080671.jpg')" }}
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/62 to-slate-950/26" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -44,11 +45,12 @@ export default function EquipmentPage() {
             {equipment.map((item, i) => (
               <motion.div
                 key={item.id}
+                id={`thiet-bi-${item.id}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="group bg-slate-50 rounded-2xl overflow-hidden hover:shadow-xl border border-slate-100 transition-all duration-300"
+                className="group scroll-mt-28 bg-slate-50 rounded-2xl overflow-hidden hover:shadow-xl border border-slate-100 transition-all duration-300"
               >
                 <div className="relative h-56 overflow-hidden">
                   <img

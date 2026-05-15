@@ -39,35 +39,34 @@ export default function NewsSection() {
               transition={{ delay: i * 0.15, duration: 0.5 }}
               className="group bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="relative h-52 overflow-hidden">
-                <img
-                  src={item.thumbnail}
-                  alt={lang === "vi" ? item.title : item.titleEn}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                />
-                <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                  {lang === "vi" ? item.category : item.categoryEn}
-                </span>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-xs text-slate-400 mb-3">
-                  <Calendar size={12} />
-                  {formatDate(item.date)}
+              <Link href={`/tin-tuc#tin-tuc-${item.id}`} className="block">
+                <div className="relative h-52 overflow-hidden">
+                  <img
+                    src={item.thumbnail}
+                    alt={lang === "vi" ? item.title : item.titleEn}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                    {lang === "vi" ? item.category : item.categoryEn}
+                  </span>
                 </div>
-                <h3 className="font-bold text-slate-900 text-base leading-snug line-clamp-2 group-hover:text-orange-500 transition-colors duration-200">
-                  {lang === "vi" ? item.title : item.titleEn}
-                </h3>
-                <p className="text-slate-500 text-sm mt-3 line-clamp-2">
-                  {lang === "vi" ? item.excerpt : item.excerptEn}
-                </p>
-                <Link
-                  href={`/tin-tuc/${item.slug}`}
-                  className="inline-flex items-center gap-1 mt-4 text-orange-500 text-sm font-semibold hover:gap-2 transition-all duration-200"
-                >
-                  {t("Đọc thêm", "Read More")} <ArrowRight size={14} />
-                </Link>
-              </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-xs text-slate-400 mb-3">
+                    <Calendar size={12} />
+                    {formatDate(item.date)}
+                  </div>
+                  <h3 className="font-bold text-slate-900 text-base leading-snug line-clamp-2 group-hover:text-orange-500 transition-colors duration-200">
+                    {lang === "vi" ? item.title : item.titleEn}
+                  </h3>
+                  <p className="text-slate-500 text-sm mt-3 line-clamp-2">
+                    {lang === "vi" ? item.excerpt : item.excerptEn}
+                  </p>
+                  <span className="inline-flex items-center gap-1 mt-4 text-orange-500 text-sm font-semibold transition-all duration-200 group-hover:gap-2">
+                    {t("Đọc thêm", "Read More")} <ArrowRight size={14} />
+                  </span>
+                </div>
+              </Link>
             </motion.article>
           ))}
         </div>

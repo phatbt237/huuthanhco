@@ -59,16 +59,16 @@ export default function ProjectsPage() {
       {/* Hero */}
       <section style={{ backgroundColor: "#0D1B2A" }} className="relative py-32">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=1600&q=80')" }}
+          className="absolute inset-0 bg-cover bg-center opacity-45"
+          style={{ backgroundImage: "url('/images/du-an/huu-thanh-co_132827983464005202.jpg')" }}
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/62 to-slate-950/26" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">Portfolio</span>
             <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
               {t("Dự án tiêu biểu", "Featured Projects")}
             </h1>
@@ -135,11 +135,12 @@ export default function ProjectsPage() {
             {filtered.map((project, i) => (
               <motion.div
                 key={project.id}
+                id={`du-an-${project.id}`}
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08, duration: 0.5 }}
-                className="group rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl border border-slate-100 transition-shadow duration-300"
+                className="group scroll-mt-28 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl border border-slate-100 transition-shadow duration-300"
               >
                 <div className="relative h-60 overflow-hidden">
                   <img
