@@ -107,8 +107,8 @@ export default function Footer() {
                 <MapPin size={16} className="text-orange-400 mt-0.5 shrink-0" />
                 <span className="text-white/60 text-sm">
                   {t(
-                    "123 Đường Nguyễn Hữu Thọ, Phường Tân Phong, Quận 7, TP. Hồ Chí Minh",
-                    "123 Nguyen Huu Tho St., Tan Phong Ward, District 7, Ho Chi Minh City"
+                    "30 Đường Số 7, Khu Đô Thị Vạn Phúc, Hiệp Bình, Thủ Đức, TP. Hồ Chí Minh",
+                    "30 Street No. 7, Van Phuc Urban Area, Hiep Binh Ward, Thu Duc District, Ho Chi Minh City"
                   )}
                 </span>
               </li>
