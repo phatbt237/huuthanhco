@@ -14,7 +14,7 @@ export default function ContactPage() {
     {
       icon: MapPin,
       title: t("Địa chỉ", "Address"),
-      value: "123 Đường Nguyễn Hữu Thọ, Phường Tân Phong, Quận 7, TP. Hồ Chí Minh",
+      value: "30 Đường Số 7, Khu Đô Thị Vạn Phúc, Hiệp Bình, Thủ Đức, TP. Hồ Chí Minh",
     },
     {
       icon: Phone,

@@ -7,7 +7,7 @@ import Providers from "@/components/Providers";
 export const metadata: Metadata = {
   metadataBase: new URL("https://huuthanh.vn"),
   title: {
-    default: "Công ty TNHH Xây dựng Hữu Thành | Thi công công trình chuyên nghiệp",
+    default: "Công ty Cổ phần Xây dựng Hữu Thành | Thi công công trình chuyên nghiệp",
     template: "%s | Hữu Thành Construction",
   },
   description:
@@ -17,12 +17,12 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     siteName: "Hữu Thành Construction",
-    title: "Công ty TNHH Xây dựng Hữu Thành",
+    title: "Công ty Cổ phần Xây dựng Hữu Thành",
     description: "Đơn vị thi công công trình thủy công, cảng biển và hạ tầng giao thông uy tín tại Việt Nam.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Công ty TNHH Xây dựng Hữu Thành",
+    title: "Công ty Cổ phần Xây dựng Hữu Thành",
     description: "Đơn vị thi công công trình chuyên nghiệp tại Việt Nam.",
   },
   robots: {
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Công ty TNHH Xây dựng Hữu Thành",
+  name: "Công ty Cổ phần Xây dựng Hữu Thành",
   alternateName: "Hữu Thành Construction",
   url: "https://huuthanh.vn",
   logo: "https://huuthanh.vn/logo.png",

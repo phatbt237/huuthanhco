@@ -45,7 +45,7 @@ export default function Footer() {
             </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               {t(
-                "Công ty TNHH Xây dựng Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển và hạ tầng uy tín tại Việt Nam.",
+                "Công ty Cổ phần Xây dựng Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển và hạ tầng uy tín tại Việt Nam.",
                 "Huu Thanh Construction Co., Ltd. — A trusted contractor for hydraulic works, port construction and infrastructure in Vietnam."
               )}
             </p>
@@ -133,7 +133,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-sm">
             {t(
-              "© 2024 Công ty TNHH Xây dựng Hữu Thành. Bảo lưu mọi quyền.",
+              "© 2024 Công ty Cổ phần Xây dựng Hữu Thành. Bảo lưu mọi quyền.",
               "© 2024 Huu Thanh Construction Co., Ltd. All rights reserved."
             )}
           </p>

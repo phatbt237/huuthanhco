@@ -9,7 +9,7 @@ import PartnersSection from "@/sections/PartnersSection";
 import CtaSection from "@/sections/CtaSection";
 
 export const metadata: Metadata = {
-  title: "Công ty TNHH Xây dựng Hữu Thành | Trang chủ",
+  title: "Công ty Cổ phần Xây dựng Hữu Thành | Trang chủ",
   alternates: {
     canonical: "https://huuthanh.vn",
   },

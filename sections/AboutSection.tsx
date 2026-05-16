@@ -83,7 +83,7 @@ export default function AboutSection() {
               label={t("Về chúng tôi", "About Us")}
               title={t("Xây dựng nền tảng vững chắc cho tương lai", "Building a solid foundation for the future")}
               subtitle={t(
-                "Công ty TNHH Xây dựng Hữu Thành được thành lập năm 2009, chuyên thi công các công trình thủy công, cảng biển, kè sông và hạ tầng giao thông tại khu vực miền Nam Việt Nam.",
+                "Công ty Cổ phần Xây dựng Hữu Thành được thành lập năm 2009, chuyên thi công các công trình thủy công, cảng biển, kè sông và hạ tầng giao thông tại khu vực miền Nam Việt Nam.",
                 "Huu Thanh Construction Co., Ltd. was established in 2009, specializing in hydraulic engineering, port construction, riverbank reinforcement and transportation infrastructure in Southern Vietnam."
               )}
             />
