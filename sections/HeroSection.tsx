@@ -5,8 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getSetting, settingLines, useSiteSettings } from "@/lib/siteApi";
 
-const heroImages = [
+const fallbackHeroImages = [
   "/images/hero/Flash-4_132827290261925965.jpg",
   "/images/hero/Flash-5_132827290406613154.jpg",
   "/images/hero/Flash-6_132827290576435207.jpg",
@@ -18,16 +19,23 @@ const INTERVAL = 5000;
 
 export default function HeroSection() {
   const { t } = useLanguage();
+  const settings = useSiteSettings();
+  const heroImages = settingLines(settings, "hero.images");
+  const slides = heroImages.length ? heroImages : fallbackHeroImages;
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setDirection(1);
-      setCurrent((prev) => (prev + 1) % heroImages.length);
+      setCurrent((prev) => (prev + 1) % slides.length);
     }, INTERVAL);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
+
+  useEffect(() => {
+    if (current >= slides.length) setCurrent(0);
+  }, [current, slides.length]);
 
   const goTo = (index: number) => {
     setDirection(index > current ? 1 : -1);
@@ -36,12 +44,12 @@ export default function HeroSection() {
 
   const prev = () => {
     setDirection(-1);
-    setCurrent((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
   const next = () => {
     setDirection(1);
-    setCurrent((prev) => (prev + 1) % heroImages.length);
+    setCurrent((prev) => (prev + 1) % slides.length);
   };
 
   return (
@@ -62,7 +70,7 @@ export default function HeroSection() {
           exit="exit"
           transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url('${heroImages[current]}')` }}
+          style={{ backgroundImage: `url('${slides[current]}')` }}
         />
       </AnimatePresence>
 
@@ -92,7 +100,7 @@ export default function HeroSection() {
         <div className="max-w-2xl pt-16 md:pt-20 lg:pt-24">
         <motion.div initial={{ opacity: 0, x: -18 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, delay: 0.15 }}>
           <span className="mb-5 inline-block rounded-full border border-orange-300/45 bg-slate-950/18 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.26em] text-orange-200 shadow-sm backdrop-blur-sm">
-            {t("Công Ty Cổ phần Xây Dựng Hữu Thành", "Huu Thanh Construction Co., Ltd.")}
+            {getSetting(settings, "hero.eyebrow") || t("Công Ty Cổ phần Xây Dựng Hữu Thành", "Huu Thanh Construction Co., Ltd.")}
           </span>
         </motion.div>
 
@@ -102,10 +110,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.25 }}
         >
-          {t("Đơn vị thi công", "Professional")}
-          <br />
-          <span className="text-orange-400">{t("công trình", "Construction")}</span>{" "}
-          {t("chuyên nghiệp", "Contractor")}
+          {getSetting(settings, "hero.title") || t("Đơn vị thi công công trình chuyên nghiệp", "Professional Construction Contractor")}
         </motion.h1>
 
         <motion.p
@@ -114,10 +119,11 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.4 }}
         >
-          {t(
-            "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
-            "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam"
-          )}
+          {getSetting(settings, "hero.description") ||
+            t(
+              "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
+              "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam"
+            )}
         </motion.p>
 
         <motion.div
@@ -163,7 +169,7 @@ export default function HeroSection() {
 
       {/* Dot indicators */}
       <div className="absolute bottom-16 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
-        {heroImages.map((_, i) => (
+        {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}

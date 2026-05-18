@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getSetting, useSiteSettings } from "@/lib/siteApi";
 
 export default function Footer() {
   const { t } = useLanguage();
+  const settings = useSiteSettings("company");
 
   const quickLinks = [
     { href: "/gioi-thieu", label: t("Giới thiệu", "About") },
@@ -106,22 +108,19 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="text-orange-400 mt-0.5 shrink-0" />
                 <span className="text-white/60 text-sm">
-                  {t(
-                    "30 Đường Số 7, Khu Đô Thị Vạn Phúc, Hiệp Bình, Thủ Đức, TP. Hồ Chí Minh",
-                    "30 Street No. 7, Van Phuc Urban Area, Hiep Binh Ward, Thu Duc District, Ho Chi Minh City"
-                  )}
+                  {getSetting(settings, "company.address")}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={16} className="text-orange-400 shrink-0" />
-                <a href="tel:0901234567" className="text-white/60 hover:text-orange-400 text-sm transition-colors">
-                  0901 234 567
+                <a href={`tel:${String(getSetting(settings, "company.phone")).replace(/\D/g, "")}`} className="text-white/60 hover:text-orange-400 text-sm transition-colors">
+                  {getSetting(settings, "company.phone")}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} className="text-orange-400 shrink-0" />
-                <a href="mailto:info@huuthanh.vn" className="text-white/60 hover:text-orange-400 text-sm transition-colors">
-                  info@huuthanh.vn
+                <a href={`mailto:${getSetting(settings, "company.email")}`} className="text-white/60 hover:text-orange-400 text-sm transition-colors">
+                  {getSetting(settings, "company.email")}
                 </a>
               </li>
             </ul>
