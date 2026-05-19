@@ -1,5 +1,3 @@
-import { cmsApiUrl, CMS_API_BASE_URL } from "@/lib/siteApi";
-
 const ACCESS_TOKEN_KEY = "huu-thanh-admin-access-token";
 const REFRESH_TOKEN_KEY = "huu-thanh-admin-refresh-token";
 const ADMIN_USER_KEY = "huu-thanh-admin-user";
@@ -19,10 +17,6 @@ type LoginResponse = {
 };
 
 type StoredSession = LoginResponse;
-
-function localApiUrl(path: string) {
-  return path;
-}
 
 function isBrowser() {
   return typeof window !== "undefined";
@@ -45,20 +39,13 @@ export function getStoredAdminSession() {
 }
 
 export async function validateAdminSession(session: Pick<StoredSession, "accessToken">) {
-  const response = await fetch(cmsApiUrl("/api/auth/me"), {
+  // Always call local proxy — it handles both external and local tokens server-side
+  const response = await fetch("/api/auth/me", {
     cache: "no-store",
     headers: { Authorization: `Bearer ${session.accessToken}` },
   }).catch(() => null);
 
-  if (response?.ok) return true;
-
-  // Fall back to local route for tokens issued by the local fallback login
-  const local = await fetch(localApiUrl("/api/auth/me"), {
-    cache: "no-store",
-    headers: { Authorization: `Bearer ${session.accessToken}` },
-  }).catch(() => null);
-
-  return local?.ok ?? false;
+  return response?.ok ?? false;
 }
 
 export function storeAdminSession(session: LoginResponse) {
@@ -76,18 +63,12 @@ export function clearStoredAdminSession() {
 }
 
 export async function loginAdmin(email: string, password: string) {
-  const init: RequestInit = {
+  // Always call local proxy — it proxies to external backend server-side, then falls back to local credentials
+  const response = await fetch("/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
-  };
-
-  let response = await fetch(cmsApiUrl("/api/auth/login"), init).catch(() => null);
-
-  // Fall back to local route if external is unavailable or rejects the credentials
-  if (!response || !response.ok) {
-    response = await fetch(localApiUrl("/api/auth/login"), init).catch(() => null);
-  }
+  }).catch(() => null);
 
   if (!response?.ok) {
     throw new Error("Email hoặc mật khẩu không đúng.");
@@ -100,15 +81,11 @@ export async function loginAdmin(email: string, password: string) {
 
 export async function logoutAdmin(refreshToken?: string) {
   if (refreshToken) {
-    await fetch(cmsApiUrl("/api/auth/logout"), {
+    await fetch("/api/auth/logout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refreshToken }),
-    }).catch(() => fetch(localApiUrl("/api/auth/logout"), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refreshToken }),
-    }).catch(() => undefined));
+    }).catch(() => undefined);
   }
   clearStoredAdminSession();
 }
