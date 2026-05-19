@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-const CMS_API_BASE_URL = process.env.NEXT_PUBLIC_CMS_API_URL?.replace(/\/$/, "") ?? "";
+const DEFAULT_CMS_API_BASE_URL = "https://huuthanhco.onrender.com";
+
+export const CMS_API_BASE_URL = (process.env.NEXT_PUBLIC_CMS_API_URL ?? DEFAULT_CMS_API_BASE_URL).replace(/\/$/, "");
 
 export type AdminRole = "super_admin" | "editor" | "hr" | "viewer";
 

@@ -1,4 +1,5 @@
-const CMS_API_BASE_URL = process.env.NEXT_PUBLIC_CMS_API_URL?.replace(/\/$/, "") ?? "";
+import { cmsApiUrl, CMS_API_BASE_URL } from "@/lib/siteApi";
+
 const ACCESS_TOKEN_KEY = "huu-thanh-admin-access-token";
 const REFRESH_TOKEN_KEY = "huu-thanh-admin-refresh-token";
 const ADMIN_USER_KEY = "huu-thanh-admin-user";
@@ -18,12 +19,6 @@ type LoginResponse = {
 };
 
 type StoredSession = LoginResponse;
-
-function cmsApiUrl(path: string) {
-  const normalizedPath =
-    CMS_API_BASE_URL.endsWith("/api") && path.startsWith("/api/") ? path.replace(/^\/api/, "") : path;
-  return `${CMS_API_BASE_URL}${normalizedPath}`;
-}
 
 function localApiUrl(path: string) {
   return path;
