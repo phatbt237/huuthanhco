@@ -7,15 +7,18 @@ import { MapPin, Calendar, ChevronLeft, ChevronRight, ArrowRight } from "lucide-
 import SectionTitle from "@/components/SectionTitle";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { mergeById, useCmsContent } from "@/lib/cmsContent";
 
 const PER_PAGE = 4;
 
 export default function ProjectsSection() {
   const { lang, t } = useLanguage();
+  const cmsContent = useCmsContent();
+  const projectItems = mergeById(cmsContent.projects, projects);
   const [page, setPage] = useState(0);
 
-  const totalPages = Math.ceil(projects.length / PER_PAGE);
-  const visible = projects.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(projectItems.length / PER_PAGE));
+  const visible = projectItems.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
 
   const prev = () => setPage((p) => (p - 1 + totalPages) % totalPages);
   const next = () => setPage((p) => (p + 1) % totalPages);

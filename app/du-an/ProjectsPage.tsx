@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { MapPin, Calendar } from "lucide-react";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { mergeById, useCmsContent } from "@/lib/cmsContent";
 
 const categoryMapVi: Record<string, string> = {
   "cang-bien": "Cảng biển",
@@ -17,6 +18,8 @@ const categoryMapVi: Record<string, string> = {
 
 export default function ProjectsPage() {
   const { lang, t } = useLanguage();
+  const cmsContent = useCmsContent();
+  const projectItems = mergeById(cmsContent.projects, projects);
   const searchParams = useSearchParams();
   const loaiParam = searchParams.get("loai");
   const initialCategory = loaiParam ? (categoryMapVi[loaiParam] ?? "all") : "all";
@@ -37,16 +40,16 @@ export default function ProjectsPage() {
     { key: "before2022", label: t("Trước 2022", "Before 2022") },
   ];
 
-  const allCategoryKeys = Array.from(new Set(projects.map((p) => p.category)));
+  const allCategoryKeys = Array.from(new Set(projectItems.map((p) => p.category)));
   const categories = [
     { key: "all", label: t("Tất cả", "All") },
     ...allCategoryKeys.map((key) => {
-      const proj = projects.find((p) => p.category === key)!;
+      const proj = projectItems.find((p) => p.category === key)!;
       return { key, label: lang === "vi" ? proj.category : proj.categoryEn };
     }),
   ];
 
-  const filtered = projects.filter((p) => {
+  const filtered = projectItems.filter((p) => {
     const matchYear =
       activeYear === "all" ||
       (activeYear === "before2022" ? p.year < 2022 : p.year === parseInt(activeYear));
