@@ -1,5 +1,7 @@
 import { equipment } from "@/data/equipment";
+import type { NewsItem } from "@/data/news";
 import { news } from "@/data/news";
+import type { Project } from "@/data/projects";
 import { projects } from "@/data/projects";
 import { normalizeSearchText } from "@/lib/utils";
 
@@ -33,7 +35,7 @@ const projectSlugMap: Record<string, string> = {
   "Hạ tầng": "ha-tang",
 };
 
-const rawSearchItems: RawSearchItem[] = [
+const baseRawSearchItems: RawSearchItem[] = [
   {
     title: "Trang chủ",
     titleEn: "Home",
@@ -111,18 +113,24 @@ const rawSearchItems: RawSearchItem[] = [
     keywords: "lien he hotline email dia chi tu van",
     keywordsEn: "contact hotline email address consultation",
   },
-  ...projects.map((project) => ({
+];
+
+function projectToSearchItem(project: Project): RawSearchItem {
+  return {
     title: project.name,
     titleEn: project.nameEn,
     category: "Dự án",
     categoryEn: "Project",
-    href: `/du-an?loai=${projectSlugMap[project.category] ?? ""}`,
+    href: `/du-an#du-an-${project.id}`,
     excerpt: `${project.category} tại ${project.location}. ${project.description}`,
     excerptEn: `${project.categoryEn} in ${project.location}. ${project.descriptionEn}`,
     keywords: `${project.name} ${project.category} ${project.location} ${project.year} ${project.description}`,
     keywordsEn: `${project.nameEn} ${project.categoryEn} ${project.location} ${project.year} ${project.descriptionEn}`,
-  })),
-  ...equipment.map((item) => ({
+  };
+}
+
+function equipmentToSearchItem(item: (typeof equipment)[number]): RawSearchItem {
+  return {
     title: item.name,
     titleEn: item.nameEn,
     category: "Thiết bị",
@@ -132,19 +140,22 @@ const rawSearchItems: RawSearchItem[] = [
     excerptEn: item.descriptionEn,
     keywords: `${item.name} ${item.description} ${item.specs.join(" ")}`,
     keywordsEn: `${item.nameEn} ${item.descriptionEn} ${item.specsEn.join(" ")}`,
-  })),
-  ...news.map((item) => ({
+  };
+}
+
+function newsToSearchItem(item: NewsItem): RawSearchItem {
+  return {
     title: item.title,
     titleEn: item.titleEn,
     category: item.category,
     categoryEn: item.categoryEn,
-    href: "/tin-tuc",
+    href: `/tin-tuc#tin-tuc-${item.id}`,
     excerpt: item.excerpt,
     excerptEn: item.excerptEn,
     keywords: `${item.title} ${item.category} ${item.excerpt}`,
     keywordsEn: `${item.titleEn} ${item.categoryEn} ${item.excerptEn}`,
-  })),
-];
+  };
+}
 
 function localizeItem(item: RawSearchItem, lang: Lang): SearchItem {
   return {
@@ -156,11 +167,19 @@ function localizeItem(item: RawSearchItem, lang: Lang): SearchItem {
   };
 }
 
-export function searchSite(query: string, lang: Lang): SearchItem[] {
+export function searchSite(query: string, lang: Lang, extras?: { projects?: Project[]; news?: NewsItem[] }): SearchItem[] {
   const normalizedQuery = normalizeSearchText(query.trim());
   if (!normalizedQuery) return [];
 
   const words = normalizedQuery.split(/\s+/).filter(Boolean);
+  const projectItems = mergeProjectsWithStaticPriority(extras?.projects ?? []);
+  const rawSearchItems = [
+    ...baseRawSearchItems,
+    ...projectItems.map(projectToSearchItem),
+    ...equipment.map(equipmentToSearchItem),
+    ...news.map(newsToSearchItem),
+    ...(extras?.news ?? []).map(newsToSearchItem),
+  ];
 
   return rawSearchItems
     .map((rawItem) => {
@@ -182,4 +201,9 @@ export function searchSite(query: string, lang: Lang): SearchItem[] {
     .filter((result) => result.score > 0)
     .sort((a, b) => b.score - a.score)
     .map((result) => result.item);
+}
+
+function mergeProjectsWithStaticPriority(customProjects: Project[]) {
+  const staticIds = new Set(projects.map((project) => project.id));
+  return [...projects, ...customProjects.filter((project) => !staticIds.has(project.id))];
 }
