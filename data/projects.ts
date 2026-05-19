@@ -18,7 +18,7 @@ export const projects: Project[] = [
     name: "Mở rộng cầu cảng 80.000DWT cảng Hải Linh (Vũng Tàu Petro)",
     nameEn: "Expanding 80,000DWT Wharf of Hai Linh Port (Vung Tau Petro)",
     location: "Vũng Tàu",
-    year: 2023,
+    year: 2023, 
     category: "Cảng biển",
     categoryEn: "Seaport",
     image: "/images/du-an/huu-thanh-co_132827983464005202.jpg",

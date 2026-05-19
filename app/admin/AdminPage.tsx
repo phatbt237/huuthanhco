@@ -4,18 +4,24 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   AlertCircle,
+  Briefcase,
   CheckCircle2,
   Download,
-  Lock,
-  Mail,
+  FolderOpen,
   Inbox,
+  Lock,
   Loader2,
   LogOut,
+  Mail,
+  Newspaper,
   Plus,
   Save,
   Search,
+  Settings,
   Trash2,
   Upload,
+  UserCheck,
+  Users,
 } from "lucide-react";
 import AdminExtraPanels, { type ExtraAdminTab } from "@/components/AdminExtraPanels";
 import type { Job } from "@/data/jobs";
@@ -84,7 +90,7 @@ function slugify(value: string) {
   return value
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .replace(/đ/g, "d")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
@@ -148,23 +154,23 @@ export default function AdminPage() {
 
   if (isCheckingSession) {
     return (
-      <section className="min-h-screen bg-slate-950 pt-20">
-        <div className="flex min-h-[60vh] items-center justify-center text-white">
-          <Loader2 className="mr-3 animate-spin" size={20} />
-          Đang kiểm tra phiên đăng nhập
+      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+        <div className="flex items-center gap-3 text-slate-400">
+          <Loader2 className="animate-spin" size={20} />
+          <span className="text-sm font-medium">Đang kiểm tra phiên đăng nhập…</span>
         </div>
-      </section>
+      </div>
     );
   }
 
   if (!session) {
     return (
-      <section className="min-h-screen bg-slate-950">
-        <div className="flex min-h-screen items-center justify-center text-white">
-          <Loader2 className="mr-3 animate-spin" size={20} />
-          Đang chuyển đến trang đăng nhập
+      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+        <div className="flex items-center gap-3 text-slate-400">
+          <Loader2 className="animate-spin" size={20} />
+          <span className="text-sm font-medium">Đang chuyển đến trang đăng nhập…</span>
         </div>
-      </section>
+      </div>
     );
   }
 
@@ -217,12 +223,12 @@ export function AdminLoginPage() {
 
   if (isCheckingSession) {
     return (
-      <section className="min-h-screen bg-slate-950">
-        <div className="flex min-h-screen items-center justify-center text-white">
-          <Loader2 className="mr-3 animate-spin" size={20} />
-          Đang kiểm tra phiên đăng nhập
+      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+        <div className="flex items-center gap-3 text-slate-400">
+          <Loader2 className="animate-spin" size={20} />
+          <span className="text-sm font-medium">Đang kiểm tra phiên đăng nhập…</span>
         </div>
-      </section>
+      </div>
     );
   }
 
@@ -269,7 +275,7 @@ function AdminLogin({ onLoggedIn }: { onLoggedIn: (session: Session) => void }) 
                 className="h-full w-full object-contain"
               />
             </div>
-            <div className="text-3xl font-black tracking-tight text-cyan-200">Hữu Thành CMS</div>
+            <div className="text-3xl font-black tracking-tight text-cyan-200">Hữu Thành</div>
             <div className="mt-1 text-xs font-bold uppercase tracking-[0.35em] text-cyan-100/70">Admin Login</div>
           </div>
 
@@ -506,243 +512,289 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
     }
   };
 
+  const userInitial = (session.user.fullName || session.user.email)[0].toUpperCase();
+
   return (
-    <section className="min-h-screen bg-slate-100 text-slate-950">
-      <div className="bg-[#d60000] text-white">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3 text-sm font-bold">
-          <div>
-            <span>Xin chào:</span>
-            <span className="ml-2">{session.user.fullName || session.user.email}</span>
+    <div className="flex min-h-screen bg-slate-50">
+      {/* ── Sidebar ── */}
+      <aside className="fixed inset-y-0 left-0 z-40 flex w-60 flex-col bg-slate-900">
+        {/* Brand */}
+        <div className="flex items-center gap-3 border-b border-slate-700/60 px-4 py-4">
+          <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/10 p-1">
+            <img
+              src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/69ba7546394f41773827398.jpg"
+              alt="Hữu Thành"
+              className="h-full w-full object-contain"
+            />
           </div>
-          <button onClick={onLogout} className="inline-flex items-center gap-1 underline">
-          <LogOut size={14} />
-          Thoát
-          </button>
+          <div className="min-w-0">
+            <div className="truncate text-sm font-black text-white">Hữu Thành</div>
+            <div className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Admin Panel</div>
+          </div>
         </div>
-      </div>
 
-      <nav className="border-b-4 border-white bg-[#d60000]">
-        <div className="flex overflow-x-auto">
-          <AdminTabButton active={activeTab === "accounts"} label="Quản Trị Tài khoản" onClick={() => changeTab("accounts")} />
-          <AdminTabButton label="Keyword" onClick={() => showStatus("Chức năng Keyword sẽ được kết nối sau.")} />
-          <AdminTabButton label="WebMail" onClick={() => showStatus("Chức năng WebMail sẽ được kết nối sau.")} />
-          <AdminTabButton label="Banner" onClick={() => showStatus("Chức năng Banner sẽ được kết nối sau.")} />
-          <AdminTabButton label="Flash" onClick={() => showStatus("Chức năng Flash sẽ được kết nối sau.")} />
-          <AdminTabButton active={activeTab === "news"} label="Đăng tin" onClick={() => changeTab("news")} />
-          <AdminTabButton active={activeTab === "projects"} label="Dự án" onClick={() => changeTab("projects")} />
-          <AdminTabButton active={activeTab === "jobs"} label="Tuyển dụng" onClick={() => changeTab("jobs")} />
-          <AdminTabButton active={activeTab === "contacts"} label="Hộp thư" onClick={() => changeTab("contacts")} />
-          <AdminTabButton active={activeTab === "applications"} label="Ứng tuyển" onClick={() => changeTab("applications")} />
-          <AdminTabButton active={activeTab === "settings"} label="Thông Tin Liên Hệ" onClick={() => changeTab("settings")} />
-        </div>
-      </nav>
+        {/* Nav */}
+        <nav className="flex-1 overflow-y-auto px-3 py-4">
+          <NavSection label="Nội dung">
+            <SideNavItem icon={<FolderOpen size={16} />} label="Dự án" active={activeTab === "projects"} onClick={() => changeTab("projects")} />
+            <SideNavItem icon={<Newspaper size={16} />} label="Tin tức" active={activeTab === "news"} onClick={() => changeTab("news")} />
+            <SideNavItem icon={<Briefcase size={16} />} label="Tuyển dụng" active={activeTab === "jobs"} onClick={() => changeTab("jobs")} />
+          </NavSection>
+          <NavSection label="Liên hệ">
+            <SideNavItem icon={<Inbox size={16} />} label="Hộp thư" active={activeTab === "contacts"} onClick={() => changeTab("contacts")} />
+            <SideNavItem icon={<UserCheck size={16} />} label="Ứng tuyển" active={activeTab === "applications"} onClick={() => changeTab("applications")} />
+          </NavSection>
+          <NavSection label="Hệ thống">
+            <SideNavItem icon={<Users size={16} />} label="Tài khoản" active={activeTab === "accounts"} onClick={() => changeTab("accounts")} />
+            <SideNavItem icon={<Settings size={16} />} label="Cài đặt" active={activeTab === "settings"} onClick={() => changeTab("settings")} />
+          </NavSection>
+        </nav>
 
-      <main className="mx-auto mt-6 max-w-[1400px] bg-white px-7 py-8 shadow-sm">
-          <header className="mb-7 flex flex-col gap-4 border-b border-slate-200 pb-5 xl:flex-row xl:items-end xl:justify-between">
-            <div>
-              <div className="text-base font-bold text-slate-900">{tabTitle(activeTab)}</div>
-              {isCmsTab(activeTab) && !isEditorOpen && (
-                <p className="mt-2 text-sm text-slate-500">
-                  Hiển thị danh sách trước. Bấm Tạo mới hoặc Sửa khi cần biên tập nội dung.
-                </p>
-              )}
+        {/* User footer */}
+        <div className="border-t border-slate-700/60 p-3">
+          <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-red-600 text-xs font-black text-white">
+              {userInitial}
             </div>
-            {isCmsTab(activeTab) && (
-              <div className="flex flex-wrap gap-2">
-                <button onClick={openCreateForm} className="inline-flex h-10 items-center gap-2 rounded-lg bg-orange-500 px-4 text-sm font-black text-white hover:bg-orange-600">
-                  <Plus size={15} />
-                  Tạo mới
-                </button>
-                <button onClick={exportJson} className="inline-flex h-10 items-center gap-2 border border-slate-400 bg-slate-100 px-3 text-sm font-bold text-slate-800">
-                  <Download size={15} />
-                  Export
-                </button>
-                <label className="inline-flex h-10 cursor-pointer items-center gap-2 border border-slate-400 bg-slate-100 px-3 text-sm font-bold text-slate-800">
-                  <Upload size={15} />
-                  Import
-                  <input type="file" accept="application/json" className="hidden" onChange={(event) => importJson(event.target.files?.[0] ?? null)} />
-                </label>
-                <button onClick={clearAll} className="inline-flex h-10 items-center gap-2 border border-red-300 bg-white px-3 text-sm font-bold text-red-700">
-                  <Trash2 size={15} />
-                  Xóa CMS
-                </button>
-              </div>
-            )}
-          </header>
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-xs font-semibold text-white">{session.user.fullName || session.user.email}</div>
+              <div className="truncate text-[11px] text-slate-500">{session.user.email}</div>
+            </div>
+            <button
+              onClick={onLogout}
+              title="Đăng xuất"
+              className="flex-shrink-0 rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-700 hover:text-white"
+            >
+              <LogOut size={15} />
+            </button>
+          </div>
+        </div>
+      </aside>
 
+      {/* ── Main area ── */}
+      <div className="ml-60 flex min-h-screen flex-1 flex-col">
+        {/* Page header */}
+        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white px-8 py-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-lg font-black text-slate-900">{tabTitle(activeTab)}</h1>
+              <p className="mt-0.5 text-xs font-medium text-slate-400">Hữu Thành Construction · Quản trị nội dung</p>
+            </div>
+
+            {isCmsTab(activeTab) && (
+              <button
+                onClick={openCreateForm}
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-red-600 px-4 text-xs font-black text-white transition hover:bg-red-700"
+              >
+                <Plus size={14} />
+                Tạo mới
+              </button>
+            )}
+          </div>
+        </header>
+
+        {/* Page body */}
+        <main className="flex-1 p-8">
           {statusMessage && (
             <div
-              className={`mb-6 flex items-start gap-3 rounded-lg border p-4 text-sm font-semibold ${
-                statusKind === "error" ? "border-red-200 bg-red-50 text-red-700" : "border-green-200 bg-green-50 text-green-700"
+              className={`mb-6 flex items-center gap-3 rounded-xl border p-4 text-sm font-semibold ${
+                statusKind === "error"
+                  ? "border-red-200 bg-red-50 text-red-700"
+                  : "border-emerald-200 bg-emerald-50 text-emerald-700"
               }`}
             >
-              {statusKind === "error" ? <AlertCircle className="mt-0.5 shrink-0" size={18} /> : <CheckCircle2 className="mt-0.5 shrink-0" size={18} />}
+              {statusKind === "error"
+                ? <AlertCircle className="shrink-0" size={17} />
+                : <CheckCircle2 className="shrink-0" size={17} />}
               {statusMessage}
             </div>
           )}
 
           {isCmsTab(activeTab) ? (
             isEditorOpen ? (
-              <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
-                <div className="flex flex-col gap-3 border-b border-slate-200 p-5 md:flex-row md:items-center md:justify-between">
+              /* ── Editor ── */
+              <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="flex flex-col gap-3 border-b border-slate-100 px-6 py-5 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <div className="text-xs font-black uppercase tracking-[0.2em] text-orange-600">
-                      {editingId ? "Chỉnh sửa nội dung" : "Tạo nội dung mới"}
+                    <div className="text-[11px] font-black uppercase tracking-widest text-red-500">
+                      {editingId ? "Chỉnh sửa" : "Tạo mới"}
                     </div>
-                    <h2 className="mt-1 text-2xl font-black text-slate-950">{tabTitle(activeTab)}</h2>
+                    <h2 className="mt-0.5 text-xl font-black text-slate-900">{tabTitle(activeTab)}</h2>
                   </div>
-                  <button onClick={resetForm} className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 px-4 text-sm font-black text-slate-700 hover:bg-slate-50">
-                    Quay lại danh sách
+                  <button
+                    onClick={resetForm}
+                    className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 px-4 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                  >
+                    ← Quay lại danh sách
                   </button>
                 </div>
-                <div className="p-5">
-              {activeTab === "news" && (
-                <div className="space-y-4">
-                  <FormHeader title="Tin tức" onDelete={newsForm.id ? () => removeItem(newsForm.id) : undefined} />
-                  <Input label="Tiêu đề" value={newsForm.title} onChange={(value) => setNewsForm({ ...newsForm, title: value, slug: newsForm.slug || slugify(value) })} />
-                  <Input label="Tiêu đề EN" value={newsForm.titleEn} onChange={(value) => setNewsForm({ ...newsForm, titleEn: value })} />
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-                    <Input label="Slug" value={newsForm.slug} onChange={(value) => setNewsForm({ ...newsForm, slug: slugify(value) })} />
-                    <Input label="Ngày" type="date" value={newsForm.date} onChange={(value) => setNewsForm({ ...newsForm, date: value })} />
-                    <Input label="Danh mục" value={newsForm.category} onChange={(value) => setNewsForm({ ...newsForm, category: value })} />
-                    <Input label="Danh mục EN" value={newsForm.categoryEn} onChange={(value) => setNewsForm({ ...newsForm, categoryEn: value })} />
-                  </div>
-                  <Input label="Ảnh đại diện" value={newsForm.thumbnail} onChange={(value) => setNewsForm({ ...newsForm, thumbnail: value })} />
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <Textarea label="Mô tả ngắn (VI)" value={newsForm.excerpt} onChange={(value) => setNewsForm({ ...newsForm, excerpt: value })} />
-                    <Textarea label="Mô tả ngắn (EN)" value={newsForm.excerptEn} onChange={(value) => setNewsForm({ ...newsForm, excerptEn: value })} />
-                  </div>
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <Textarea label="Nội dung (VI)" rows={8} value={newsForm.content} onChange={(value) => setNewsForm({ ...newsForm, content: value })} />
-                    <Textarea label="Nội dung (EN)" rows={8} value={newsForm.contentEn} onChange={(value) => setNewsForm({ ...newsForm, contentEn: value })} />
-                  </div>
-                  <SaveButton disabled={isSaving} onClick={saveNews} />
-                </div>
-              )}
 
-              {activeTab === "projects" && (
-                <div className="space-y-4">
-                  <FormHeader title="Dự án" onDelete={projectForm.id ? () => removeItem(projectForm.id) : undefined} />
-                  <Input label="Tên dự án" value={projectForm.name} onChange={(value) => setProjectForm({ ...projectForm, name: value })} />
-                  <Input label="Tên dự án EN" value={projectForm.nameEn} onChange={(value) => setProjectForm({ ...projectForm, nameEn: value })} />
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    <Input label="Địa điểm" value={projectForm.location} onChange={(value) => setProjectForm({ ...projectForm, location: value })} />
-                    <Input label="Năm" type="number" value={String(projectForm.year)} onChange={(value) => setProjectForm({ ...projectForm, year: Number(value) })} />
-                    <Input label="Loại" value={projectForm.category} onChange={(value) => setProjectForm({ ...projectForm, category: value })} />
-                  </div>
-                  <Input label="Ảnh dự án" value={projectForm.image} onChange={(value) => setProjectForm({ ...projectForm, image: value })} />
-                  <Textarea label="Mô tả" value={projectForm.description} onChange={(value) => setProjectForm({ ...projectForm, description: value })} />
-                  <Textarea label="Mô tả EN" value={projectForm.descriptionEn} onChange={(value) => setProjectForm({ ...projectForm, descriptionEn: value })} />
-                  <SaveButton disabled={isSaving} onClick={saveProject} />
-                </div>
-              )}
+                <div className="p-6">
+                  {activeTab === "news" && (
+                    <div className="space-y-5">
+                      <FormHeader title="Tin tức" onDelete={newsForm.id ? () => removeItem(newsForm.id) : undefined} />
+                      <Input label="Tiêu đề" value={newsForm.title} onChange={(v) => setNewsForm({ ...newsForm, title: v, slug: newsForm.slug || slugify(v) })} />
+                      <Input label="Tiêu đề EN" value={newsForm.titleEn} onChange={(v) => setNewsForm({ ...newsForm, titleEn: v })} />
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+                        <Input label="Slug" value={newsForm.slug} onChange={(v) => setNewsForm({ ...newsForm, slug: slugify(v) })} />
+                        <Input label="Ngày" type="date" value={newsForm.date} onChange={(v) => setNewsForm({ ...newsForm, date: v })} />
+                        <Input label="Danh mục" value={newsForm.category} onChange={(v) => setNewsForm({ ...newsForm, category: v })} />
+                        <Input label="Danh mục EN" value={newsForm.categoryEn} onChange={(v) => setNewsForm({ ...newsForm, categoryEn: v })} />
+                      </div>
+                      <Input label="Ảnh đại diện" value={newsForm.thumbnail} onChange={(v) => setNewsForm({ ...newsForm, thumbnail: v })} />
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <Textarea label="Mô tả ngắn (VI)" value={newsForm.excerpt} onChange={(v) => setNewsForm({ ...newsForm, excerpt: v })} />
+                        <Textarea label="Mô tả ngắn (EN)" value={newsForm.excerptEn} onChange={(v) => setNewsForm({ ...newsForm, excerptEn: v })} />
+                      </div>
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <Textarea label="Nội dung (VI)" rows={8} value={newsForm.content} onChange={(v) => setNewsForm({ ...newsForm, content: v })} />
+                        <Textarea label="Nội dung (EN)" rows={8} value={newsForm.contentEn} onChange={(v) => setNewsForm({ ...newsForm, contentEn: v })} />
+                      </div>
+                      <SaveButton disabled={isSaving} onClick={saveNews} />
+                    </div>
+                  )}
 
-              {activeTab === "jobs" && (
-                <div className="space-y-4">
-                  <FormHeader title="Tuyển dụng" onDelete={jobForm.id ? () => removeItem(jobForm.id) : undefined} />
-                  <Input label="Vị trí" value={jobForm.title} onChange={(value) => setJobForm({ ...jobForm, title: value })} />
-                  <Input label="Vị trí EN" value={jobForm.titleEn} onChange={(value) => setJobForm({ ...jobForm, titleEn: value })} />
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    <Input label="Địa điểm" value={jobForm.location} onChange={(value) => setJobForm({ ...jobForm, location: value })} />
-                    <Input label="Loại hình" value={jobForm.type} onChange={(value) => setJobForm({ ...jobForm, type: value })} />
-                    <Input label="Lương" value={jobForm.salary} onChange={(value) => setJobForm({ ...jobForm, salary: value })} />
-                  </div>
-                  <Textarea label="Mô tả công việc" value={jobForm.description} onChange={(value) => setJobForm({ ...jobForm, description: value })} />
-                  <Textarea label="Mô tả EN" value={jobForm.descriptionEn} onChange={(value) => setJobForm({ ...jobForm, descriptionEn: value })} />
-                  <Textarea label="Yêu cầu, mỗi dòng một ý" value={jobRequirements} onChange={setJobRequirements} />
-                  <Textarea label="Yêu cầu EN, mỗi dòng một ý" value={jobRequirementsEn} onChange={setJobRequirementsEn} />
-                  <SaveButton disabled={isSaving} onClick={saveJob} />
+                  {activeTab === "projects" && (
+                    <div className="space-y-5">
+                      <FormHeader title="Dự án" onDelete={projectForm.id ? () => removeItem(projectForm.id) : undefined} />
+                      <Input label="Tên dự án" value={projectForm.name} onChange={(v) => setProjectForm({ ...projectForm, name: v })} />
+                      <Input label="Tên dự án EN" value={projectForm.nameEn} onChange={(v) => setProjectForm({ ...projectForm, nameEn: v })} />
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        <Input label="Địa điểm" value={projectForm.location} onChange={(v) => setProjectForm({ ...projectForm, location: v })} />
+                        <Input label="Năm" type="number" value={String(projectForm.year)} onChange={(v) => setProjectForm({ ...projectForm, year: Number(v) })} />
+                        <Input label="Loại" value={projectForm.category} onChange={(v) => setProjectForm({ ...projectForm, category: v })} />
+                      </div>
+                      <Input label="Ảnh dự án" value={projectForm.image} onChange={(v) => setProjectForm({ ...projectForm, image: v })} />
+                      <Textarea label="Mô tả" value={projectForm.description} onChange={(v) => setProjectForm({ ...projectForm, description: v })} />
+                      <Textarea label="Mô tả EN" value={projectForm.descriptionEn} onChange={(v) => setProjectForm({ ...projectForm, descriptionEn: v })} />
+                      <SaveButton disabled={isSaving} onClick={saveProject} />
+                    </div>
+                  )}
+
+                  {activeTab === "jobs" && (
+                    <div className="space-y-5">
+                      <FormHeader title="Tuyển dụng" onDelete={jobForm.id ? () => removeItem(jobForm.id) : undefined} />
+                      <Input label="Vị trí" value={jobForm.title} onChange={(v) => setJobForm({ ...jobForm, title: v })} />
+                      <Input label="Vị trí EN" value={jobForm.titleEn} onChange={(v) => setJobForm({ ...jobForm, titleEn: v })} />
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        <Input label="Địa điểm" value={jobForm.location} onChange={(v) => setJobForm({ ...jobForm, location: v })} />
+                        <Input label="Loại hình" value={jobForm.type} onChange={(v) => setJobForm({ ...jobForm, type: v })} />
+                        <Input label="Lương" value={jobForm.salary} onChange={(v) => setJobForm({ ...jobForm, salary: v })} />
+                      </div>
+                      <Textarea label="Mô tả công việc" value={jobForm.description} onChange={(v) => setJobForm({ ...jobForm, description: v })} />
+                      <Textarea label="Mô tả EN" value={jobForm.descriptionEn} onChange={(v) => setJobForm({ ...jobForm, descriptionEn: v })} />
+                      <Textarea label="Yêu cầu, mỗi dòng một ý" value={jobRequirements} onChange={setJobRequirements} />
+                      <Textarea label="Yêu cầu EN, mỗi dòng một ý" value={jobRequirementsEn} onChange={setJobRequirementsEn} />
+                      <SaveButton disabled={isSaving} onClick={saveJob} />
+                    </div>
+                  )}
                 </div>
-              )}
-                </div>
-              </section>
+              </div>
             ) : (
-              <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
-                <div className="flex flex-col gap-4 border-b border-slate-200 p-5 lg:flex-row lg:items-center lg:justify-between">
+              /* ── List ── */
+              <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="flex flex-col gap-4 border-b border-slate-100 px-6 py-5 lg:flex-row lg:items-center lg:justify-between">
                   <div>
-                    <h2 className="text-2xl font-black text-slate-950">{cmsListTitle(activeTab)}</h2>
-                    <p className="mt-1 text-sm font-semibold text-slate-500">
-                      {currentItems.length} nội dung đang hiển thị trong danh sách.
+                    <h2 className="text-lg font-black text-slate-900">{cmsListTitle(activeTab)}</h2>
+                    <p className="mt-0.5 text-sm font-medium text-slate-400">
+                      {currentItems.length} mục đang hiển thị
                     </p>
                   </div>
-                  <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto">
-                    <label className="relative block min-w-0 sm:w-80">
-                      <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <div className="flex w-full flex-col gap-2 sm:flex-row lg:w-auto">
+                    <label className="relative block sm:w-72">
+                      <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
                       <input
                         value={query}
-                        onChange={(event) => setQuery(event.target.value)}
-                        placeholder="Tìm theo tên hoặc ID"
-                        className="h-11 w-full rounded-lg border border-slate-200 pl-10 pr-4 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder="Tìm theo tên hoặc ID…"
+                        className="h-9 w-full rounded-lg border border-slate-200 pl-9 pr-4 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100"
                       />
                     </label>
-                    <button onClick={openCreateForm} className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-orange-500 px-4 text-sm font-black text-white hover:bg-orange-600">
-                      <Plus size={16} />
+                    <button
+                      onClick={openCreateForm}
+                      className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-red-600 px-4 text-sm font-black text-white transition hover:bg-red-700"
+                    >
+                      <Plus size={15} />
                       Tạo mới
                     </button>
                   </div>
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[900px] border-collapse text-left text-sm">
-                    <thead className="bg-slate-50 text-xs font-black uppercase tracking-wide text-slate-500">
-                      <tr>
-                        <th className="w-36 border-b border-slate-200 px-4 py-3">Thao tác</th>
-                        <th className="border-b border-slate-200 px-4 py-3">{cmsPrimaryColumn(activeTab)}</th>
-                        <th className="border-b border-slate-200 px-4 py-3">Loại</th>
-                        <th className="border-b border-slate-200 px-4 py-3">Hình ảnh</th>
-                        <th className="border-b border-slate-200 px-4 py-3">Hiển thị</th>
-                        <th className="border-b border-slate-200 px-4 py-3">Ngôn ngữ</th>
-                        <th className="border-b border-slate-200 px-4 py-3">{activeTab === "projects" ? "Năm" : "ID"}</th>
+                  <table className="w-full min-w-[860px] border-collapse text-left text-sm">
+                    <thead>
+                      <tr className="bg-slate-50 text-[11px] font-black uppercase tracking-widest text-slate-400">
+                        <th className="border-b border-slate-100 px-5 py-3">{cmsPrimaryColumn(activeTab)}</th>
+                        <th className="border-b border-slate-100 px-5 py-3">Loại</th>
+                        <th className="border-b border-slate-100 px-5 py-3">Hình ảnh</th>
+                        <th className="border-b border-slate-100 px-5 py-3">Trạng thái</th>
+                        <th className="border-b border-slate-100 px-5 py-3">Ngôn ngữ</th>
+                        {activeTab === "projects" && <th className="border-b border-slate-100 px-5 py-3">Năm</th>}
+                        <th className="border-b border-slate-100 px-5 py-3">Thao tác</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentItems.length === 0 ? (
                         <tr>
-                          <td colSpan={7} className="px-4 py-12 text-center text-sm font-semibold text-slate-400">
+                          <td colSpan={activeTab === "projects" ? 7 : 6} className="px-5 py-16 text-center text-sm font-semibold text-slate-400">
                             Chưa có nội dung phù hợp.
                           </td>
                         </tr>
                       ) : (
                         currentItems.map((item) => (
-                          <tr key={item.id} className="border-b border-slate-100 align-middle hover:bg-orange-50/30">
-                            <td className="px-4 py-4">
-                              <div className="flex flex-wrap gap-2">
-                                <button onClick={() => editItem(item.id)} className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-black text-blue-700 hover:bg-blue-100">
+                          <tr key={item.id} className="border-b border-slate-50 align-middle transition hover:bg-slate-50/80">
+                            <td className="max-w-[22rem] px-5 py-3">
+                              <div className="line-clamp-2 text-sm font-bold text-slate-900">{getItemTitle(item) || "Chưa đặt tên"}</div>
+                            </td>
+                            <td className="px-5 py-3">
+                              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+                                {getItemCategory(item)}
+                              </span>
+                            </td>
+                            <td className="px-5 py-3">
+                              <ItemThumbnail src={getItemImage(item)} alt={getItemTitle(item)} />
+                            </td>
+                            <td className="px-5 py-3">
+                              <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-700">Hiện</span>
+                            </td>
+                            <td className="px-5 py-3 text-xs font-semibold text-slate-500">VI / EN</td>
+                            {activeTab === "projects" && "year" in item && (
+                              <td className="px-5 py-3 text-sm font-semibold text-slate-600">{item.year}</td>
+                            )}
+                            <td className="px-5 py-3">
+                              <div className="flex gap-1.5">
+                                <button
+                                  onClick={() => editItem(item.id)}
+                                  className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-black text-blue-700 transition hover:bg-blue-100"
+                                >
                                   Sửa
                                 </button>
-                                <button onClick={() => removeItem(item.id)} className="rounded-lg bg-red-50 px-3 py-2 text-sm font-black text-red-700 hover:bg-red-100">
+                                <button
+                                  onClick={() => removeItem(item.id)}
+                                  className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-black text-red-600 transition hover:bg-red-100"
+                                >
                                   Xóa
                                 </button>
                               </div>
                             </td>
-                            <td className="max-w-[24rem] px-4 py-4">
-                              <div className="line-clamp-2 text-base font-black text-slate-900">{getItemTitle(item) || "Chưa đặt tên"}</div>
-                              <div className="mt-1 truncate text-xs font-semibold text-slate-400">{item.id}</div>
-                            </td>
-                            <td className="px-4 py-4 font-semibold text-slate-600">{getItemCategory(item)}</td>
-                            <td className="px-4 py-4">
-                              <ItemThumbnail src={getItemImage(item)} alt={getItemTitle(item)} />
-                            </td>
-                            <td className="px-4 py-4">
-                              <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-black text-green-700">Enable</span>
-                            </td>
-                            <td className="px-4 py-4 font-semibold text-slate-600">VI / EN</td>
-                            <td className="px-4 py-4 font-semibold text-slate-600">{activeTab === "projects" && "year" in item ? item.year : item.id}</td>
                           </tr>
                         ))
                       )}
                     </tbody>
                   </table>
                 </div>
-              </section>
+              </div>
             )
           ) : (
             <AdminExtraPanels tab={activeTab} token={session.accessToken} currentUserId={session.user.id} />
           )}
-      </main>
-    </section>
+        </main>
+      </div>
+    </div>
   );
 }
+
+/* ── Helpers ── */
 
 function upsert<T extends { id: string }>(items: T[], item: T): T[] {
   const exists = items.some((entry) => entry.id === item.id);
@@ -786,11 +838,49 @@ function tabTitle(tab: Tab) {
   if (tab === "accounts") return "Quản lý tài khoản";
   if (tab === "contacts") return "Thông tin liên hệ";
   if (tab === "applications") return "Hồ sơ ứng tuyển";
-  return "Cấu hình website";
+  return "Cài đặt website";
 }
 
 function isCmsTab(tab: Tab): tab is CmsTab {
   return tab === "news" || tab === "projects" || tab === "jobs";
+}
+
+/* ── UI Components ── */
+
+function NavSection({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-5">
+      <div className="mb-1.5 px-3 text-[10px] font-black uppercase tracking-widest text-slate-600">{label}</div>
+      <div className="space-y-0.5">{children}</div>
+    </div>
+  );
+}
+
+function SideNavItem({
+  icon,
+  label,
+  active,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
+        active
+          ? "bg-red-600 text-white shadow-sm"
+          : "text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+      }`}
+    >
+      {icon}
+      {label}
+    </button>
+  );
 }
 
 function LoginField({
@@ -815,7 +905,7 @@ function LoginField({
         value={value}
         autoComplete={autoComplete}
         placeholder={placeholder}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         className="h-12 w-full border border-slate-300 bg-white pl-4 pr-12 text-base text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-[#3f98c4] focus:ring-2 focus:ring-[#3f98c4]/15"
       />
       <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-500">
@@ -825,27 +915,12 @@ function LoginField({
   );
 }
 
-function AdminTabButton({ active = false, label, onClick }: { active?: boolean; label: string; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`h-14 shrink-0 border-r border-red-700 px-5 text-base font-bold transition-colors ${
-        active ? "bg-white text-red-600" : "bg-[#d60000] text-white hover:bg-red-700"
-      }`}
-    >
-      <span className="whitespace-nowrap">{label}</span>
-    </button>
-  );
-}
-
 function ItemThumbnail({ src, alt }: { src: string; alt: string }) {
   if (!src) {
-    return <div className="h-16 w-24 rounded-lg border border-dashed border-slate-200 bg-slate-50" />;
+    return <div className="h-12 w-18 rounded-lg border border-dashed border-slate-200 bg-slate-50" />;
   }
-
   return (
-    <div className="h-16 w-24 overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+    <div className="h-12 w-[4.5rem] overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
       <img src={src} alt={alt || "Ảnh nội dung"} className="h-full w-full object-cover" />
     </div>
   );
@@ -853,14 +928,17 @@ function ItemThumbnail({ src, alt }: { src: string; alt: string }) {
 
 function FormHeader({ title, onDelete }: { title: string; onDelete?: () => void }) {
   return (
-    <div className="flex flex-col gap-3 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <div className="text-xs font-black uppercase tracking-[0.2em] text-orange-600">Biên tập</div>
-        <h2 className="mt-1 text-2xl font-black text-slate-950">{title}</h2>
+        <div className="text-[11px] font-black uppercase tracking-widest text-red-500">Biên tập</div>
+        <h2 className="mt-0.5 text-xl font-black text-slate-900">{title}</h2>
       </div>
       {onDelete && (
-        <button onClick={onDelete} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-red-200 px-3 text-sm font-black text-red-600">
-          <Trash2 size={16} />
+        <button
+          onClick={onDelete}
+          className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-red-200 px-3 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+        >
+          <Trash2 size={15} />
           Xóa
         </button>
       )}
@@ -883,27 +961,37 @@ function Input({
 }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-xs font-black uppercase tracking-wide text-slate-500">{label}</span>
+      <span className="mb-1.5 block text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</span>
       <input
         type={type}
         value={value}
         autoComplete={autoComplete}
-        onChange={(event) => onChange(event.target.value)}
-        className="h-12 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm outline-none transition-colors focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+        onChange={(e) => onChange(e.target.value)}
+        className="h-10 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100"
       />
     </label>
   );
 }
 
-function Textarea({ label, value, onChange, rows = 4 }: { label: string; value: string; onChange: (value: string) => void; rows?: number }) {
+function Textarea({
+  label,
+  value,
+  onChange,
+  rows = 4,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  rows?: number;
+}) {
   return (
     <label className="block">
-      <span className="mb-2 block text-xs font-black uppercase tracking-wide text-slate-500">{label}</span>
+      <span className="mb-1.5 block text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</span>
       <textarea
         rows={rows}
         value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100"
       />
     </label>
   );
@@ -914,10 +1002,10 @@ function SaveButton({ disabled, onClick }: { disabled?: boolean; onClick: () => 
     <button
       disabled={disabled}
       onClick={onClick}
-      className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-orange-500 px-5 text-sm font-black text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+      className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-red-600 px-5 text-sm font-black text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {disabled ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
-      {disabled ? "Đang lưu..." : "Lưu nội dung"}
+      {disabled ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+      {disabled ? "Đang lưu…" : "Lưu nội dung"}
     </button>
   );
 }
