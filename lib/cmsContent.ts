@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import type { Job } from "@/data/jobs";
 import type { NewsItem } from "@/data/news";
 import type { Project } from "@/data/projects";
+import { cmsApiUrl } from "@/lib/siteApi";
 
 const CMS_STORAGE_KEY = "huu-thanh-cms-content-v1";
-const CMS_API_BASE_URL = process.env.NEXT_PUBLIC_CMS_API_URL?.replace(/\/$/, "") ?? "";
 
 export type CmsContent = {
   news: NewsItem[];
@@ -24,12 +24,6 @@ const emptyContent: CmsContent = {
 
 function isBrowser() {
   return typeof window !== "undefined";
-}
-
-function cmsApiUrl(path: string) {
-  const normalizedPath =
-    CMS_API_BASE_URL.endsWith("/api") && path.startsWith("/api/") ? path.replace(/^\/api/, "") : path;
-  return `${CMS_API_BASE_URL}${normalizedPath}`;
 }
 
 export function loadCmsContent(): CmsContent {

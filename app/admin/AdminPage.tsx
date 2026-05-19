@@ -601,14 +601,21 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                   <FormHeader title="Tin tức" onDelete={newsForm.id ? () => removeItem(newsForm.id) : undefined} />
                   <Input label="Tiêu đề" value={newsForm.title} onChange={(value) => setNewsForm({ ...newsForm, title: value, slug: newsForm.slug || slugify(value) })} />
                   <Input label="Tiêu đề EN" value={newsForm.titleEn} onChange={(value) => setNewsForm({ ...newsForm, titleEn: value })} />
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
                     <Input label="Slug" value={newsForm.slug} onChange={(value) => setNewsForm({ ...newsForm, slug: slugify(value) })} />
                     <Input label="Ngày" type="date" value={newsForm.date} onChange={(value) => setNewsForm({ ...newsForm, date: value })} />
                     <Input label="Danh mục" value={newsForm.category} onChange={(value) => setNewsForm({ ...newsForm, category: value })} />
+                    <Input label="Danh mục EN" value={newsForm.categoryEn} onChange={(value) => setNewsForm({ ...newsForm, categoryEn: value })} />
                   </div>
                   <Input label="Ảnh đại diện" value={newsForm.thumbnail} onChange={(value) => setNewsForm({ ...newsForm, thumbnail: value })} />
-                  <Textarea label="Mô tả ngắn" value={newsForm.excerpt} onChange={(value) => setNewsForm({ ...newsForm, excerpt: value })} />
-                  <Textarea label="Nội dung" rows={8} value={newsForm.content} onChange={(value) => setNewsForm({ ...newsForm, content: value })} />
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <Textarea label="Mô tả ngắn (VI)" value={newsForm.excerpt} onChange={(value) => setNewsForm({ ...newsForm, excerpt: value })} />
+                    <Textarea label="Mô tả ngắn (EN)" value={newsForm.excerptEn} onChange={(value) => setNewsForm({ ...newsForm, excerptEn: value })} />
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <Textarea label="Nội dung (VI)" rows={8} value={newsForm.content} onChange={(value) => setNewsForm({ ...newsForm, content: value })} />
+                    <Textarea label="Nội dung (EN)" rows={8} value={newsForm.contentEn} onChange={(value) => setNewsForm({ ...newsForm, contentEn: value })} />
+                  </div>
                   <SaveButton disabled={isSaving} onClick={saveNews} />
                 </div>
               )}
