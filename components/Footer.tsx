@@ -1,13 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
+import { Building2, FileText, Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getSetting, useSiteSettings } from "@/lib/siteApi";
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const settings = useSiteSettings("company");
+  const headOffice =
+    lang === "vi"
+      ? getSetting(settings, "company.headOffice") || getSetting(settings, "company.address")
+      : getSetting(settings, "company.headOfficeEn") || getSetting(settings, "company.headOffice") || getSetting(settings, "company.addressEn");
+  const transactionOffice =
+    lang === "vi"
+      ? getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.address")
+      : getSetting(settings, "company.transactionOfficeEn") || getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.addressEn");
 
   const quickLinks = [
     { href: "/gioi-thieu", label: t("Giới thiệu", "About") },
@@ -106,9 +114,17 @@ export default function Footer() {
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
+                <Building2 size={16} className="text-orange-400 mt-0.5 shrink-0" />
+                <span className="text-white/60 text-sm">
+                  <span className="block font-semibold text-white/75">{t("Trụ sở", "Head Office")}</span>
+                  {headOffice}
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
                 <MapPin size={16} className="text-orange-400 mt-0.5 shrink-0" />
                 <span className="text-white/60 text-sm">
-                  {getSetting(settings, "company.address")}
+                  <span className="block font-semibold text-white/75">{t("Văn phòng giao dịch", "Transaction Office")}</span>
+                  {transactionOffice}
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -123,21 +139,24 @@ export default function Footer() {
                   {getSetting(settings, "company.email")}
                 </a>
               </li>
+              <li className="flex items-center gap-3">
+                <FileText size={16} className="text-orange-400 shrink-0" />
+                <span className="text-white/60 text-sm">
+                  {t("MST", "Tax ID")}: {getSetting(settings, "company.taxCode")}
+                </span>
+              </li>
             </ul>
           </div>
         </div>
       </div>
 
       <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-center">
           <p className="text-white/40 text-sm">
             {t(
-              "© 2024 Công ty Cổ phần Xây dựng Hữu Thành. Bảo lưu mọi quyền.",
-              "© 2024 Huu Thanh Construction Co., Ltd. All rights reserved."
+              "© 2026 Công ty Cổ phần Xây dựng Hữu Thành. Bảo lưu mọi quyền.",
+              "© 2026 Huu Thanh Construction Joint Stock Company. All rights reserved."
             )}
-          </p>
-          <p className="text-white/40 text-sm">
-            {t("MST: 0123456789 | ĐKKD: Sở KH&ĐT TP.HCM", "Tax ID: 0123456789 | Business Reg.: HCMC Dept. of Planning")}
           </p>
         </div>
       </div>

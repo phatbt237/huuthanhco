@@ -3,6 +3,7 @@ import type { NewsItem } from "@/data/news";
 import { news } from "@/data/news";
 import type { Project } from "@/data/projects";
 import { projects } from "@/data/projects";
+import { getProjectDetailHref } from "@/lib/projects";
 import { normalizeSearchText } from "@/lib/utils";
 
 export type Lang = "vi" | "en";
@@ -121,7 +122,7 @@ function projectToSearchItem(project: Project): RawSearchItem {
     titleEn: project.nameEn,
     category: "Dự án",
     categoryEn: "Project",
-    href: `/du-an#du-an-${project.id}`,
+    href: getProjectDetailHref(project),
     excerpt: `${project.category} tại ${project.location}. ${project.description}`,
     excerptEn: `${project.categoryEn} in ${project.location}. ${project.descriptionEn}`,
     keywords: `${project.name} ${project.category} ${project.location} ${project.year} ${project.description}`,

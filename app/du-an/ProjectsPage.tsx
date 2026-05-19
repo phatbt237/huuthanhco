@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { MapPin, Calendar } from "lucide-react";
+import { Calendar, MapPin, Search } from "lucide-react";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { getProjectDetailHref } from "@/lib/projects";
+import { normalizeSearchText } from "@/lib/utils";
 
 const categoryMapVi: Record<string, string> = {
   "cang-bien": "Cảng biển",
@@ -24,21 +26,13 @@ export default function ProjectsPage() {
   const loaiParam = searchParams.get("loai");
   const initialCategory = loaiParam ? (categoryMapVi[loaiParam] ?? "all") : "all";
 
-  const [activeYear, setActiveYear] = useState("all");
   const [activeCategory, setActiveCategory] = useState(initialCategory);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const category = loaiParam ? (categoryMapVi[loaiParam] ?? "all") : "all";
     setActiveCategory(category);
   }, [loaiParam]);
-
-  const years = [
-    { key: "all", label: t("Tất cả", "All") },
-    { key: "2024", label: "2024" },
-    { key: "2023", label: "2023" },
-    { key: "2022", label: "2022" },
-    { key: "before2022", label: t("Trước 2022", "Before 2022") },
-  ];
 
   const allCategoryKeys = Array.from(new Set(projectItems.map((p) => p.category)));
   const categories = [
@@ -50,11 +44,10 @@ export default function ProjectsPage() {
   ];
 
   const filtered = projectItems.filter((p) => {
-    const matchYear =
-      activeYear === "all" ||
-      (activeYear === "before2022" ? p.year < 2022 : p.year === parseInt(activeYear));
     const matchCategory = activeCategory === "all" || p.category === activeCategory;
-    return matchYear && matchCategory;
+    const keyword = normalizeSearchText(`${p.name} ${p.nameEn} ${p.location} ${p.category} ${p.categoryEn} ${p.description} ${p.descriptionEn}`);
+    const matchQuery = !query.trim() || keyword.includes(normalizeSearchText(query.trim()));
+    return matchCategory && matchQuery;
   });
 
   return (
@@ -86,50 +79,40 @@ export default function ProjectsPage() {
       </section>
 
       {/* Filter + Grid */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* Category filter */}
-          <div className="mb-6">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-              {t("Lọc theo chủ đề", "Filter by category")}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat.key}
-                  onClick={() => setActiveCategory(cat.key)}
-                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                    activeCategory === cat.key
-                      ? "bg-orange-500 text-white shadow-md"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Year filter */}
           <div className="mb-12">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-              {t("Lọc theo năm", "Filter by year")}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {years.map((y) => (
-                <button
-                  key={y.key}
-                  onClick={() => setActiveYear(y.key)}
-                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                    activeYear === y.key
-                      ? "bg-slate-800 text-white shadow-md"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
+            <div className="grid gap-5 md:grid-cols-[1fr_0.9fr] md:items-center">
+              <label className="grid gap-3 sm:grid-cols-[auto_1fr] sm:items-center">
+                <span className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">
+                  {t("Dự án", "Project")}
+                </span>
+                <select
+                  value={activeCategory}
+                  onChange={(event) => setActiveCategory(event.target.value)}
+                  className="h-14 w-full border border-slate-200 bg-white px-5 text-base font-semibold text-slate-700 outline-none transition-colors focus:border-orange-400"
                 >
-                  {y.label}
-                </button>
-              ))}
+                  {categories.map((cat) => (
+                    <option key={cat.key} value={cat.key}>
+                      {cat.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="relative block">
+                <span className="sr-only">{t("Tìm kiếm", "Search")}</span>
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder={t("Tìm kiếm", "Search")}
+                  className="h-14 w-full border border-slate-200 bg-white px-5 pr-16 text-base text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-orange-400"
+                />
+                <span className="absolute right-0 top-0 flex h-14 w-16 items-center justify-center bg-orange-500 text-white">
+                  <Search size={22} />
+                </span>
+              </label>
             </div>
           </div>
 
@@ -145,34 +128,36 @@ export default function ProjectsPage() {
                 transition={{ delay: i * 0.08, duration: 0.5 }}
                 className="group scroll-mt-28 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl border border-slate-100 transition-shadow duration-300"
               >
-                <div className="relative h-60 overflow-hidden">
-                  <img
-                    src={project.image}
-                    alt={lang === "vi" ? project.name : project.nameEn}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                    {lang === "vi" ? project.category : project.categoryEn}
-                  </span>
-                </div>
-                <div className="p-6">
-                  <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-orange-500 transition-colors">
-                    {lang === "vi" ? project.name : project.nameEn}
-                  </h2>
-                  <p className="text-slate-500 text-sm mb-4 line-clamp-2">
-                    {lang === "vi" ? project.description : project.descriptionEn}
-                  </p>
-                  <div className="flex items-center gap-5 text-xs text-slate-400">
-                    <span className="flex items-center gap-1.5">
-                      <MapPin size={13} /> {project.location}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Calendar size={13} /> {project.year}
+                <a href={getProjectDetailHref(project)} className="block">
+                  <div className="relative h-60 overflow-hidden">
+                    <img
+                      src={project.image}
+                      alt={lang === "vi" ? project.name : project.nameEn}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                      {lang === "vi" ? project.category : project.categoryEn}
                     </span>
                   </div>
-                </div>
+                  <div className="p-6">
+                    <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-orange-500 transition-colors">
+                      {lang === "vi" ? project.name : project.nameEn}
+                    </h2>
+                    <p className="text-slate-500 text-sm mb-4 line-clamp-2">
+                      {lang === "vi" ? project.description : project.descriptionEn}
+                    </p>
+                    <div className="flex items-center gap-5 text-xs text-slate-400">
+                      <span className="flex items-center gap-1.5">
+                        <MapPin size={13} /> {project.location}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <Calendar size={13} /> {project.year}
+                      </span>
+                    </div>
+                  </div>
+                </a>
               </motion.div>
             ))}
           </div>

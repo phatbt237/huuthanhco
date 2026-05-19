@@ -19,6 +19,7 @@ export default function CareersPage() {
     phone: "",
     email: "",
     cvFileUrl: "",
+    cvFileName: "",
     message: "",
   });
   const [applicationError, setApplicationError] = useState("");
@@ -35,15 +36,44 @@ export default function CareersPage() {
         email: applicationForm.email || undefined,
         cvFileUrl: applicationForm.cvFileUrl || undefined,
         positionApplied: lang === "vi" ? job.title : job.titleEn,
-        message: applicationForm.message,
+        message: applicationForm.cvFileName
+          ? `${applicationForm.message}\nCV: ${applicationForm.cvFileName}`.trim()
+          : applicationForm.message,
       });
       setApplied(job.id);
-      setApplicationForm({ fullName: "", phone: "", email: "", cvFileUrl: "", message: "" });
+      setApplicationForm({ fullName: "", phone: "", email: "", cvFileUrl: "", cvFileName: "", message: "" });
     } catch {
       setApplicationError(t("Không gửi được hồ sơ. Vui lòng thử lại.", "Could not submit your application. Please try again."));
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleCvFile = (file: File | null) => {
+    setApplicationError("");
+    if (!file) {
+      setApplicationForm((current) => ({ ...current, cvFileUrl: "", cvFileName: "" }));
+      return;
+    }
+
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setApplicationError(t("File CV tối đa 5MB.", "CV file must be 5MB or smaller."));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setApplicationForm((current) => ({
+        ...current,
+        cvFileUrl: String(reader.result ?? ""),
+        cvFileName: file.name,
+      }));
+    };
+    reader.onerror = () => {
+      setApplicationError(t("Không đọc được file CV. Vui lòng thử lại.", "Could not read the CV file. Please try again."));
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -155,8 +185,22 @@ export default function CareersPage() {
                               </div>
                               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                 <input type="email" value={applicationForm.email} onChange={(e) => setApplicationForm({ ...applicationForm, email: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder="Email" />
-                                <input value={applicationForm.cvFileUrl} onChange={(e) => setApplicationForm({ ...applicationForm, cvFileUrl: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Link CV / hồ sơ", "CV / resume link")} />
+                                <input value={applicationForm.cvFileUrl.startsWith("data:") ? applicationForm.cvFileName : applicationForm.cvFileUrl} onChange={(e) => setApplicationForm({ ...applicationForm, cvFileUrl: e.target.value, cvFileName: "" })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Link CV / hồ sơ", "CV / resume link")} />
                               </div>
+                              <label className="block rounded-lg border border-dashed border-slate-300 bg-white px-3 py-3 text-sm text-slate-600">
+                                <span className="mb-2 block font-semibold text-slate-800">{t("Tải file CV", "Upload CV file")}</span>
+                                <input
+                                  type="file"
+                                  accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                  onChange={(event) => handleCvFile(event.target.files?.[0] ?? null)}
+                                  className="block w-full text-sm"
+                                />
+                                {applicationForm.cvFileName && (
+                                  <span className="mt-2 block text-xs font-semibold text-green-600">
+                                    {t("Đã chọn:", "Selected:")} {applicationForm.cvFileName}
+                                  </span>
+                                )}
+                              </label>
                               <textarea value={applicationForm.message} onChange={(e) => setApplicationForm({ ...applicationForm, message: e.target.value })} rows={3} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Lời nhắn", "Message")} />
                               <button
                                 disabled={isSubmitting || !applicationForm.fullName || !applicationForm.phone}

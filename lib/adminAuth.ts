@@ -17,10 +17,16 @@ type LoginResponse = {
   user: AdminUser;
 };
 
+type StoredSession = LoginResponse;
+
 function cmsApiUrl(path: string) {
   const normalizedPath =
     CMS_API_BASE_URL.endsWith("/api") && path.startsWith("/api/") ? path.replace(/^\/api/, "") : path;
   return `${CMS_API_BASE_URL}${normalizedPath}`;
+}
+
+function localApiUrl(path: string) {
+  return path;
 }
 
 function isBrowser() {
@@ -43,6 +49,16 @@ export function getStoredAdminSession() {
   }
 }
 
+export async function validateAdminSession(session: Pick<StoredSession, "accessToken">) {
+  const response = await fetch(cmsApiUrl("/api/auth/me"), {
+    cache: "no-store",
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+  }).catch(() => null);
+
+  if (!response) return false;
+  return response.ok;
+}
+
 export function storeAdminSession(session: LoginResponse) {
   if (!isBrowser()) return;
   window.localStorage.setItem(ACCESS_TOKEN_KEY, session.accessToken);
@@ -58,13 +74,19 @@ export function clearStoredAdminSession() {
 }
 
 export async function loginAdmin(email: string, password: string) {
-  const response = await fetch(cmsApiUrl("/api/auth/login"), {
+  const init: RequestInit = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
-  });
+  };
 
-  if (!response.ok) {
+  let response = await fetch(cmsApiUrl("/api/auth/login"), init).catch(() => null);
+
+  if ((!response || response.status === 404) && CMS_API_BASE_URL) {
+    response = await fetch(localApiUrl("/api/auth/login"), init).catch(() => null);
+  }
+
+  if (!response?.ok) {
     throw new Error("Email hoặc mật khẩu không đúng.");
   }
 
@@ -79,7 +101,11 @@ export async function logoutAdmin(refreshToken?: string) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refreshToken }),
-    }).catch(() => undefined);
+    }).catch(() => fetch(localApiUrl("/api/auth/logout"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+    }).catch(() => undefined));
   }
   clearStoredAdminSession();
 }

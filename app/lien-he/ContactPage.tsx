@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
+import { Building2, FileText, Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getSetting, submitConsultation, useSiteSettings } from "@/lib/siteApi";
 
 export default function ContactPage() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const settings = useSiteSettings("company");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,9 +16,25 @@ export default function ContactPage() {
 
   const contactInfo = [
     {
+      icon: Building2,
+      title: t("Trụ sở", "Head Office"),
+      value:
+        lang === "vi"
+          ? getSetting(settings, "company.headOffice") || getSetting(settings, "company.address")
+          : getSetting(settings, "company.headOfficeEn") || getSetting(settings, "company.headOffice") || getSetting(settings, "company.addressEn"),
+    },
+    {
       icon: MapPin,
-      title: t("Địa chỉ", "Address"),
-      value: getSetting(settings, "company.address"),
+      title: t("Văn phòng giao dịch", "Transaction Office"),
+      value:
+        lang === "vi"
+          ? getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.address")
+          : getSetting(settings, "company.transactionOfficeEn") || getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.addressEn"),
+    },
+    {
+      icon: FileText,
+      title: t("MST", "Tax ID"),
+      value: getSetting(settings, "company.taxCode"),
     },
     {
       icon: Phone,
@@ -190,7 +206,7 @@ export default function ContactPage() {
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
                         className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 text-slate-700 text-sm"
-                        placeholder="0901 234 567"
+                        placeholder={getSetting(settings, "company.phone")}
                       />
                     </div>
                   </div>

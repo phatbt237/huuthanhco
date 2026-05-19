@@ -32,7 +32,13 @@ const editableSettings = [
   { key: "company.name", label: "Tên công ty", type: "text" },
   { key: "company.phone", label: "Số điện thoại", type: "text" },
   { key: "company.email", label: "Email", type: "text" },
-  { key: "company.address", label: "Địa chỉ", type: "text" },
+  { key: "company.taxCode", label: "Mã số thuế", type: "text" },
+  { key: "company.headOffice", label: "Trụ sở", type: "text" },
+  { key: "company.headOfficeEn", label: "Trụ sở tiếng Anh", type: "text" },
+  { key: "company.transactionOffice", label: "Văn phòng giao dịch", type: "text" },
+  { key: "company.transactionOfficeEn", label: "Văn phòng giao dịch tiếng Anh", type: "text" },
+  { key: "company.address", label: "Địa chỉ chính", type: "text" },
+  { key: "company.addressEn", label: "Địa chỉ chính tiếng Anh", type: "text" },
   { key: "company.workingHours", label: "Giờ làm việc", type: "text" },
   { key: "company.mapEmbedUrl", label: "Google Map embed URL", type: "text" },
   { key: "hero.eyebrow", label: "Hero eyebrow", type: "text" },
@@ -120,11 +126,18 @@ function AccountsPanel({ token, currentUserId }: { token: string; currentUserId:
 
 function ContactsPanel({ token }: { token: string }) {
   const [items, setItems] = useState<ConsultationRecord[]>([]);
-  const refresh = () => void listConsultations(token).then(setItems);
+  const [message, setMessage] = useState("");
+  const refresh = () => {
+    setMessage("");
+    void listConsultations(token)
+      .then(setItems)
+      .catch((err) => setMessage(err.message || "Không tải được dữ liệu liên hệ."));
+  };
   useEffect(refresh, [token]);
 
   return (
     <PanelFrame title="Thông tin liên hệ gửi về" action={<RefreshButton onClick={refresh} />}>
+      {message && <Notice tone="error">{message}</Notice>}
       <RecordList
         empty="Chưa có yêu cầu liên hệ."
         items={items.map((item) => ({
@@ -148,20 +161,32 @@ function ContactsPanel({ token }: { token: string }) {
 
 function ApplicationsPanel({ token }: { token: string }) {
   const [items, setItems] = useState<JobApplicationRecord[]>([]);
-  const refresh = () => void listJobApplications(token).then((result) => setItems(result.data));
+  const [message, setMessage] = useState("");
+  const refresh = () => {
+    setMessage("");
+    void listJobApplications(token)
+      .then((result) => setItems(result.data))
+      .catch((err) => setMessage(err.message || "Không tải được hồ sơ ứng tuyển."));
+  };
   useEffect(refresh, [token]);
 
   return (
     <PanelFrame title="Hồ sơ tuyển dụng" action={<RefreshButton onClick={refresh} />}>
+      {message && <Notice tone="error">{message}</Notice>}
       <RecordList
         empty="Chưa có hồ sơ ứng tuyển."
         items={items.map((item) => ({
           id: item.id,
           title: item.fullName,
-          meta: `${item.phone}${item.email ? ` - ${item.email}` : ""}`,
+          meta: `${item.positionApplied || item.jobTitle || "Ứng tuyển"} - ${item.phone}${item.email ? ` - ${item.email}` : ""}`,
           status: item.status,
-          body: `${item.positionApplied || item.jobTitle || "Ứng tuyển"}${item.cvFileUrl ? `\nCV: ${item.cvFileUrl}` : ""}${item.message ? `\n${item.message}` : ""}`,
+          body: item.message,
           createdAt: item.createdAt,
+          extra: item.cvFileUrl ? (
+            <a href={item.cvFileUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex h-9 items-center border border-orange-200 px-3 text-sm font-bold text-orange-600">
+              Xem / tải CV
+            </a>
+          ) : undefined,
           actions: (
             <>
               <SelectStatus value={item.status} options={["new", "reviewing", "interviewed", "hired", "rejected"]} onChange={(status) => void updateJobApplicationStatus(token, item.id, status as JobApplicationRecord["status"]).then(refresh)} />
@@ -342,7 +367,7 @@ function RecordList({
   empty,
 }: {
   empty: string;
-  items: Array<{ id: string; title: string; meta: string; status: string; body: string; createdAt: string; actions: React.ReactNode }>;
+  items: Array<{ id: string; title: string; meta: string; status: string; body: string; createdAt: string; actions: React.ReactNode; extra?: React.ReactNode }>;
 }) {
   if (!items.length) return <div className="border border-dashed border-slate-200 bg-white p-8 text-center text-sm font-semibold text-slate-400">{empty}</div>;
 
@@ -359,6 +384,7 @@ function RecordList({
             <div className="flex flex-wrap items-center gap-2">{item.actions}</div>
           </div>
           <p className="mt-4 whitespace-pre-line text-sm leading-6 text-slate-600">{item.body || "-"}</p>
+          {item.extra}
         </article>
       ))}
     </div>
@@ -387,6 +413,10 @@ function DeleteButton({ onClick }: { onClick: () => void }) {
   );
 }
 
-function Notice({ children }: { children: React.ReactNode }) {
-  return <div className="mt-4 border border-green-200 bg-green-50 p-3 text-sm font-bold text-green-700">{children}</div>;
+function Notice({ children, tone = "success" }: { children: React.ReactNode; tone?: "success" | "error" }) {
+  return (
+    <div className={`my-4 border p-3 text-sm font-bold ${tone === "error" ? "border-red-200 bg-red-50 text-red-700" : "border-green-200 bg-green-50 text-green-700"}`}>
+      {children}
+    </div>
+  );
 }
