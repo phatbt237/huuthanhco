@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import type { Job } from "@/data/jobs";
 import type { NewsItem } from "@/data/news";
 import type { Project } from "@/data/projects";
@@ -16,7 +15,7 @@ type RequestOptions = {
   token?: string;
 };
 
-const emptyContent: CmsContent = {
+export const emptyContent: CmsContent = {
   news: [],
   projects: [],
   jobs: [],
@@ -93,27 +92,6 @@ export async function clearCmsContent(options: RequestOptions = {}) {
     throw new Error(detail || "Không xóa được dữ liệu CMS trong database.");
   }
   window.dispatchEvent(new Event("huu-thanh-cms-content-updated"));
-}
-
-export function useCmsContent() {
-  const [content, setContent] = useState<CmsContent>(emptyContent);
-
-  useEffect(() => {
-    const refresh = () => {
-      setContent(loadCmsContent());
-      void fetchCmsContent().then(setContent);
-    };
-    refresh();
-    window.addEventListener("storage", refresh);
-    window.addEventListener("huu-thanh-cms-content-updated", refresh);
-
-    return () => {
-      window.removeEventListener("storage", refresh);
-      window.removeEventListener("huu-thanh-cms-content-updated", refresh);
-    };
-  }, []);
-
-  return content;
 }
 
 export function mergeById<T extends { id: string }>(base: T[], custom: T[]): T[] {

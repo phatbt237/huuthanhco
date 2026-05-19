@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 const DEFAULT_CMS_API_BASE_URL = "https://huuthanhco.onrender.com";
 
 export const CMS_API_BASE_URL = (process.env.NEXT_PUBLIC_CMS_API_URL ?? DEFAULT_CMS_API_BASE_URL).replace(/\/$/, "");
@@ -232,12 +230,3 @@ export function settingLines(settings: SettingsMap, key: string) {
     .filter(Boolean);
 }
 
-export function useSiteSettings(prefix?: string) {
-  const [settings, setSettings] = useState<SettingsMap>(defaultSiteSettings);
-
-  useEffect(() => {
-    void getSettingsMap(prefix).then(setSettings).catch(() => setSettings(defaultSiteSettings));
-  }, [prefix]);
-
-  return settings;
-}

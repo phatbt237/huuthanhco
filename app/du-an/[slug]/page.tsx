@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectDetailPage from "./ProjectDetailPage";
-import { projects } from "@/data/projects";
-import { findStaticProjectBySlug, getProjectSlug, getRelatedStaticProjects } from "@/lib/projects";
+import { fetchCmsContent } from "@/lib/cmsContent";
+import { findProjectBySlug, getRelatedProjects } from "@/lib/projects";
 
 type Props = PageProps<"/du-an/[slug]">;
 
-export function generateStaticParams() {
-  return projects.map((project) => ({ slug: getProjectSlug(project) }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const project = findStaticProjectBySlug(slug);
+  const { projects } = await fetchCmsContent();
+  const project = findProjectBySlug(projects, slug);
   if (!project) return {};
 
   return {
@@ -28,8 +27,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const project = findStaticProjectBySlug(slug);
+  const { projects } = await fetchCmsContent();
+  const project = findProjectBySlug(projects, slug);
   if (!project) notFound();
 
-  return <ProjectDetailPage project={project} relatedProjects={getRelatedStaticProjects(project)} />;
+  return (
+    <ProjectDetailPage
+      project={project}
+      relatedProjects={getRelatedProjects(projects, project)}
+    />
+  );
 }

@@ -50,8 +50,15 @@ export async function validateAdminSession(session: Pick<StoredSession, "accessT
     headers: { Authorization: `Bearer ${session.accessToken}` },
   }).catch(() => null);
 
-  if (!response) return false;
-  return response.ok;
+  if (response?.ok) return true;
+
+  // Fall back to local route for tokens issued by the local fallback login
+  const local = await fetch(localApiUrl("/api/auth/me"), {
+    cache: "no-store",
+    headers: { Authorization: `Bearer ${session.accessToken}` },
+  }).catch(() => null);
+
+  return local?.ok ?? false;
 }
 
 export function storeAdminSession(session: LoginResponse) {
@@ -77,7 +84,8 @@ export async function loginAdmin(email: string, password: string) {
 
   let response = await fetch(cmsApiUrl("/api/auth/login"), init).catch(() => null);
 
-  if ((!response || response.status === 404) && CMS_API_BASE_URL) {
+  // Fall back to local route if external is unavailable or rejects the credentials
+  if (!response || !response.ok) {
     response = await fetch(localApiUrl("/api/auth/login"), init).catch(() => null);
   }
 

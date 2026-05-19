@@ -5,9 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { MapPin, Calendar, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
-import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { useCmsContent } from "@/lib/useCmsContent";
 import { getProjectDetailHref } from "@/lib/projects";
 
 const PER_PAGE = 4;
@@ -15,7 +14,7 @@ const PER_PAGE = 4;
 export default function ProjectsSection() {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent();
-  const projectItems = mergeById(cmsContent.projects, projects);
+  const projectItems = cmsContent.projects;
   const [page, setPage] = useState(0);
 
   const totalPages = Math.max(1, Math.ceil(projectItems.length / PER_PAGE));

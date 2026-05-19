@@ -4,9 +4,8 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Search } from "lucide-react";
-import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { useCmsContent } from "@/lib/useCmsContent";
 import { getProjectDetailHref } from "@/lib/projects";
 import { normalizeSearchText } from "@/lib/utils";
 
@@ -21,7 +20,7 @@ const categoryMapVi: Record<string, string> = {
 export default function ProjectsPage() {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent();
-  const projectItems = mergeById(cmsContent.projects, projects);
+  const projectItems = cmsContent.projects;
   const searchParams = useSearchParams();
   const loaiParam = searchParams.get("loai");
   const initialCategory = loaiParam ? (categoryMapVi[loaiParam] ?? "all") : "all";

@@ -4,7 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Building2, FileText, Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getSetting, submitConsultation, useSiteSettings } from "@/lib/siteApi";
+import { getSetting, submitConsultation } from "@/lib/siteApi";
+import { useSiteSettings } from "@/lib/useSiteSettings";
 
 export default function ContactPage() {
   const { lang, t } = useLanguage();

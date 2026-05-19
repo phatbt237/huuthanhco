@@ -1,5 +1,4 @@
 import type { Project } from "@/data/projects";
-import { projects } from "@/data/projects";
 import { slugify } from "@/lib/utils";
 
 export function getProjectSlug(project: Pick<Project, "id" | "name" | "slug">) {
@@ -10,11 +9,11 @@ export function getProjectDetailHref(project: Pick<Project, "id" | "name" | "slu
   return `/du-an/${getProjectSlug(project)}`;
 }
 
-export function findStaticProjectBySlug(slug: string) {
-  return projects.find((project) => getProjectSlug(project) === slug || project.id === slug);
+export function findProjectBySlug(projects: Project[], slug: string) {
+  return projects.find((p) => getProjectSlug(p) === slug || p.id === slug);
 }
 
-export function getRelatedStaticProjects(project: Project, limit = 3) {
+export function getRelatedProjects(projects: Project[], project: Project, limit = 3) {
   const sameCategory = projects.filter((item) => item.id !== project.id && item.category === project.category);
   const others = projects.filter((item) => item.id !== project.id && item.category !== project.category);
   return [...sameCategory, ...others].slice(0, limit);
