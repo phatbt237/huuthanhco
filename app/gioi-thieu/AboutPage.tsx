@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import SectionTitle from "@/components/SectionTitle";
-import { Download, ExternalLink, Eye, Target, Heart, Award } from "lucide-react";
+import { Eye, Target, Heart, Award } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import CompanyProfileFlipbook from "./CompanyProfileFlipbook";
 
 export default function AboutPage() {
   const { t } = useLanguage();
@@ -222,81 +223,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Company profile */}
-      <section id="ho-so-nang-luc" className="bg-white py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
-            className="overflow-hidden rounded-[2rem] bg-slate-950 text-white shadow-2xl"
-          >
-            <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr]">
-              <div className="bg-white p-4 sm:p-6">
-                <div className="relative h-[420px] overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200 md:h-[560px]">
-                  <iframe
-                    src="/docs/ho-so-nang-luc-huu-thanh-2026.pdf#toolbar=0&navpanes=0&view=FitH"
-                    title={t("Xem online hồ sơ năng lực Hữu Thành 2026", "Online view of Huu Thanh Company Profile 2026")}
-                    className="h-full w-full"
-                  />
-                  <div className="pointer-events-none absolute left-4 top-4 rounded-full bg-slate-950/80 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
-                    PDF 2026
-                  </div>
-                </div>
-              </div>
-              <div className="relative p-8 md:p-12 lg:p-14">
-                <div className="absolute right-0 top-0 h-36 w-36 bg-orange-500/10 blur-3xl" />
-                <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-400">
-                  {t("Hồ sơ năng lực", "Company Profile")}
-                </span>
-                <h2 className="mt-4 text-3xl font-extrabold leading-tight md:text-5xl">
-                  {t("Hồ sơ năng lực Hữu Thành 2026", "Huu Thanh Company Profile 2026")}
-                </h2>
-                <p className="mt-6 max-w-2xl leading-8 text-white/70">
-                  {t(
-                    "Tài liệu tổng hợp thông tin pháp lý, năng lực nhân sự, thiết bị, kinh nghiệm thi công và các dự án tiêu biểu của Công ty Cổ phần Xây dựng Hữu Thành.",
-                    "A consolidated document covering legal information, personnel capability, equipment, construction experience and featured projects of Huu Thanh Construction Joint Stock Company."
-                  )}
-                </p>
-                <div className="mt-8 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
-                  <div className="rounded-2xl bg-white/7 p-4 ring-1 ring-white/10">
-                    <div className="text-2xl font-black text-orange-400">200+</div>
-                    <div className="mt-1 text-white/55">{t("Dự án", "Projects")}</div>
-                  </div>
-                  <div className="rounded-2xl bg-white/7 p-4 ring-1 ring-white/10">
-                    <div className="text-2xl font-black text-orange-400">50+</div>
-                    <div className="mt-1 text-white/55">{t("Thiết bị", "Equipment")}</div>
-                  </div>
-                  <div className="rounded-2xl bg-white/7 p-4 ring-1 ring-white/10">
-                    <div className="text-2xl font-black text-orange-400">15+</div>
-                    <div className="mt-1 text-white/55">{t("Năm", "Years")}</div>
-                  </div>
-                </div>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <a
-                    href="/docs/ho-so-nang-luc-huu-thanh-2026.pdf"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded bg-orange-500 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-orange-600"
-                  >
-                    <ExternalLink size={18} />
-                    {t("Xem online", "View Online")}
-                  </a>
-                  <a
-                    href="/docs/ho-so-nang-luc-huu-thanh-2026.pdf"
-                    download
-                    className="inline-flex items-center justify-center gap-2 rounded border border-white/20 px-6 py-3 text-sm font-bold text-white transition-colors hover:border-white hover:bg-white/10"
-                  >
-                    <Download size={18} />
-                    {t("Tải hồ sơ năng lực", "Download Profile")}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <CompanyProfileFlipbook />
 
       {/* Timeline */}
       <section className="py-20 bg-slate-50">

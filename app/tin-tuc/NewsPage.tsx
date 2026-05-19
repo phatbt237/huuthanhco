@@ -2,35 +2,40 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Search, ArrowRight } from "lucide-react";
+import { Calendar, Search, ArrowRight, Home } from "lucide-react";
 import Link from "next/link";
 import { news } from "@/data/news";
 import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { getNewsDetailHref } from "@/lib/news";
 
 export default function NewsPage() {
   const { lang, t } = useLanguage();
+  const cmsContent = useCmsContent();
+  const newsItems = mergeById(news, cmsContent.news);
   const [query, setQuery] = useState("");
 
-  const filtered = news.filter((n) => {
-    const title = lang === "vi" ? n.title : n.titleEn;
-    const category = lang === "vi" ? n.category : n.categoryEn;
+  const filtered = newsItems.filter((n) => {
+    const title = (lang === "vi" ? n.title : n.titleEn) || n.title || n.titleEn || "";
+    const category = (lang === "vi" ? n.category : n.categoryEn) || n.category || n.categoryEn || "";
     return (
       title.toLowerCase().includes(query.toLowerCase()) ||
       category.toLowerCase().includes(query.toLowerCase())
     );
   });
 
-  const rest = news.slice(1);
+  const rest = newsItems.slice(1);
 
   return (
     <>
       {/* Hero */}
-      <section style={{ backgroundColor: "#0D1B2A" }} className="relative py-32">
+      <section style={{ backgroundColor: "#0D1B2A" }} className="relative py-28">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-20"
+          className="absolute inset-0 bg-cover bg-center opacity-24"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80')" }}
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/92 via-slate-950/70 to-slate-950/25" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -41,7 +46,7 @@ export default function NewsPage() {
               {t("Cập nhật", "Updates")}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
-              {t("Tin tức & Sự kiện", "News & Events")}
+              {t("Tin tức", "News")}
             </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">
               {t(
@@ -52,6 +57,17 @@ export default function NewsPage() {
           </motion.div>
         </div>
       </section>
+
+      <nav className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-4 text-sm font-bold text-slate-500 sm:px-6 lg:px-8">
+          <Link href="/" className="inline-flex items-center gap-2 text-slate-700 hover:text-orange-500">
+            <Home size={16} />
+            {t("Trang chủ", "Home")}
+          </Link>
+          <span className="text-slate-300">/</span>
+          <span className="text-slate-950">{t("Tin tức", "News")}</span>
+        </div>
+      </nav>
 
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,40 +88,49 @@ export default function NewsPage() {
 
               {/* Articles */}
               <div className="space-y-8">
-                {filtered.map((item, i) => (
-                  <motion.article
-                    key={item.id}
-                    id={`tin-tuc-${item.id}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1, duration: 0.5 }}
-                    className="group flex scroll-mt-28 gap-6 p-4 rounded-2xl hover:bg-slate-50 transition-colors duration-200"
-                  >
-                    <div className="relative w-36 h-28 rounded-xl overflow-hidden shrink-0">
-                      <img
-                        src={item.thumbnail}
-                        alt={lang === "vi" ? item.title : item.titleEn}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="inline-block text-xs font-semibold text-orange-500 bg-orange-50 px-2 py-0.5 rounded mb-2">
-                        {lang === "vi" ? item.category : item.categoryEn}
-                      </span>
-                      <h2 className="font-bold text-slate-900 text-base leading-snug line-clamp-2 group-hover:text-orange-500 transition-colors">
-                        {lang === "vi" ? item.title : item.titleEn}
-                      </h2>
-                      <div className="flex items-center gap-2 text-xs text-slate-400 mt-2 mb-3">
-                        <Calendar size={12} /> {formatDate(item.date)}
-                      </div>
-                      <p className="text-slate-500 text-sm line-clamp-2">
-                        {lang === "vi" ? item.excerpt : item.excerptEn}
-                      </p>
-                    </div>
-                  </motion.article>
-                ))}
+                {filtered.map((item, i) => {
+                  const itemTitle = (lang === "vi" ? item.title : item.titleEn) || item.title || item.titleEn;
+                  const itemCategory = (lang === "vi" ? item.category : item.categoryEn) || item.category || item.categoryEn;
+                  const itemExcerpt = (lang === "vi" ? item.excerpt : item.excerptEn) || item.excerpt || item.excerptEn || "";
+                  const itemThumbnail = item.thumbnail || "/images/du-an/huu-thanh-co_132827983464005202.jpg";
+
+                  return (
+                    <motion.article
+                      key={item.id}
+                      id={`tin-tuc-${item.id}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1, duration: 0.5 }}
+                      className="group scroll-mt-28 rounded-2xl hover:bg-slate-50 transition-colors duration-200"
+                    >
+                      <Link href={getNewsDetailHref(item)} className="flex gap-6 p-4">
+                        <div className="relative w-36 h-28 rounded-xl overflow-hidden shrink-0">
+                          <img
+                            src={itemThumbnail}
+                            alt={itemTitle}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="inline-block text-xs font-semibold text-orange-500 bg-orange-50 px-2 py-0.5 rounded mb-2">
+                            {itemCategory}
+                          </span>
+                          <h2 className="font-bold text-slate-900 text-base leading-snug line-clamp-2 group-hover:text-orange-500 transition-colors">
+                            {itemTitle}
+                          </h2>
+                          <div className="flex items-center gap-2 text-xs text-slate-400 mt-2 mb-3">
+                            <Calendar size={12} /> {formatDate(item.date)}
+                          </div>
+                          <p className="text-slate-500 text-sm line-clamp-2">
+                            {itemExcerpt}
+                          </p>
+                        </div>
+                      </Link>
+                    </motion.article>
+                  );
+                })}
                 {filtered.length === 0 && (
                   <p className="text-center text-slate-400 py-12">
                     {t("Không tìm thấy kết quả.", "No results found.")}
@@ -121,26 +146,31 @@ export default function NewsPage() {
                   {t("Tin nổi bật", "Featured News")}
                 </h3>
                 <div className="space-y-5">
-                  {rest.slice(0, 4).map((item) => (
-                    <div key={item.id} className="group flex gap-4 cursor-pointer">
+                  {rest.slice(0, 4).map((item) => {
+                    const itemTitle = (lang === "vi" ? item.title : item.titleEn) || item.title || item.titleEn;
+                    const itemThumbnail = item.thumbnail || "/images/du-an/huu-thanh-co_132827983464005202.jpg";
+
+                    return (
+                    <Link key={item.id} href={getNewsDetailHref(item)} className="group flex gap-4">
                       <div className="w-20 h-16 rounded-lg overflow-hidden shrink-0">
                         <img
-                          src={item.thumbnail}
-                          alt={lang === "vi" ? item.title : item.titleEn}
+                          src={itemThumbnail}
+                          alt={itemTitle}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
                         />
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-slate-800 line-clamp-2 group-hover:text-orange-500 transition-colors leading-snug">
-                          {lang === "vi" ? item.title : item.titleEn}
+                          {itemTitle}
                         </p>
                         <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
                           <Calendar size={11} /> {formatDate(item.date)}
                         </p>
                       </div>
-                    </div>
-                  ))}
+                    </Link>
+                    );
+                  })}
                 </div>
 
                 <div className="mt-10 bg-slate-900 rounded-2xl p-6 text-white text-center">

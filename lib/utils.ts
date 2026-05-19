@@ -18,3 +18,9 @@ export function normalizeSearchText(value: string): string {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/đ/g, "d");
 }
+
+export function slugify(value: string): string {
+  return normalizeSearchText(value)
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}

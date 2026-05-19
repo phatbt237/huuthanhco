@@ -5,11 +5,76 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Briefcase, DollarSign, ChevronDown, CheckCircle2 } from "lucide-react";
 import { jobs } from "@/data/jobs";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { submitJobApplication } from "@/lib/siteApi";
 
 export default function CareersPage() {
   const { lang, t } = useLanguage();
+  const cmsContent = useCmsContent();
+  const jobItems = mergeById(jobs, cmsContent.jobs);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [applied, setApplied] = useState<string | null>(null);
+  const [applicationForm, setApplicationForm] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    cvFileUrl: "",
+    cvFileName: "",
+    message: "",
+  });
+  const [applicationError, setApplicationError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleApply = async (job: (typeof jobItems)[number]) => {
+    setApplicationError("");
+    setIsSubmitting(true);
+    try {
+      await submitJobApplication({
+        jobId: null,
+        fullName: applicationForm.fullName,
+        phone: applicationForm.phone,
+        email: applicationForm.email || undefined,
+        cvFileUrl: applicationForm.cvFileUrl || undefined,
+        positionApplied: lang === "vi" ? job.title : job.titleEn,
+        message: applicationForm.cvFileName
+          ? `${applicationForm.message}\nCV: ${applicationForm.cvFileName}`.trim()
+          : applicationForm.message,
+      });
+      setApplied(job.id);
+      setApplicationForm({ fullName: "", phone: "", email: "", cvFileUrl: "", cvFileName: "", message: "" });
+    } catch {
+      setApplicationError(t("Không gửi được hồ sơ. Vui lòng thử lại.", "Could not submit your application. Please try again."));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCvFile = (file: File | null) => {
+    setApplicationError("");
+    if (!file) {
+      setApplicationForm((current) => ({ ...current, cvFileUrl: "", cvFileName: "" }));
+      return;
+    }
+
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setApplicationError(t("File CV tối đa 5MB.", "CV file must be 5MB or smaller."));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setApplicationForm((current) => ({
+        ...current,
+        cvFileUrl: String(reader.result ?? ""),
+        cvFileName: file.name,
+      }));
+    };
+    reader.onerror = () => {
+      setApplicationError(t("Không đọc được file CV. Vui lòng thử lại.", "Could not read the CV file. Please try again."));
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
     <>
@@ -44,7 +109,7 @@ export default function CareersPage() {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-4">
-            {jobs.map((job, i) => (
+            {jobItems.map((job, i) => (
               <motion.div
                 key={job.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -106,18 +171,47 @@ export default function CareersPage() {
                             </li>
                           ))}
                         </ul>
-                        <button
-                          onClick={() => setApplied(job.id)}
-                          className={`px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 ${
-                            applied === job.id
-                              ? "bg-green-500 text-white cursor-default"
-                              : "bg-orange-500 hover:bg-orange-600 text-white"
-                          }`}
-                        >
-                          {applied === job.id
-                            ? t("✓ Đã ứng tuyển thành công", "✓ Application submitted")
-                            : t("Ứng tuyển ngay", "Apply Now")}
-                        </button>
+                        <div className="mt-6 rounded-xl bg-slate-50 p-4">
+                          {applied === job.id ? (
+                            <div className="rounded-lg bg-green-500 px-4 py-3 text-sm font-semibold text-white">
+                              {t("✓ Đã ứng tuyển thành công", "✓ Application submitted")}
+                            </div>
+                          ) : (
+                            <div className="space-y-3">
+                              {applicationError && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{applicationError}</div>}
+                              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <input required value={applicationForm.fullName} onChange={(e) => setApplicationForm({ ...applicationForm, fullName: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Họ và tên", "Full name")} />
+                                <input required value={applicationForm.phone} onChange={(e) => setApplicationForm({ ...applicationForm, phone: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Số điện thoại", "Phone")} />
+                              </div>
+                              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <input type="email" value={applicationForm.email} onChange={(e) => setApplicationForm({ ...applicationForm, email: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder="Email" />
+                                <input value={applicationForm.cvFileUrl.startsWith("data:") ? applicationForm.cvFileName : applicationForm.cvFileUrl} onChange={(e) => setApplicationForm({ ...applicationForm, cvFileUrl: e.target.value, cvFileName: "" })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Link CV / hồ sơ", "CV / resume link")} />
+                              </div>
+                              <label className="block rounded-lg border border-dashed border-slate-300 bg-white px-3 py-3 text-sm text-slate-600">
+                                <span className="mb-2 block font-semibold text-slate-800">{t("Tải file CV", "Upload CV file")}</span>
+                                <input
+                                  type="file"
+                                  accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                  onChange={(event) => handleCvFile(event.target.files?.[0] ?? null)}
+                                  className="block w-full text-sm"
+                                />
+                                {applicationForm.cvFileName && (
+                                  <span className="mt-2 block text-xs font-semibold text-green-600">
+                                    {t("Đã chọn:", "Selected:")} {applicationForm.cvFileName}
+                                  </span>
+                                )}
+                              </label>
+                              <textarea value={applicationForm.message} onChange={(e) => setApplicationForm({ ...applicationForm, message: e.target.value })} rows={3} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Lời nhắn", "Message")} />
+                              <button
+                                disabled={isSubmitting || !applicationForm.fullName || !applicationForm.phone}
+                                onClick={() => void handleApply(job)}
+                                className="px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed disabled:opacity-60"
+                              >
+                                {isSubmitting ? t("Đang gửi...", "Sending...") : t("Ứng tuyển ngay", "Apply Now")}
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </motion.div>
                   )}

@@ -7,10 +7,12 @@ import SectionTitle from "@/components/SectionTitle";
 import { news } from "@/data/news";
 import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { mergeById, useCmsContent } from "@/lib/cmsContent";
 
 export default function NewsSection() {
   const { lang, t } = useLanguage();
-  const latest = news.slice(0, 3);
+  const cmsContent = useCmsContent();
+  const latest = mergeById(news, cmsContent.news).slice(0, 3);
 
   return (
     <section className="py-24 bg-slate-50">

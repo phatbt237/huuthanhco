@@ -8,6 +8,7 @@ import SectionTitle from "@/components/SectionTitle";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { getProjectDetailHref } from "@/lib/projects";
 
 const PER_PAGE = 4;
 
@@ -65,7 +66,7 @@ export default function ProjectsSection() {
                   transition={{ delay: i * 0.08, duration: 0.4 }}
                   className="group relative rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300"
                 >
-                  <Link href={`/du-an#du-an-${project.id}`} className="block">
+                  <Link href={getProjectDetailHref(project)} className="block">
                     <div className="relative h-56 overflow-hidden">
                       <img
                         src={project.image}

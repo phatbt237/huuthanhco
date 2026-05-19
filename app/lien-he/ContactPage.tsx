@@ -2,42 +2,77 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
+import { Building2, FileText, Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getSetting, submitConsultation, useSiteSettings } from "@/lib/siteApi";
 
 export default function ContactPage() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+  const settings = useSiteSettings("company");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
 
   const contactInfo = [
     {
+      icon: Building2,
+      title: t("Trụ sở", "Head Office"),
+      value:
+        lang === "vi"
+          ? getSetting(settings, "company.headOffice") || getSetting(settings, "company.address")
+          : getSetting(settings, "company.headOfficeEn") || getSetting(settings, "company.headOffice") || getSetting(settings, "company.addressEn"),
+    },
+    {
       icon: MapPin,
-      title: t("Địa chỉ", "Address"),
-      value: "30 Đường Số 7, Khu Đô Thị Vạn Phúc, Hiệp Bình, Thủ Đức, TP. Hồ Chí Minh",
+      title: t("Văn phòng giao dịch", "Transaction Office"),
+      value:
+        lang === "vi"
+          ? getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.address")
+          : getSetting(settings, "company.transactionOfficeEn") || getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.addressEn"),
+    },
+    {
+      icon: FileText,
+      title: t("MST", "Tax ID"),
+      value: getSetting(settings, "company.taxCode"),
     },
     {
       icon: Phone,
       title: t("Hotline", "Hotline"),
-      value: "0901 234 567",
-      href: "tel:0901234567",
+      value: getSetting(settings, "company.phone"),
+      href: `tel:${String(getSetting(settings, "company.phone")).replace(/\D/g, "")}`,
     },
     {
       icon: Mail,
       title: "Email",
-      value: "info@huuthanh.vn",
-      href: "mailto:info@huuthanh.vn",
+      value: getSetting(settings, "company.email"),
+      href: `mailto:${getSetting(settings, "company.email")}`,
     },
     {
       icon: Clock,
       title: t("Giờ làm việc", "Working Hours"),
-      value: t("Thứ 2 - Thứ 7: 7:30 - 17:30", "Mon - Sat: 7:30 AM - 5:30 PM"),
+      value: getSetting(settings, "company.workingHours"),
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+    setIsSubmitting(true);
+    try {
+      await submitConsultation({
+        name: form.name,
+        phone: form.phone,
+        email: form.email || undefined,
+        service: "Tư vấn từ website",
+        message: form.message,
+      });
+      setSubmitted(true);
+    } catch {
+      setError(t("Không gửi được yêu cầu. Vui lòng thử lại.", "Could not send your request. Please try again."));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -108,7 +143,7 @@ export default function ContactPage() {
               {/* Map embed */}
               <div className="rounded-2xl overflow-hidden h-72 bg-slate-100 border border-slate-200">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.5177580560896!2d106.69927!3d10.73535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f8985e43519%3A0x4e7d5e3e8e90e36b!2zUXXhuq1uIDcsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaA!5e0!3m2!1svi!2svn!4v1620000000000!5m2!1svi!2svn"
+                  src={getSetting(settings, "company.mapEmbedUrl")}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -146,6 +181,7 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</div>}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">
@@ -170,7 +206,7 @@ export default function ContactPage() {
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
                         className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 text-slate-700 text-sm"
-                        placeholder="0901 234 567"
+                        placeholder={getSetting(settings, "company.phone")}
                       />
                     </div>
                   </div>
@@ -198,11 +234,12 @@ export default function ContactPage() {
                     />
                   </div>
                   <button
+                    disabled={isSubmitting}
                     type="submit"
-                    className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-xl font-semibold text-sm transition-colors duration-200 shadow-md hover:shadow-orange-500/30"
+                    className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-xl font-semibold text-sm transition-colors duration-200 shadow-md hover:shadow-orange-500/30 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <Send size={16} />
-                    {t("Gửi yêu cầu", "Send Request")}
+                    {isSubmitting ? t("Đang gửi...", "Sending...") : t("Gửi yêu cầu", "Send Request")}
                   </button>
                 </form>
               )}

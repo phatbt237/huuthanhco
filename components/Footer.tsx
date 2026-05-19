@@ -1,11 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
+import { Building2, FileText, Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getSetting, useSiteSettings } from "@/lib/siteApi";
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+  const settings = useSiteSettings("company");
+  const headOffice =
+    lang === "vi"
+      ? getSetting(settings, "company.headOffice") || getSetting(settings, "company.address")
+      : getSetting(settings, "company.headOfficeEn") || getSetting(settings, "company.headOffice") || getSetting(settings, "company.addressEn");
+  const transactionOffice =
+    lang === "vi"
+      ? getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.address")
+      : getSetting(settings, "company.transactionOfficeEn") || getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.addressEn");
 
   const quickLinks = [
     { href: "/gioi-thieu", label: t("Giới thiệu", "About") },
@@ -104,25 +114,36 @@ export default function Footer() {
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
+                <Building2 size={16} className="text-orange-400 mt-0.5 shrink-0" />
+                <span className="text-white/60 text-sm">
+                  <span className="block font-semibold text-white/75">{t("Trụ sở", "Head Office")}</span>
+                  {headOffice}
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
                 <MapPin size={16} className="text-orange-400 mt-0.5 shrink-0" />
                 <span className="text-white/60 text-sm">
-                  {t(
-                    "30 Đường Số 7, Khu Đô Thị Vạn Phúc, Hiệp Bình, Thủ Đức, TP. Hồ Chí Minh",
-                    "30 Street No. 7, Van Phuc Urban Area, Hiep Binh Ward, Thu Duc District, Ho Chi Minh City"
-                  )}
+                  <span className="block font-semibold text-white/75">{t("Văn phòng giao dịch", "Transaction Office")}</span>
+                  {transactionOffice}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={16} className="text-orange-400 shrink-0" />
-                <a href="tel:0901234567" className="text-white/60 hover:text-orange-400 text-sm transition-colors">
-                  0901 234 567
+                <a href={`tel:${String(getSetting(settings, "company.phone")).replace(/\D/g, "")}`} className="text-white/60 hover:text-orange-400 text-sm transition-colors">
+                  {getSetting(settings, "company.phone")}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} className="text-orange-400 shrink-0" />
-                <a href="mailto:info@huuthanh.vn" className="text-white/60 hover:text-orange-400 text-sm transition-colors">
-                  info@huuthanh.vn
+                <a href={`mailto:${getSetting(settings, "company.email")}`} className="text-white/60 hover:text-orange-400 text-sm transition-colors">
+                  {getSetting(settings, "company.email")}
                 </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <FileText size={16} className="text-orange-400 shrink-0" />
+                <span className="text-white/60 text-sm">
+                  {t("MST", "Tax ID")}: {getSetting(settings, "company.taxCode")}
+                </span>
               </li>
             </ul>
           </div>
@@ -130,15 +151,12 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-center">
           <p className="text-white/40 text-sm">
             {t(
-              "© 2024 Công ty Cổ phần Xây dựng Hữu Thành. Bảo lưu mọi quyền.",
-              "© 2024 Huu Thanh Construction Co., Ltd. All rights reserved."
+              "© 2026 Công ty Cổ phần Xây dựng Hữu Thành. Bảo lưu mọi quyền.",
+              "© 2026 Huu Thanh Construction Joint Stock Company. All rights reserved."
             )}
-          </p>
-          <p className="text-white/40 text-sm">
-            {t("MST: 0123456789 | ĐKKD: Sở KH&ĐT TP.HCM", "Tax ID: 0123456789 | Business Reg.: HCMC Dept. of Planning")}
           </p>
         </div>
       </div>

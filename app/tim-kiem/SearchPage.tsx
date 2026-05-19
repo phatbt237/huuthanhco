@@ -6,12 +6,14 @@ import { motion } from "framer-motion";
 import { ArrowRight, Search } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { searchSite } from "@/data/search";
+import { useCmsContent } from "@/lib/cmsContent";
 
 export default function SearchPage() {
   const { lang, t } = useLanguage();
+  const cmsContent = useCmsContent();
   const searchParams = useSearchParams();
   const query = searchParams.get("q") ?? "";
-  const results = searchSite(query, lang);
+  const results = searchSite(query, lang, { projects: cmsContent.projects, news: cmsContent.news });
 
   return (
     <>

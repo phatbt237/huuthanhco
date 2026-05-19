@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Providers from "@/components/Providers";
+import SiteChrome from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://huuthanh.vn"),
@@ -43,11 +42,12 @@ const jsonLd = {
   alternateName: "Hữu Thành Construction",
   url: "https://huuthanh.vn",
   logo: "https://huuthanh.vn/logo.png",
+  taxID: "0309349692",
   description: "Đơn vị thi công công trình thủy công, cảng biển và hạ tầng giao thông uy tín tại Việt Nam.",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "123 Đường Nguyễn Hữu Thọ, Phường Tân Phong",
-    addressLocality: "Quận 7",
+    streetAddress: "16 Nguyễn Văn Lượng, Phường An Nhơn",
+    addressLocality: "TP. Hồ Chí Minh",
     addressRegion: "TP. Hồ Chí Minh",
     addressCountry: "VN",
   },
@@ -75,9 +75,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col antialiased">
         <Providers>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <SiteChrome>{children}</SiteChrome>
         </Providers>
       </body>
     </html>
