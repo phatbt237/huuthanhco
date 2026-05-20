@@ -132,6 +132,18 @@ export async function createAdminUser(token: string, data: { email: string; pass
   });
 }
 
+export async function updateAdminUser(
+  token: string,
+  id: string,
+  data: { email: string; password?: string; fullName: string; role: AdminRole }
+) {
+  return requestJson<AdminUserRecord>(`/api/auth/users/${id}`, {
+    method: "PUT",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
 export async function deleteAdminUser(token: string, id: string) {
   return requestJson<void>(`/api/auth/users/${id}`, { method: "DELETE", headers: authHeaders(token) });
 }

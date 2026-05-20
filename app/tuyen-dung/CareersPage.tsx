@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Briefcase, DollarSign, ChevronDown, CheckCircle2 } from "lucide-react";
 import { jobs } from "@/data/jobs";
@@ -24,6 +24,7 @@ export default function CareersPage() {
   });
   const [applicationError, setApplicationError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const cvInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleApply = async (job: (typeof jobItems)[number]) => {
     setApplicationError("");
@@ -53,12 +54,14 @@ export default function CareersPage() {
     setApplicationError("");
     if (!file) {
       setApplicationForm((current) => ({ ...current, cvFileUrl: "", cvFileName: "" }));
+      if (cvInputRef.current) cvInputRef.current.value = "";
       return;
     }
 
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
       setApplicationError(t("File CV tối đa 5MB.", "CV file must be 5MB or smaller."));
+      if (cvInputRef.current) cvInputRef.current.value = "";
       return;
     }
 
@@ -72,8 +75,14 @@ export default function CareersPage() {
     };
     reader.onerror = () => {
       setApplicationError(t("Không đọc được file CV. Vui lòng thử lại.", "Could not read the CV file. Please try again."));
+      if (cvInputRef.current) cvInputRef.current.value = "";
     };
     reader.readAsDataURL(file);
+  };
+
+  const clearCvFile = () => {
+    setApplicationForm((current) => ({ ...current, cvFileUrl: "", cvFileName: "" }));
+    if (cvInputRef.current) cvInputRef.current.value = "";
   };
 
   return (
@@ -183,22 +192,28 @@ export default function CareersPage() {
                                 <input required value={applicationForm.fullName} onChange={(e) => setApplicationForm({ ...applicationForm, fullName: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Họ và tên", "Full name")} />
                                 <input required value={applicationForm.phone} onChange={(e) => setApplicationForm({ ...applicationForm, phone: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Số điện thoại", "Phone")} />
                               </div>
-                              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                <input type="email" value={applicationForm.email} onChange={(e) => setApplicationForm({ ...applicationForm, email: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder="Email" />
-                                <input value={applicationForm.cvFileUrl.startsWith("data:") ? applicationForm.cvFileName : applicationForm.cvFileUrl} onChange={(e) => setApplicationForm({ ...applicationForm, cvFileUrl: e.target.value, cvFileName: "" })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Link CV / hồ sơ", "CV / resume link")} />
-                              </div>
+                              <input type="email" value={applicationForm.email} onChange={(e) => setApplicationForm({ ...applicationForm, email: e.target.value })} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder="Email" />
                               <label className="block rounded-lg border border-dashed border-slate-300 bg-white px-3 py-3 text-sm text-slate-600">
                                 <span className="mb-2 block font-semibold text-slate-800">{t("Tải file CV", "Upload CV file")}</span>
                                 <input
+                                  ref={cvInputRef}
                                   type="file"
                                   accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                  onClick={(event) => {
+                                    event.currentTarget.value = "";
+                                  }}
                                   onChange={(event) => handleCvFile(event.target.files?.[0] ?? null)}
                                   className="block w-full text-sm"
                                 />
                                 {applicationForm.cvFileName && (
-                                  <span className="mt-2 block text-xs font-semibold text-green-600">
-                                    {t("Đã chọn:", "Selected:")} {applicationForm.cvFileName}
-                                  </span>
+                                  <div className="mt-3 flex flex-wrap items-center gap-3 rounded-lg bg-green-50 px-3 py-2 text-xs font-semibold text-green-700">
+                                    <span>
+                                      {t("Đã chọn:", "Selected:")} {applicationForm.cvFileName}
+                                    </span>
+                                    <button type="button" onClick={clearCvFile} className="font-black text-red-600 underline-offset-2 hover:underline">
+                                      {t("Xóa / chọn lại", "Remove / choose again")}
+                                    </button>
+                                  </div>
                                 )}
                               </label>
                               <textarea value={applicationForm.message} onChange={(e) => setApplicationForm({ ...applicationForm, message: e.target.value })} rows={3} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Lời nhắn", "Message")} />

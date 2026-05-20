@@ -581,15 +581,6 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
               <p className="mt-0.5 text-xs font-medium text-slate-400">Hữu Thành Construction · Quản trị nội dung</p>
             </div>
 
-            {isCmsTab(activeTab) && (
-              <button
-                onClick={openCreateForm}
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-red-600 px-4 text-xs font-black text-white transition hover:bg-red-700"
-              >
-                <Plus size={14} />
-                Tạo mới
-              </button>
-            )}
           </div>
         </header>
 
@@ -721,22 +712,20 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[860px] border-collapse text-left text-sm">
+                  <table className="w-full min-w-[760px] border-collapse text-left text-sm">
                     <thead>
                       <tr className="bg-slate-50 text-[11px] font-black uppercase tracking-widest text-slate-400">
                         <th className="border-b border-slate-100 px-5 py-3">{cmsPrimaryColumn(activeTab)}</th>
                         <th className="border-b border-slate-100 px-5 py-3">Loại</th>
-                        <th className="border-b border-slate-100 px-5 py-3">Hình ảnh</th>
+                        {activeTab !== "jobs" && <th className="border-b border-slate-100 px-5 py-3">Hình ảnh</th>}
                         <th className="border-b border-slate-100 px-5 py-3">Trạng thái</th>
-                        <th className="border-b border-slate-100 px-5 py-3">Ngôn ngữ</th>
-                        {activeTab === "projects" && <th className="border-b border-slate-100 px-5 py-3">Năm</th>}
                         <th className="border-b border-slate-100 px-5 py-3">Thao tác</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentItems.length === 0 ? (
                         <tr>
-                          <td colSpan={activeTab === "projects" ? 7 : 6} className="px-5 py-16 text-center text-sm font-semibold text-slate-400">
+                          <td colSpan={activeTab === "jobs" ? 4 : 5} className="px-5 py-16 text-center text-sm font-semibold text-slate-400">
                             Chưa có nội dung phù hợp.
                           </td>
                         </tr>
@@ -751,16 +740,14 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                                 {getItemCategory(item)}
                               </span>
                             </td>
-                            <td className="px-5 py-3">
-                              <ItemThumbnail src={getItemImage(item)} alt={getItemTitle(item)} />
-                            </td>
+                            {activeTab !== "jobs" && (
+                              <td className="px-5 py-3">
+                                <ItemThumbnail src={getItemImage(item)} alt={getItemTitle(item)} />
+                              </td>
+                            )}
                             <td className="px-5 py-3">
                               <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-700">Hiện</span>
                             </td>
-                            <td className="px-5 py-3 text-xs font-semibold text-slate-500">VI / EN</td>
-                            {activeTab === "projects" && "year" in item && (
-                              <td className="px-5 py-3 text-sm font-semibold text-slate-600">{item.year}</td>
-                            )}
                             <td className="px-5 py-3">
                               <div className="flex gap-1.5">
                                 <button
