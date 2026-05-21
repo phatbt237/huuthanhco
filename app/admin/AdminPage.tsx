@@ -36,6 +36,7 @@ import {
   validateAdminSession,
   type AdminUser,
 } from "@/lib/adminAuth";
+import { listMedia, mediaFileUrl, uploadMediaFile, type MediaRecord } from "@/lib/siteApi";
 
 type CmsTab = "news" | "projects" | "jobs";
 type Tab = CmsTab | ExtraAdminTab;
@@ -44,6 +45,25 @@ type Session = {
   refreshToken: string;
   user: AdminUser;
 };
+
+const projectCategories = [
+  { value: "Cảng biển", valueEn: "Seaport" },
+  { value: "Thủy lợi", valueEn: "Hydraulics" },
+  { value: "Nạo vét", valueEn: "Dredging" },
+  { value: "Hạ tầng", valueEn: "Infrastructure" },
+  { value: "Dịch vụ", valueEn: "Services" },
+];
+
+const projectLocations = [
+  "TP. Hồ Chí Minh",
+  "Đồng Nai",
+  "Bà Rịa - Vũng Tàu",
+  "Vũng Tàu",
+  "Hà Nội",
+  "An Giang",
+  "Phú Thọ",
+  "Miền Nam",
+];
 
 const blankNews: NewsItem = {
   id: "",
@@ -69,6 +89,7 @@ const blankProject: Project = {
   category: "Cảng biển",
   categoryEn: "Seaport",
   image: "",
+  galleryImages: [],
   description: "",
   descriptionEn: "",
 };
@@ -348,10 +369,16 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
   const [isSaving, setIsSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [statusKind, setStatusKind] = useState<"success" | "error">("success");
+  const [mediaLibrary, setMediaLibrary] = useState<MediaRecord[]>([]);
+
+  const refreshMediaLibrary = () => {
+    void listMedia(session.accessToken).then(setMediaLibrary).catch(() => setMediaLibrary([]));
+  };
 
   useEffect(() => {
     void fetchCmsContent().then(setContent);
-  }, []);
+    refreshMediaLibrary();
+  }, [session.accessToken]);
 
   const currentItems = useMemo(() => {
     if (!isCmsTab(activeTab)) return [];
@@ -453,6 +480,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
   };
 
   const saveProject = async () => {
+    const galleryImages = normalizeProjectGallery(projectForm);
     const item: Project = {
       ...projectForm,
       id: projectForm.id || nextId("project"),
@@ -460,6 +488,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
       nameEn: projectForm.nameEn || projectForm.name,
       categoryEn: projectForm.categoryEn || projectForm.category,
       descriptionEn: projectForm.descriptionEn || projectForm.description,
+      galleryImages,
     };
     await persist({ ...content, projects: upsert(content.projects, item) });
     resetForm();
@@ -582,15 +611,6 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
               <p className="mt-0.5 text-xs font-medium text-slate-400">Hữu Thành Construction · Quản trị nội dung</p>
             </div>
 
-            {isCmsTab(activeTab) && (
-              <button
-                onClick={openCreateForm}
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-red-600 px-4 text-xs font-black text-white transition hover:bg-red-700"
-              >
-                <Plus size={14} />
-                Tạo mới
-              </button>
-            )}
           </div>
         </header>
 
@@ -661,11 +681,44 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                       <Input label="Tên dự án" value={projectForm.name} onChange={(v) => setProjectForm({ ...projectForm, name: v })} />
                       <Input label="Tên dự án EN" value={projectForm.nameEn} onChange={(v) => setProjectForm({ ...projectForm, nameEn: v })} />
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <Input label="Địa điểm" value={projectForm.location} onChange={(v) => setProjectForm({ ...projectForm, location: v })} />
+                        <SelectField
+                          label="Địa điểm"
+                          value={projectForm.location}
+                          onChange={(v) => setProjectForm({ ...projectForm, location: v })}
+                          options={projectLocations.map((location) => ({ value: location, label: location }))}
+                        />
                         <Input label="Năm" type="number" value={String(projectForm.year)} onChange={(v) => setProjectForm({ ...projectForm, year: Number(v) })} />
-                        <Input label="Loại" value={projectForm.category} onChange={(v) => setProjectForm({ ...projectForm, category: v })} />
+                        <SelectField
+                          label="Loại"
+                          value={projectForm.category}
+                          onChange={(v) => {
+                            const category = projectCategories.find((item) => item.value === v);
+                            setProjectForm({ ...projectForm, category: v, categoryEn: category?.valueEn ?? v });
+                          }}
+                          options={projectCategories.map((category) => ({ value: category.value, label: category.value }))}
+                        />
                       </div>
-                      <ImageUploadField label="Ảnh dự án" value={projectForm.image} onChange={(v) => setProjectForm({ ...projectForm, image: v })} folder="project" token={session.accessToken} />
+                      <MediaSelect
+                        label="Ảnh chính dự án"
+                        value={projectForm.image}
+                        media={mediaLibrary}
+                        token={session.accessToken}
+                        onChange={(v) => setProjectForm({ ...projectForm, image: v })}
+                        onUploaded={(item) => {
+                          setMediaLibrary((current) => [item, ...current]);
+                          setProjectForm((current) => ({ ...current, image: item.fileUrl }));
+                        }}
+                      />
+                      <ProjectGalleryPicker
+                        value={projectForm.galleryImages ?? []}
+                        media={mediaLibrary}
+                        token={session.accessToken}
+                        onChange={(galleryImages) => setProjectForm({ ...projectForm, galleryImages })}
+                        onUploaded={(item) => {
+                          setMediaLibrary((current) => [item, ...current]);
+                          setProjectForm((current) => ({ ...current, galleryImages: [...(current.galleryImages ?? []), item.fileUrl] }));
+                        }}
+                      />
                       <Textarea label="Mô tả" value={projectForm.description} onChange={(v) => setProjectForm({ ...projectForm, description: v })} />
                       <Textarea label="Mô tả EN" value={projectForm.descriptionEn} onChange={(v) => setProjectForm({ ...projectForm, descriptionEn: v })} />
                       <SaveButton disabled={isSaving} onClick={saveProject} />
@@ -722,22 +775,20 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[860px] border-collapse text-left text-sm">
+                  <table className="w-full min-w-[760px] border-collapse text-left text-sm">
                     <thead>
                       <tr className="bg-slate-50 text-[11px] font-black uppercase tracking-widest text-slate-400">
                         <th className="border-b border-slate-100 px-5 py-3">{cmsPrimaryColumn(activeTab)}</th>
                         <th className="border-b border-slate-100 px-5 py-3">Loại</th>
-                        <th className="border-b border-slate-100 px-5 py-3">Hình ảnh</th>
+                        {activeTab !== "jobs" && <th className="border-b border-slate-100 px-5 py-3">Hình ảnh</th>}
                         <th className="border-b border-slate-100 px-5 py-3">Trạng thái</th>
-                        <th className="border-b border-slate-100 px-5 py-3">Ngôn ngữ</th>
-                        {activeTab === "projects" && <th className="border-b border-slate-100 px-5 py-3">Năm</th>}
                         <th className="border-b border-slate-100 px-5 py-3">Thao tác</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentItems.length === 0 ? (
                         <tr>
-                          <td colSpan={activeTab === "projects" ? 7 : 6} className="px-5 py-16 text-center text-sm font-semibold text-slate-400">
+                          <td colSpan={activeTab === "jobs" ? 4 : 5} className="px-5 py-16 text-center text-sm font-semibold text-slate-400">
                             Chưa có nội dung phù hợp.
                           </td>
                         </tr>
@@ -752,16 +803,14 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                                 {getItemCategory(item)}
                               </span>
                             </td>
-                            <td className="px-5 py-3">
-                              <ItemThumbnail src={getItemImage(item)} alt={getItemTitle(item)} />
-                            </td>
+                            {activeTab !== "jobs" && (
+                              <td className="px-5 py-3">
+                                <ItemThumbnail src={getItemImage(item)} alt={getItemTitle(item)} />
+                              </td>
+                            )}
                             <td className="px-5 py-3">
                               <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-700">Hiện</span>
                             </td>
-                            <td className="px-5 py-3 text-xs font-semibold text-slate-500">VI / EN</td>
-                            {activeTab === "projects" && "year" in item && (
-                              <td className="px-5 py-3 text-sm font-semibold text-slate-600">{item.year}</td>
-                            )}
                             <td className="px-5 py-3">
                               <div className="flex gap-1.5">
                                 <button
@@ -844,6 +893,10 @@ function tabTitle(tab: Tab) {
 
 function isCmsTab(tab: Tab): tab is CmsTab {
   return tab === "news" || tab === "projects" || tab === "jobs";
+}
+
+function normalizeProjectGallery(project: Project) {
+  return Array.from(new Set([project.image, ...(project.galleryImages ?? [])].map((src) => src.trim()).filter(Boolean)));
 }
 
 /* ── UI Components ── */
@@ -972,6 +1025,224 @@ function Input({
       />
     </label>
   );
+}
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-10 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100"
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function MediaSelect({
+  label,
+  value,
+  media,
+  token,
+  onChange,
+  onUploaded,
+}: {
+  label: string;
+  value: string;
+  media: MediaRecord[];
+  token: string;
+  onChange: (value: string) => void;
+  onUploaded: (item: MediaRecord) => void;
+}) {
+  const imageMedia = media.filter((item) => isImageMedia(item));
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</div>
+          <p className="mt-1 text-xs font-semibold text-slate-500">Upload ảnh mới từ máy để dùng cho dự án.</p>
+        </div>
+        <ImageUploadButton token={token} folder="projects" onUploaded={onUploaded} />
+      </div>
+
+      {value && (
+        <div className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <img src={mediaFileUrl(value)} alt={label} className="h-56 w-full object-cover" />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="absolute right-3 top-3 inline-flex h-9 items-center gap-1.5 rounded-lg bg-white/95 px-3 text-xs font-black text-red-600 shadow-sm transition hover:bg-red-600 hover:text-white"
+          >
+            <Trash2 size={14} />
+            Bỏ chọn
+          </button>
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-sm font-bold text-white">
+            {getMediaLabel(imageMedia, value)}
+          </div>
+        </div>
+      )}
+
+      {!value && (
+        <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm font-semibold text-slate-500">
+          Chưa chọn ảnh chính cho dự án.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ProjectGalleryPicker({
+  value,
+  media,
+  token,
+  onChange,
+  onUploaded,
+}: {
+  value: string[];
+  media: MediaRecord[];
+  token: string;
+  onChange: (value: string[]) => void;
+  onUploaded: (item: MediaRecord) => void;
+}) {
+  const imageMedia = media.filter((item) => isImageMedia(item));
+  const selectedUrls = Array.from(new Set(value.filter(Boolean)));
+
+  const toggle = (src: string) => {
+    const next = new Set(selectedUrls);
+    if (next.has(src)) next.delete(src);
+    else next.add(src);
+    onChange(Array.from(next));
+  };
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">Ảnh gallery dự án</div>
+          <p className="mt-1 text-xs font-semibold text-slate-500">
+            Chỉ các ảnh được chọn ở đây mới thuộc gallery của dự án này.
+          </p>
+        </div>
+        <ImageUploadButton token={token} folder="projects" onUploaded={onUploaded} />
+      </div>
+
+      {selectedUrls.length > 0 ? (
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {selectedUrls.map((src) => (
+            <SelectedMediaCard key={src} src={src} label={getMediaLabel(imageMedia, src)} onRemove={() => toggle(src)} />
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm font-semibold text-slate-500">
+          Chưa chọn ảnh gallery. Ảnh chính vẫn sẽ được dùng làm ảnh đại diện khi lưu.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ImageUploadButton({
+  token,
+  folder,
+  onUploaded,
+}: {
+  token: string;
+  folder: string;
+  onUploaded: (item: MediaRecord) => void;
+}) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState("");
+
+  const uploadFiles = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setError("");
+    setIsUploading(true);
+    try {
+      for (const file of Array.from(files)) {
+        const dataUrl = await readFileAsDataUrl(file);
+        const item = await uploadMediaFile(token, {
+          fileName: file.name,
+          dataUrl,
+          folder,
+          altText: file.name.replace(/\.[^.]+$/, ""),
+        });
+        onUploaded(item);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Không upload được ảnh.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-slate-950 px-4 text-sm font-black text-white transition hover:bg-slate-800">
+        {isUploading ? <Loader2 className="animate-spin" size={16} /> : <Upload size={16} />}
+        {isUploading ? "Đang upload..." : "Chọn ảnh từ máy"}
+        <input
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif"
+          multiple
+          className="hidden"
+          onChange={(event) => void uploadFiles(event.target.files)}
+        />
+      </label>
+      {error && <div className="mt-2 text-xs font-semibold text-red-600">{error}</div>}
+    </div>
+  );
+}
+
+function SelectedMediaCard({ src, label, onRemove }: { src: string; label: string; onRemove: () => void }) {
+  return (
+    <div className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <img src={mediaFileUrl(src)} alt={label} className="h-32 w-full object-cover" />
+      <button
+        type="button"
+        onClick={onRemove}
+        className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/95 text-red-600 opacity-100 shadow-sm transition hover:bg-red-600 hover:text-white md:opacity-0 md:group-hover:opacity-100"
+        aria-label="Bỏ ảnh khỏi gallery"
+      >
+        <Trash2 size={14} />
+      </button>
+      <div className="truncate px-3 py-2 text-xs font-bold text-slate-600">{label}</div>
+    </div>
+  );
+}
+
+function getMediaLabel(media: MediaRecord[], src: string) {
+  return media.find((item) => item.fileUrl === src)?.fileName ?? src.split("/").pop() ?? "Ảnh dự án";
+}
+
+function readFileAsDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error ?? new Error("Không đọc được file."));
+    reader.readAsDataURL(file);
+  });
+}
+
+function isImageMedia(item: MediaRecord) {
+  return item.fileType === "image" || /\.(png|jpe?g|webp|gif|avif)$/i.test(item.fileUrl);
 }
 
 function Textarea({

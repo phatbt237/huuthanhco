@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import ProjectDetailPage from "./ProjectDetailPage";
 import { fetchCmsContent } from "@/lib/cmsContent";
 import { findProjectBySlug, getRelatedProjects } from "@/lib/projects";
@@ -33,8 +33,8 @@ export default async function Page({ params }: Props) {
 
   return (
     <ProjectDetailPage
-      project={project}
-      relatedProjects={getRelatedProjects(projects, project)}
+      project={project!}
+      relatedProjects={getRelatedProjects(projects, project!)}
     />
   );
 }

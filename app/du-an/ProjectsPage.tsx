@@ -6,7 +6,10 @@ import { motion } from "framer-motion";
 import { Calendar, MapPin, Search } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCmsContent } from "@/lib/useCmsContent";
-import { getProjectDetailHref } from "@/lib/projects";
+import { mergeById } from "@/lib/cmsContent";
+import { getProjectDetailHref, sortProjectsByYearDesc } from "@/lib/projects";
+import { mediaFileUrl } from "@/lib/siteApi";
+import { projects } from "@/data/projects";
 import { normalizeSearchText } from "@/lib/utils";
 
 const categoryMapVi: Record<string, string> = {
@@ -20,7 +23,7 @@ const categoryMapVi: Record<string, string> = {
 export default function ProjectsPage() {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent();
-  const projectItems = cmsContent.projects;
+  const projectItems = sortProjectsByYearDesc(mergeById(projects, cmsContent.projects));
   const searchParams = useSearchParams();
   const loaiParam = searchParams.get("loai");
   const initialCategory = loaiParam ? (categoryMapVi[loaiParam] ?? "all") : "all";
@@ -130,7 +133,7 @@ export default function ProjectsPage() {
                 <a href={getProjectDetailHref(project)} className="block">
                   <div className="relative h-60 overflow-hidden">
                     <img
-                      src={project.image}
+                      src={mediaFileUrl(project.image)}
                       alt={lang === "vi" ? project.name : project.nameEn}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"

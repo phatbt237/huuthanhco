@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { settingLines, useSiteSettings } from "@/lib/siteApi";
 
 function CountUp({ to, suffix }: { to: number; suffix: string }) {
   const [val, setVal] = useState(0);
@@ -41,10 +42,12 @@ const partnerImages = [
   "/images/doi-tac/huu-thanh-co_132747921728510246.jpg",
 ];
 
-const track = [...partnerImages, ...partnerImages];
-
 export default function PartnersSection() {
   const { t } = useLanguage();
+  const settings = useSiteSettings("partners");
+  const configuredImages = settingLines(settings, "partners.images");
+  const visiblePartnerImages = configuredImages.length ? configuredImages : partnerImages;
+  const track = [...visiblePartnerImages, ...visiblePartnerImages];
 
   const stats = [
     { value: 50,  suffix: "+",  label: t("Đối tác chiến lược", "Strategic Partners") },
@@ -90,7 +93,7 @@ export default function PartnersSection() {
             >
               <img
                 src={src}
-                alt={`Đối tác ${(i % partnerImages.length) + 1}`}
+                alt={`Đối tác ${(i % visiblePartnerImages.length) + 1}`}
                 className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105"
                 loading="lazy"
               />

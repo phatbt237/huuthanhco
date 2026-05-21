@@ -3,26 +3,71 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Calendar, CheckCircle2, MapPin, Tag } from "lucide-react";
+import { projects } from "@/data/projects";
 import type { Project } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getProjectDetailHref } from "@/lib/projects";
+import { mergeById } from "@/lib/cmsContent";
+import { useCmsContent } from "@/lib/useCmsContent";
+import { getProjectDetailHref, getProjectSlug } from "@/lib/projects";
+import { mediaFileUrl } from "@/lib/siteApi";
 
 export default function ProjectDetailPage({
   project,
   relatedProjects,
+  slug,
 }: {
-  project: Project;
+  project?: Project;
   relatedProjects: Project[];
+  slug?: string;
 }) {
   const { lang, t } = useLanguage();
-  const title = lang === "vi" ? project.name : project.nameEn;
-  const description = lang === "vi" ? project.description : project.descriptionEn;
-  const category = lang === "vi" ? project.category : project.categoryEn;
+  const cmsContent = useCmsContent();
+  const allProjects = mergeById(projects, cmsContent.projects);
+  const activeProject =
+    project ?? allProjects.find((item) => getProjectSlug(item) === slug || item.id === slug);
+
+  if (!activeProject) {
+    return (
+      <section className="min-h-[60vh] bg-white px-4 py-28 text-center">
+        <h1 className="text-3xl font-black text-slate-950">
+          {t("Không tìm thấy dự án", "Project not found")}
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl text-slate-500">
+          {t(
+            "Dự án này có thể đã bị xóa hoặc chưa được đồng bộ từ hệ thống quản trị.",
+            "This project may have been removed or has not been synced from the admin system."
+          )}
+        </p>
+        <Link
+          href="/du-an"
+          className="mt-8 inline-flex bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600"
+        >
+          {t("Quay lại dự án", "Back to projects")}
+        </Link>
+      </section>
+    );
+  }
+
+  const relatedItems =
+    relatedProjects.length > 0
+      ? relatedProjects
+      : allProjects.filter((item) => item.id !== activeProject.id).slice(0, 3);
+  const title = (lang === "vi" ? activeProject.name : activeProject.nameEn) || activeProject.name || activeProject.nameEn;
+  const description =
+    (lang === "vi" ? activeProject.description : activeProject.descriptionEn) ||
+    activeProject.description ||
+    activeProject.descriptionEn ||
+    t("Nội dung đang được cập nhật.", "Content is being updated.");
+  const category =
+    (lang === "vi" ? activeProject.category : activeProject.categoryEn) ||
+    activeProject.category ||
+    activeProject.categoryEn;
+  const galleryImages = Array.from(new Set([activeProject.image, ...(activeProject.galleryImages ?? [])].filter(Boolean)));
 
   const infoRows = [
     { label: t("Lĩnh vực", "Sector"), value: category, icon: Tag },
-    { label: t("Địa điểm", "Location"), value: project.location, icon: MapPin },
-    { label: t("Năm thực hiện", "Year"), value: String(project.year), icon: Calendar },
+    { label: t("Địa điểm", "Location"), value: activeProject.location, icon: MapPin },
+    { label: t("Năm thực hiện", "Year"), value: String(activeProject.year), icon: Calendar },
     {
       label: t("Phạm vi công việc", "Scope of work"),
       value: description,
@@ -34,7 +79,7 @@ export default function ProjectDetailPage({
     <>
       <section className="relative overflow-hidden bg-slate-950 pt-28 pb-20">
         <div className="absolute inset-0">
-          <img src={project.image} alt={title} className="h-full w-full object-cover opacity-35" />
+          <img src={mediaFileUrl(activeProject.image)} alt={title} className="h-full w-full object-cover opacity-35" />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/82 to-slate-950/35" />
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -78,8 +123,18 @@ export default function ProjectDetailPage({
             transition={{ duration: 0.5 }}
           >
             <div className="overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm">
-              <img src={project.image} alt={title} className="h-auto w-full object-contain" />
+              <img src={mediaFileUrl(activeProject.image)} alt={title} className="h-auto w-full object-contain" />
             </div>
+
+            {galleryImages.length > 1 && (
+              <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-3">
+                {galleryImages.slice(1).map((src, index) => (
+                  <div key={`${src}-${index}`} className="overflow-hidden rounded-xl border border-slate-100 bg-slate-50 shadow-sm">
+                    <img src={mediaFileUrl(src)} alt={`${title} ${index + 2}`} className="h-44 w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div className="mt-10">
               <span className="text-xs font-black uppercase tracking-[0.24em] text-orange-500">
@@ -135,7 +190,7 @@ export default function ProjectDetailPage({
         </div>
       </section>
 
-      {relatedProjects.length > 0 && (
+      {relatedItems.length > 0 && (
         <section className="bg-slate-50 py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
@@ -153,7 +208,7 @@ export default function ProjectDetailPage({
             </div>
 
             <div className="grid gap-6 md:grid-cols-3">
-              {relatedProjects.map((item) => (
+              {relatedItems.map((item) => (
                 <Link
                   key={item.id}
                   href={getProjectDetailHref(item)}
@@ -161,7 +216,7 @@ export default function ProjectDetailPage({
                 >
                   <div className="h-52 overflow-hidden">
                     <img
-                      src={item.image}
+                      src={mediaFileUrl(item.image)}
                       alt={lang === "vi" ? item.name : item.nameEn}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"

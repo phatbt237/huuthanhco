@@ -1,3 +1,7 @@
+import { useEffect, useState } from "react";
+import { equipment } from "@/data/equipment";
+import { services } from "@/data/services";
+
 const DEFAULT_CMS_API_BASE_URL = "https://huuthanhco.onrender.com";
 
 export const CMS_API_BASE_URL = (process.env.NEXT_PUBLIC_CMS_API_URL ?? DEFAULT_CMS_API_BASE_URL).replace(/\/$/, "");
@@ -87,6 +91,10 @@ export const defaultSiteSettings: SettingsMap = {
   "hero.eyebrow": "Công Ty Cổ phần Xây Dựng Hữu Thành",
   "hero.title": "Đơn vị thi công công trình chuyên nghiệp",
   "hero.description": "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
+  "services.items": JSON.stringify(services, null, 2),
+  "equipment.items": JSON.stringify(equipment, null, 2),
+  "partners.images":
+    "/images/doi-tac/huu-thanh-co_132747886943964272.jpg\n/images/doi-tac/huu-thanh-co_132747887169276799.jpg\n/images/doi-tac/huu-thanh-co_132747906276479099.jpg\n/images/doi-tac/huu-thanh-co_132747911027105033.jpg\n/images/doi-tac/huu-thanh-co_132747915873354052.jpg\n/images/doi-tac/huu-thanh-co_132747916552729392.jpg\n/images/doi-tac/huu-thanh-co_132747917517885233.jpg\n/images/doi-tac/huu-thanh-co_132747921285697744.jpg\n/images/doi-tac/huu-thanh-co_132747921436010275.jpg\n/images/doi-tac/huu-thanh-co_132747921578197710.jpg\n/images/doi-tac/huu-thanh-co_132747921728510246.jpg",
 };
 
 export function cmsApiUrl(path: string) {
@@ -125,6 +133,18 @@ export async function listAdminUsers(token: string) {
 export async function createAdminUser(token: string, data: { email: string; password: string; fullName: string; role: AdminRole }) {
   return requestJson<AdminUserRecord>("/api/auth/users", {
     method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateAdminUser(
+  token: string,
+  id: string,
+  data: { email: string; password?: string; fullName: string; role: AdminRole }
+) {
+  return requestJson<AdminUserRecord>(`/api/auth/users/${id}`, {
+    method: "PUT",
     headers: authHeaders(token),
     body: JSON.stringify(data),
   });
@@ -215,6 +235,17 @@ export async function createMedia(token: string, data: Omit<MediaRecord, "id">) 
   });
 }
 
+export async function uploadMediaFile(
+  token: string,
+  data: { fileName: string; dataUrl: string; folder: string; altText?: string; altTextEn?: string }
+) {
+  return requestJson<MediaRecord>("/api/media/upload", {
+    method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
 export async function deleteMedia(token: string, id: string) {
   return requestJson<void>(`/api/media/${id}`, { method: "DELETE", headers: authHeaders(token) });
 }
@@ -244,10 +275,6 @@ export async function uploadMedia(
   }
 
   const data = (await response.json()) as unknown;
-  // Log để debug response shape
-  console.log("[uploadMedia] response:", JSON.stringify(data));
-
-  // Tìm URL trong các cấu trúc phổ biến
   const findUrl = (obj: unknown): string => {
     if (!obj || typeof obj !== "object") return "";
     if (Array.isArray(obj)) return findUrl(obj[0]);
@@ -271,6 +298,14 @@ export async function uploadMedia(
   return url;
 }
 
+export function mediaFileUrl(fileUrl: string) {
+  if (!fileUrl) return "";
+  if (/^(https?:|data:|blob:)/.test(fileUrl)) return fileUrl;
+  if (fileUrl.startsWith("/images/")) return fileUrl;
+  if (fileUrl.startsWith("/")) return `${CMS_API_BASE_URL}${fileUrl}`;
+  return `${CMS_API_BASE_URL}/uploads/${fileUrl.replace(/^\/+/, "")}`;
+}
+
 export function getSetting(settings: SettingsMap, key: string) {
   return settings[key] ?? defaultSiteSettings[key] ?? "";
 }
@@ -282,3 +317,20 @@ export function settingLines(settings: SettingsMap, key: string) {
     .filter(Boolean);
 }
 
+export function settingJson<T>(settings: SettingsMap, key: string, fallback: T): T {
+  const raw = getSetting(settings, key);
+  if (!raw) return fallback;
+  try {
+    return JSON.parse(String(raw)) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+export function useSiteSettings(prefix?: string) {
+  const [settings, setSettings] = useState<SettingsMap>(defaultSiteSettings);
+  useEffect(() => {
+    void getSettingsMap(prefix).then(setSettings).catch(() => setSettings(defaultSiteSettings));
+  }, [prefix]);
+  return settings;
+}

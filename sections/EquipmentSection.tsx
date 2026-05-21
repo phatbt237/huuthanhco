@@ -6,16 +6,20 @@ import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
 import { equipment } from "@/data/equipment";
+import type { Equipment } from "@/data/equipment";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { settingJson, useSiteSettings } from "@/lib/siteApi";
 
 const PER_PAGE = 4;
 
 export default function EquipmentSection() {
   const { lang, t } = useLanguage();
+  const settings = useSiteSettings("equipment");
+  const equipmentItems = settingJson<Equipment[]>(settings, "equipment.items", equipment);
   const [page, setPage] = useState(0);
 
-  const totalPages = Math.ceil(equipment.length / PER_PAGE);
-  const visible = equipment.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(equipmentItems.length / PER_PAGE));
+  const visible = equipmentItems.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
 
   const prev = () => setPage((p) => (p - 1 + totalPages) % totalPages);
   const next = () => setPage((p) => (p + 1) % totalPages);

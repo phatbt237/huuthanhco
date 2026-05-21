@@ -8,6 +8,7 @@ export interface Project {
   category: string;
   categoryEn: string;
   image: string;
+  galleryImages?: string[];
   description: string;
   descriptionEn: string;
 }
