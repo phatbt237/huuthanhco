@@ -8,7 +8,8 @@ import SectionTitle from "@/components/SectionTitle";
 import { equipment } from "@/data/equipment";
 import type { Equipment } from "@/data/equipment";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { settingJson, useSiteSettings } from "@/lib/siteApi";
+import { settingJson } from "@/lib/siteApi";
+import { useSiteSettings } from "@/lib/useSiteSettings";
 
 const PER_PAGE = 4;
 

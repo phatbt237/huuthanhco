@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { equipment } from "@/data/equipment";
 import { services } from "@/data/services";
 
@@ -327,10 +326,3 @@ export function settingJson<T>(settings: SettingsMap, key: string, fallback: T):
   }
 }
 
-export function useSiteSettings(prefix?: string) {
-  const [settings, setSettings] = useState<SettingsMap>(defaultSiteSettings);
-  useEffect(() => {
-    void getSettingsMap(prefix).then(setSettings).catch(() => setSettings(defaultSiteSettings));
-  }, [prefix]);
-  return settings;
-}
