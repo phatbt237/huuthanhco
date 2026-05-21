@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { equipment } from "@/data/equipment";
 import type { Equipment } from "@/data/equipment";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { settingJson, useSiteSettings } from "@/lib/siteApi";
+import { settingJson } from "@/lib/siteApi";
+import { useSiteSettings } from "@/lib/useSiteSettings";
 
 export default function EquipmentPage() {
   const { lang, t } = useLanguage();

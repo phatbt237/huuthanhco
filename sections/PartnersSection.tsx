@@ -3,7 +3,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { settingLines, useSiteSettings } from "@/lib/siteApi";
+import { settingLines } from "@/lib/siteApi";
+import { useSiteSettings } from "@/lib/useSiteSettings";
 
 function CountUp({ to, suffix }: { to: number; suffix: string }) {
   const [val, setVal] = useState(0);

@@ -7,7 +7,8 @@ import SectionTitle from "@/components/SectionTitle";
 import { services } from "@/data/services";
 import type { Service } from "@/data/services";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { settingJson, useSiteSettings } from "@/lib/siteApi";
+import { settingJson } from "@/lib/siteApi";
+import { useSiteSettings } from "@/lib/useSiteSettings";
 
 export default function ServicesSection() {
   const { lang, t } = useLanguage();
