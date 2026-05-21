@@ -698,27 +698,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                           options={projectCategories.map((category) => ({ value: category.value, label: category.value }))}
                         />
                       </div>
-                      <MediaSelect
-                        label="Ảnh chính dự án"
-                        value={projectForm.image}
-                        media={mediaLibrary}
-                        token={session.accessToken}
-                        onChange={(v) => setProjectForm({ ...projectForm, image: v })}
-                        onUploaded={(item) => {
-                          setMediaLibrary((current) => [item, ...current]);
-                          setProjectForm((current) => ({ ...current, image: item.fileUrl }));
-                        }}
-                      />
-                      <ProjectGalleryPicker
-                        value={projectForm.galleryImages ?? []}
-                        media={mediaLibrary}
-                        token={session.accessToken}
-                        onChange={(galleryImages) => setProjectForm({ ...projectForm, galleryImages })}
-                        onUploaded={(item) => {
-                          setMediaLibrary((current) => [item, ...current]);
-                          setProjectForm((current) => ({ ...current, galleryImages: [...(current.galleryImages ?? []), item.fileUrl] }));
-                        }}
-                      />
+                      <ImageUploadField label="Ảnh dự án" value={projectForm.image} onChange={(v) => setProjectForm({ ...projectForm, image: v })} folder="project" token={session.accessToken} />
                       <Textarea label="Mô tả" value={projectForm.description} onChange={(v) => setProjectForm({ ...projectForm, description: v })} />
                       <Textarea label="Mô tả EN" value={projectForm.descriptionEn} onChange={(v) => setProjectForm({ ...projectForm, descriptionEn: v })} />
                       <SaveButton disabled={isSaving} onClick={saveProject} />
