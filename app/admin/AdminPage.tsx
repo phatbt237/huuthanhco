@@ -87,7 +87,7 @@ const blankProject: Project = {
   year: new Date().getFullYear(),
   category: "Cảng biển",
   categoryEn: "Seaport",
-  image: "/images/du-an/huu-thanh-co_132827983464005202.jpg",
+  image: "",
   galleryImages: [],
   description: "",
   descriptionEn: "",
@@ -710,7 +710,6 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                       />
                       <ProjectGalleryPicker
                         value={projectForm.galleryImages ?? []}
-                        mainImage={projectForm.image}
                         media={mediaLibrary}
                         token={session.accessToken}
                         onChange={(galleryImages) => setProjectForm({ ...projectForm, galleryImages })}
@@ -1074,20 +1073,35 @@ function MediaSelect({
   const imageMedia = media.filter((item) => isImageMedia(item));
 
   return (
-    <div className="space-y-3">
-      <div>
-        <span className="mb-1.5 block text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</span>
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</div>
+          <p className="mt-1 text-xs font-semibold text-slate-500">Upload ảnh mới từ máy để dùng cho dự án.</p>
+        </div>
         <ImageUploadButton token={token} folder="projects" onUploaded={onUploaded} />
       </div>
-      <MediaGrid
-        media={imageMedia}
-        selectedUrls={value ? [value] : []}
-        emptyText="Chưa có ảnh trong thư viện. Bấm chọn ảnh từ máy để upload."
-        onToggle={(src) => onChange(src)}
-      />
+
       {value && (
-        <div className="w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-          <img src={mediaFileUrl(value)} alt={label} className="h-40 w-full object-cover" />
+        <div className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <img src={mediaFileUrl(value)} alt={label} className="h-56 w-full object-cover" />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="absolute right-3 top-3 inline-flex h-9 items-center gap-1.5 rounded-lg bg-white/95 px-3 text-xs font-black text-red-600 shadow-sm transition hover:bg-red-600 hover:text-white"
+          >
+            <Trash2 size={14} />
+            Bỏ chọn
+          </button>
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-sm font-bold text-white">
+            {getMediaLabel(imageMedia, value)}
+          </div>
+        </div>
+      )}
+
+      {!value && (
+        <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm font-semibold text-slate-500">
+          Chưa chọn ảnh chính cho dự án.
         </div>
       )}
     </div>
@@ -1096,25 +1110,22 @@ function MediaSelect({
 
 function ProjectGalleryPicker({
   value,
-  mainImage,
   media,
   token,
   onChange,
   onUploaded,
 }: {
   value: string[];
-  mainImage: string;
   media: MediaRecord[];
   token: string;
   onChange: (value: string[]) => void;
   onUploaded: (item: MediaRecord) => void;
 }) {
   const imageMedia = media.filter((item) => isImageMedia(item));
-  const selected = new Set(value);
-  const galleryText = value.join("\n");
+  const selectedUrls = Array.from(new Set(value.filter(Boolean)));
 
   const toggle = (src: string) => {
-    const next = new Set(selected);
+    const next = new Set(selectedUrls);
     if (next.has(src)) next.delete(src);
     else next.add(src);
     onChange(Array.from(next));
@@ -1122,31 +1133,27 @@ function ProjectGalleryPicker({
 
   return (
     <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-      <div className="mb-3">
-        <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">Ảnh gallery dự án</div>
-        <p className="mt-1 text-xs font-semibold text-slate-500">
-          Chọn nhiều ảnh từ media. Ảnh chính sẽ tự được đưa vào gallery khi lưu.
-        </p>
+      <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">Ảnh gallery dự án</div>
+          <p className="mt-1 text-xs font-semibold text-slate-500">
+            Chỉ các ảnh được chọn ở đây mới thuộc gallery của dự án này.
+          </p>
+        </div>
+        <ImageUploadButton token={token} folder="projects" onUploaded={onUploaded} />
       </div>
 
-      <ImageUploadButton token={token} folder="projects" onUploaded={onUploaded} />
-      <div className="mt-3">
-        <MediaGrid
-          media={imageMedia}
-          selectedUrls={Array.from(new Set([mainImage, ...value].filter(Boolean)))}
-          emptyText="Chưa có ảnh trong thư viện. Bấm chọn ảnh từ máy để upload."
-          onToggle={toggle}
-        />
-      </div>
-
-      <div className="mt-4">
-        <Textarea
-          label="Hoặc nhập danh sách URL ảnh, mỗi dòng một ảnh"
-          rows={4}
-          value={galleryText}
-          onChange={(text) => onChange(textToList(text))}
-        />
-      </div>
+      {selectedUrls.length > 0 ? (
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {selectedUrls.map((src) => (
+            <SelectedMediaCard key={src} src={src} label={getMediaLabel(imageMedia, src)} onRemove={() => toggle(src)} />
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm font-semibold text-slate-500">
+          Chưa chọn ảnh gallery. Ảnh chính vẫn sẽ được dùng làm ảnh đại diện khi lưu.
+        </div>
+      )}
     </div>
   );
 }
@@ -1203,46 +1210,25 @@ function ImageUploadButton({
   );
 }
 
-function MediaGrid({
-  media,
-  selectedUrls,
-  emptyText,
-  onToggle,
-}: {
-  media: MediaRecord[];
-  selectedUrls: string[];
-  emptyText: string;
-  onToggle: (src: string) => void;
-}) {
-  const selected = new Set(selectedUrls);
-  if (!media.length) {
-    return (
-      <div className="rounded-lg border border-dashed border-slate-300 bg-white p-4 text-sm font-semibold text-slate-500">
-        {emptyText}
-      </div>
-    );
-  }
-
+function SelectedMediaCard({ src, label, onRemove }: { src: string; label: string; onRemove: () => void }) {
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-      {media.map((item) => {
-        const checked = selected.has(item.fileUrl);
-        return (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => onToggle(item.fileUrl)}
-            className={`overflow-hidden rounded-xl border bg-white text-left transition ${
-              checked ? "border-red-500 ring-2 ring-red-100" : "border-slate-200 hover:border-red-200"
-            }`}
-          >
-            <img src={mediaFileUrl(item.fileUrl)} alt={item.altText || item.fileName} className="h-24 w-full object-cover" />
-            <div className="truncate px-3 py-2 text-xs font-bold text-slate-600">{item.fileName}</div>
-          </button>
-        );
-      })}
+    <div className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <img src={mediaFileUrl(src)} alt={label} className="h-32 w-full object-cover" />
+      <button
+        type="button"
+        onClick={onRemove}
+        className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/95 text-red-600 opacity-100 shadow-sm transition hover:bg-red-600 hover:text-white md:opacity-0 md:group-hover:opacity-100"
+        aria-label="Bỏ ảnh khỏi gallery"
+      >
+        <Trash2 size={14} />
+      </button>
+      <div className="truncate px-3 py-2 text-xs font-bold text-slate-600">{label}</div>
     </div>
   );
+}
+
+function getMediaLabel(media: MediaRecord[], src: string) {
+  return media.find((item) => item.fileUrl === src)?.fileName ?? src.split("/").pop() ?? "Ảnh dự án";
 }
 
 function readFileAsDataUrl(file: File) {
