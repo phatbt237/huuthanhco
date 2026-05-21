@@ -9,6 +9,7 @@ import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { mergeById, useCmsContent } from "@/lib/cmsContent";
 import { getProjectDetailHref, sortProjectsByYearDesc } from "@/lib/projects";
+import { mediaFileUrl } from "@/lib/siteApi";
 
 const PER_PAGE = 4;
 
@@ -69,7 +70,7 @@ export default function ProjectsSection() {
                   <Link href={getProjectDetailHref(project)} className="block">
                     <div className="relative h-56 overflow-hidden">
                       <img
-                        src={project.image}
+                        src={mediaFileUrl(project.image)}
                         alt={lang === "vi" ? project.name : project.nameEn}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         loading="lazy"

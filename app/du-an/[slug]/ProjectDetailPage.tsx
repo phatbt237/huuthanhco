@@ -8,6 +8,7 @@ import type { Project } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { mergeById, useCmsContent } from "@/lib/cmsContent";
 import { getProjectDetailHref, getProjectSlug } from "@/lib/projects";
+import { mediaFileUrl } from "@/lib/siteApi";
 
 export default function ProjectDetailPage({
   project,
@@ -77,7 +78,7 @@ export default function ProjectDetailPage({
     <>
       <section className="relative overflow-hidden bg-slate-950 pt-28 pb-20">
         <div className="absolute inset-0">
-          <img src={activeProject.image} alt={title} className="h-full w-full object-cover opacity-35" />
+          <img src={mediaFileUrl(activeProject.image)} alt={title} className="h-full w-full object-cover opacity-35" />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/82 to-slate-950/35" />
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -121,14 +122,14 @@ export default function ProjectDetailPage({
             transition={{ duration: 0.5 }}
           >
             <div className="overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm">
-              <img src={activeProject.image} alt={title} className="h-auto w-full object-contain" />
+              <img src={mediaFileUrl(activeProject.image)} alt={title} className="h-auto w-full object-contain" />
             </div>
 
             {galleryImages.length > 1 && (
               <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-3">
                 {galleryImages.slice(1).map((src, index) => (
                   <div key={`${src}-${index}`} className="overflow-hidden rounded-xl border border-slate-100 bg-slate-50 shadow-sm">
-                    <img src={src} alt={`${title} ${index + 2}`} className="h-44 w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
+                    <img src={mediaFileUrl(src)} alt={`${title} ${index + 2}`} className="h-44 w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
                   </div>
                 ))}
               </div>
@@ -214,7 +215,7 @@ export default function ProjectDetailPage({
                 >
                   <div className="h-52 overflow-hidden">
                     <img
-                      src={item.image}
+                      src={mediaFileUrl(item.image)}
                       alt={lang === "vi" ? item.name : item.nameEn}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"

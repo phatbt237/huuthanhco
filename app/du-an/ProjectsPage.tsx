@@ -8,6 +8,7 @@ import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { mergeById, useCmsContent } from "@/lib/cmsContent";
 import { getProjectDetailHref, sortProjectsByYearDesc } from "@/lib/projects";
+import { mediaFileUrl } from "@/lib/siteApi";
 import { normalizeSearchText } from "@/lib/utils";
 
 const categoryMapVi: Record<string, string> = {
@@ -131,7 +132,7 @@ export default function ProjectsPage() {
                 <a href={getProjectDetailHref(project)} className="block">
                   <div className="relative h-60 overflow-hidden">
                     <img
-                      src={project.image}
+                      src={mediaFileUrl(project.image)}
                       alt={lang === "vi" ? project.name : project.nameEn}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"

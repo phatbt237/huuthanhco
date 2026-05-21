@@ -235,8 +235,27 @@ export async function createMedia(token: string, data: Omit<MediaRecord, "id">) 
   });
 }
 
+export async function uploadMediaFile(
+  token: string,
+  data: { fileName: string; dataUrl: string; folder: string; altText?: string; altTextEn?: string }
+) {
+  return requestJson<MediaRecord>("/api/media/upload", {
+    method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
 export async function deleteMedia(token: string, id: string) {
   return requestJson<void>(`/api/media/${id}`, { method: "DELETE", headers: authHeaders(token) });
+}
+
+export function mediaFileUrl(fileUrl: string) {
+  if (!fileUrl) return "";
+  if (/^(https?:|data:|blob:)/.test(fileUrl)) return fileUrl;
+  if (fileUrl.startsWith("/images/")) return fileUrl;
+  if (fileUrl.startsWith("/")) return `${CMS_API_BASE_URL}${fileUrl}`;
+  return `${CMS_API_BASE_URL}/uploads/${fileUrl.replace(/^\/+/, "")}`;
 }
 
 export function getSetting(settings: SettingsMap, key: string) {
