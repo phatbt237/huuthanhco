@@ -35,6 +35,7 @@ import {
   validateAdminSession,
   type AdminUser,
 } from "@/lib/adminAuth";
+import { listMedia, type MediaRecord } from "@/lib/siteApi";
 
 type CmsTab = "news" | "projects" | "jobs";
 type Tab = CmsTab | ExtraAdminTab;
@@ -43,6 +44,25 @@ type Session = {
   refreshToken: string;
   user: AdminUser;
 };
+
+const projectCategories = [
+  { value: "Cảng biển", valueEn: "Seaport" },
+  { value: "Thủy lợi", valueEn: "Hydraulics" },
+  { value: "Nạo vét", valueEn: "Dredging" },
+  { value: "Hạ tầng", valueEn: "Infrastructure" },
+  { value: "Dịch vụ", valueEn: "Services" },
+];
+
+const projectLocations = [
+  "TP. Hồ Chí Minh",
+  "Đồng Nai",
+  "Bà Rịa - Vũng Tàu",
+  "Vũng Tàu",
+  "Hà Nội",
+  "An Giang",
+  "Phú Thọ",
+  "Miền Nam",
+];
 
 const blankNews: NewsItem = {
   id: "",
@@ -68,6 +88,7 @@ const blankProject: Project = {
   category: "Cảng biển",
   categoryEn: "Seaport",
   image: "/images/du-an/huu-thanh-co_132827983464005202.jpg",
+  galleryImages: [],
   description: "",
   descriptionEn: "",
 };
@@ -347,10 +368,12 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
   const [isSaving, setIsSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [statusKind, setStatusKind] = useState<"success" | "error">("success");
+  const [mediaLibrary, setMediaLibrary] = useState<MediaRecord[]>([]);
 
   useEffect(() => {
     void fetchCmsContent().then(setContent);
-  }, []);
+    void listMedia(session.accessToken).then(setMediaLibrary).catch(() => setMediaLibrary([]));
+  }, [session.accessToken]);
 
   const currentItems = useMemo(() => {
     if (!isCmsTab(activeTab)) return [];
@@ -452,6 +475,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
   };
 
   const saveProject = async () => {
+    const galleryImages = normalizeProjectGallery(projectForm);
     const item: Project = {
       ...projectForm,
       id: projectForm.id || nextId("project"),
@@ -459,6 +483,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
       nameEn: projectForm.nameEn || projectForm.name,
       categoryEn: projectForm.categoryEn || projectForm.category,
       descriptionEn: projectForm.descriptionEn || projectForm.description,
+      galleryImages,
     };
     await persist({ ...content, projects: upsert(content.projects, item) });
     resetForm();
@@ -651,11 +676,35 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                       <Input label="Tên dự án" value={projectForm.name} onChange={(v) => setProjectForm({ ...projectForm, name: v })} />
                       <Input label="Tên dự án EN" value={projectForm.nameEn} onChange={(v) => setProjectForm({ ...projectForm, nameEn: v })} />
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <Input label="Địa điểm" value={projectForm.location} onChange={(v) => setProjectForm({ ...projectForm, location: v })} />
+                        <SelectField
+                          label="Địa điểm"
+                          value={projectForm.location}
+                          onChange={(v) => setProjectForm({ ...projectForm, location: v })}
+                          options={projectLocations.map((location) => ({ value: location, label: location }))}
+                        />
                         <Input label="Năm" type="number" value={String(projectForm.year)} onChange={(v) => setProjectForm({ ...projectForm, year: Number(v) })} />
-                        <Input label="Loại" value={projectForm.category} onChange={(v) => setProjectForm({ ...projectForm, category: v })} />
+                        <SelectField
+                          label="Loại"
+                          value={projectForm.category}
+                          onChange={(v) => {
+                            const category = projectCategories.find((item) => item.value === v);
+                            setProjectForm({ ...projectForm, category: v, categoryEn: category?.valueEn ?? v });
+                          }}
+                          options={projectCategories.map((category) => ({ value: category.value, label: category.value }))}
+                        />
                       </div>
-                      <Input label="Ảnh dự án" value={projectForm.image} onChange={(v) => setProjectForm({ ...projectForm, image: v })} />
+                      <MediaSelect
+                        label="Ảnh chính dự án"
+                        value={projectForm.image}
+                        media={mediaLibrary}
+                        onChange={(v) => setProjectForm({ ...projectForm, image: v })}
+                      />
+                      <ProjectGalleryPicker
+                        value={projectForm.galleryImages ?? []}
+                        mainImage={projectForm.image}
+                        media={mediaLibrary}
+                        onChange={(galleryImages) => setProjectForm({ ...projectForm, galleryImages })}
+                      />
                       <Textarea label="Mô tả" value={projectForm.description} onChange={(v) => setProjectForm({ ...projectForm, description: v })} />
                       <Textarea label="Mô tả EN" value={projectForm.descriptionEn} onChange={(v) => setProjectForm({ ...projectForm, descriptionEn: v })} />
                       <SaveButton disabled={isSaving} onClick={saveProject} />
@@ -832,6 +881,10 @@ function isCmsTab(tab: Tab): tab is CmsTab {
   return tab === "news" || tab === "projects" || tab === "jobs";
 }
 
+function normalizeProjectGallery(project: Project) {
+  return Array.from(new Set([project.image, ...(project.galleryImages ?? [])].map((src) => src.trim()).filter(Boolean)));
+}
+
 /* ── UI Components ── */
 
 function NavSection({ label, children }: { label: string; children: React.ReactNode }) {
@@ -958,6 +1011,144 @@ function Input({
       />
     </label>
   );
+}
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-10 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100"
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function MediaSelect({
+  label,
+  value,
+  media,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  media: MediaRecord[];
+  onChange: (value: string) => void;
+}) {
+  const imageMedia = media.filter((item) => isImageMedia(item));
+
+  return (
+    <div className="space-y-3">
+      <SelectField
+        label={`${label} từ thư viện`}
+        value={value}
+        onChange={onChange}
+        options={[
+          { value, label: value ? "Đang dùng ảnh hiện tại" : "Chọn ảnh từ media" },
+          ...imageMedia.map((item) => ({
+            value: item.fileUrl,
+            label: `${item.folder ? `${item.folder}/` : ""}${item.fileName}`,
+          })),
+        ]}
+      />
+      <Input label={`${label} URL`} value={value} onChange={onChange} />
+      {value && (
+        <div className="w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+          <img src={value} alt={label} className="h-40 w-full object-cover" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ProjectGalleryPicker({
+  value,
+  mainImage,
+  media,
+  onChange,
+}: {
+  value: string[];
+  mainImage: string;
+  media: MediaRecord[];
+  onChange: (value: string[]) => void;
+}) {
+  const imageMedia = media.filter((item) => isImageMedia(item));
+  const selected = new Set(value);
+  const galleryText = value.join("\n");
+
+  const toggle = (src: string) => {
+    const next = new Set(selected);
+    if (next.has(src)) next.delete(src);
+    else next.add(src);
+    onChange(Array.from(next));
+  };
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="mb-3">
+        <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">Ảnh gallery dự án</div>
+        <p className="mt-1 text-xs font-semibold text-slate-500">
+          Chọn nhiều ảnh từ media. Ảnh chính sẽ tự được đưa vào gallery khi lưu.
+        </p>
+      </div>
+
+      {imageMedia.length > 0 ? (
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {imageMedia.map((item) => {
+            const checked = selected.has(item.fileUrl) || mainImage === item.fileUrl;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => toggle(item.fileUrl)}
+                className={`overflow-hidden rounded-xl border bg-white text-left transition ${
+                  checked ? "border-red-500 ring-2 ring-red-100" : "border-slate-200 hover:border-red-200"
+                }`}
+              >
+                <img src={item.fileUrl} alt={item.altText || item.fileName} className="h-24 w-full object-cover" />
+                <div className="truncate px-3 py-2 text-xs font-bold text-slate-600">{item.fileName}</div>
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-4 text-sm font-semibold text-slate-500">
+          Chưa có ảnh trong media. Vào tab Cài đặt để thêm URL ảnh vào thư viện trước.
+        </div>
+      )}
+
+      <div className="mt-4">
+        <Textarea
+          label="Hoặc nhập danh sách URL ảnh, mỗi dòng một ảnh"
+          rows={4}
+          value={galleryText}
+          onChange={(text) => onChange(textToList(text))}
+        />
+      </div>
+    </div>
+  );
+}
+
+function isImageMedia(item: MediaRecord) {
+  return item.fileType === "image" || /\.(png|jpe?g|webp|gif|avif)$/i.test(item.fileUrl);
 }
 
 function Textarea({

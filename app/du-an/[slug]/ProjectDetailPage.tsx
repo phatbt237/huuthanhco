@@ -60,6 +60,7 @@ export default function ProjectDetailPage({
     (lang === "vi" ? activeProject.category : activeProject.categoryEn) ||
     activeProject.category ||
     activeProject.categoryEn;
+  const galleryImages = Array.from(new Set([activeProject.image, ...(activeProject.galleryImages ?? [])].filter(Boolean)));
 
   const infoRows = [
     { label: t("Lĩnh vực", "Sector"), value: category, icon: Tag },
@@ -122,6 +123,16 @@ export default function ProjectDetailPage({
             <div className="overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm">
               <img src={activeProject.image} alt={title} className="h-auto w-full object-contain" />
             </div>
+
+            {galleryImages.length > 1 && (
+              <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-3">
+                {galleryImages.slice(1).map((src, index) => (
+                  <div key={`${src}-${index}`} className="overflow-hidden rounded-xl border border-slate-100 bg-slate-50 shadow-sm">
+                    <img src={src} alt={`${title} ${index + 2}`} className="h-44 w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div className="mt-10">
               <span className="text-xs font-black uppercase tracking-[0.24em] text-orange-500">
