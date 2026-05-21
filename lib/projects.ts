@@ -10,6 +10,13 @@ export function getProjectDetailHref(project: Pick<Project, "id" | "name" | "slu
   return `/du-an/${getProjectSlug(project)}`;
 }
 
+export function sortProjectsByYearDesc(projectItems: Project[]) {
+  return projectItems
+    .map((project, index) => ({ project, index }))
+    .sort((a, b) => b.project.year - a.project.year || a.index - b.index)
+    .map(({ project }) => project);
+}
+
 export function findStaticProjectBySlug(slug: string) {
   return projects.find((project) => getProjectSlug(project) === slug || project.id === slug);
 }

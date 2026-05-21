@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import ProjectDetailPage from "./ProjectDetailPage";
 import { projects } from "@/data/projects";
 import { findStaticProjectBySlug, getProjectSlug, getRelatedStaticProjects } from "@/lib/projects";
@@ -29,7 +28,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const project = findStaticProjectBySlug(slug);
-  if (!project) notFound();
 
-  return <ProjectDetailPage project={project} relatedProjects={getRelatedStaticProjects(project)} />;
+  return <ProjectDetailPage project={project} relatedProjects={project ? getRelatedStaticProjects(project) : []} slug={slug} />;
 }

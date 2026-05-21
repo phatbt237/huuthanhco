@@ -3,6 +3,7 @@ import type { Job } from "@/data/jobs";
 import type { NewsItem } from "@/data/news";
 import type { Project } from "@/data/projects";
 import { cmsApiUrl } from "@/lib/siteApi";
+import { slugify } from "@/lib/utils";
 
 const CMS_STORAGE_KEY = "huu-thanh-cms-content-v1";
 
@@ -116,7 +117,17 @@ export function useCmsContent() {
   return content;
 }
 
-export function mergeById<T extends { id: string }>(base: T[], custom: T[]): T[] {
-  const customIds = new Set(custom.map((item) => item.id));
-  return [...custom, ...base.filter((item) => !customIds.has(item.id))];
+export function mergeById<T extends { id: string; slug?: string; name?: string; title?: string }>(base: T[], custom: T[]): T[] {
+  const customKeys = new Set(custom.flatMap(getContentKeys));
+  return [...custom, ...base.filter((item) => !getContentKeys(item).some((key) => customKeys.has(key)))];
+}
+
+function getContentKeys<T extends { id: string; slug?: string; name?: string; title?: string }>(item: T) {
+  const keys = [`id:${item.id}`];
+  if (item.slug) keys.push(`slug:${item.slug}`);
+
+  const title = item.name || item.title;
+  if (title) keys.push(`title:${slugify(title)}`);
+
+  return keys;
 }

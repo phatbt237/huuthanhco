@@ -8,14 +8,14 @@ import SectionTitle from "@/components/SectionTitle";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { mergeById, useCmsContent } from "@/lib/cmsContent";
-import { getProjectDetailHref } from "@/lib/projects";
+import { getProjectDetailHref, sortProjectsByYearDesc } from "@/lib/projects";
 
 const PER_PAGE = 4;
 
 export default function ProjectsSection() {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent();
-  const projectItems = mergeById(cmsContent.projects, projects);
+  const projectItems = sortProjectsByYearDesc(mergeById(projects, cmsContent.projects));
   const [page, setPage] = useState(0);
 
   const totalPages = Math.max(1, Math.ceil(projectItems.length / PER_PAGE));

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { equipment } from "@/data/equipment";
+import { services } from "@/data/services";
 
 const DEFAULT_CMS_API_BASE_URL = "https://huuthanhco.onrender.com";
 
@@ -89,6 +91,10 @@ export const defaultSiteSettings: SettingsMap = {
   "hero.eyebrow": "Công Ty Cổ phần Xây Dựng Hữu Thành",
   "hero.title": "Đơn vị thi công công trình chuyên nghiệp",
   "hero.description": "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
+  "services.items": JSON.stringify(services, null, 2),
+  "equipment.items": JSON.stringify(equipment, null, 2),
+  "partners.images":
+    "/images/doi-tac/huu-thanh-co_132747886943964272.jpg\n/images/doi-tac/huu-thanh-co_132747887169276799.jpg\n/images/doi-tac/huu-thanh-co_132747906276479099.jpg\n/images/doi-tac/huu-thanh-co_132747911027105033.jpg\n/images/doi-tac/huu-thanh-co_132747915873354052.jpg\n/images/doi-tac/huu-thanh-co_132747916552729392.jpg\n/images/doi-tac/huu-thanh-co_132747917517885233.jpg\n/images/doi-tac/huu-thanh-co_132747921285697744.jpg\n/images/doi-tac/huu-thanh-co_132747921436010275.jpg\n/images/doi-tac/huu-thanh-co_132747921578197710.jpg\n/images/doi-tac/huu-thanh-co_132747921728510246.jpg",
 };
 
 export function cmsApiUrl(path: string) {
@@ -242,6 +248,17 @@ export function settingLines(settings: SettingsMap, key: string) {
     .split("\n")
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+export function settingJson<T>(settings: SettingsMap, key: string, fallback: T): T {
+  const raw = getSetting(settings, key);
+  if (!raw) return fallback;
+
+  try {
+    return JSON.parse(String(raw)) as T;
+  } catch {
+    return fallback;
+  }
 }
 
 export function useSiteSettings(prefix?: string) {

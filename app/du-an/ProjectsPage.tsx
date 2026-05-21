@@ -7,7 +7,7 @@ import { Calendar, MapPin, Search } from "lucide-react";
 import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { mergeById, useCmsContent } from "@/lib/cmsContent";
-import { getProjectDetailHref } from "@/lib/projects";
+import { getProjectDetailHref, sortProjectsByYearDesc } from "@/lib/projects";
 import { normalizeSearchText } from "@/lib/utils";
 
 const categoryMapVi: Record<string, string> = {
@@ -21,7 +21,7 @@ const categoryMapVi: Record<string, string> = {
 export default function ProjectsPage() {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent();
-  const projectItems = mergeById(cmsContent.projects, projects);
+  const projectItems = sortProjectsByYearDesc(mergeById(projects, cmsContent.projects));
   const searchParams = useSearchParams();
   const loaiParam = searchParams.get("loai");
   const initialCategory = loaiParam ? (categoryMapVi[loaiParam] ?? "all") : "all";

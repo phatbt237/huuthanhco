@@ -5,10 +5,14 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
 import { services } from "@/data/services";
+import type { Service } from "@/data/services";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { settingJson, useSiteSettings } from "@/lib/siteApi";
 
 export default function ServicesSection() {
   const { lang, t } = useLanguage();
+  const settings = useSiteSettings("services");
+  const serviceItems = settingJson<Service[]>(settings, "services.items", services);
   const serviceLinks = [
     "/du-an?loai=cang-bien",
     "/du-an?loai=cang-bien",
@@ -39,7 +43,7 @@ export default function ServicesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, i) => (
+          {serviceItems.map((service, i) => (
             <motion.div
               key={service.id}
               initial={{ opacity: 0, y: 30 }}

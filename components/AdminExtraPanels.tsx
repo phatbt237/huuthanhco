@@ -46,6 +46,9 @@ const editableSettings = [
   { key: "hero.title", label: "Hero title", type: "text" },
   { key: "hero.description", label: "Hero mô tả", type: "textarea" },
   { key: "hero.images", label: "Flash/banner trang chủ, mỗi dòng một URL", type: "textarea" },
+  { key: "services.items", label: "Dịch vụ/Lĩnh vực dạng JSON", type: "textarea" },
+  { key: "equipment.items", label: "Thiết bị dạng JSON", type: "textarea" },
+  { key: "partners.images", label: "Logo đối tác, mỗi dòng một URL", type: "textarea" },
 ] as const;
 
 const applicationStatusOptions = [
