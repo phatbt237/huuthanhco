@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getSetting, settingLines, useSiteSettings } from "@/lib/siteApi";
+import { getSetting, settingLines } from "@/lib/siteApi";
+import { useSiteSettings } from "@/lib/useSiteSettings";
 
 const fallbackHeroImages = [
   "/images/hero/Flash-4_132827290261925965.jpg",

@@ -4,15 +4,14 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Calendar, ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
-import { news } from "@/data/news";
 import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { useCmsContent } from "@/lib/useCmsContent";
 
 export default function NewsSection() {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent();
-  const latest = mergeById(news, cmsContent.news).slice(0, 3);
+  const latest = cmsContent.news.slice(0, 3);
 
   return (
     <section className="py-24 bg-slate-50">

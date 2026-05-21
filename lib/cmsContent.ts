@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import type { Job } from "@/data/jobs";
 import type { NewsItem } from "@/data/news";
 import type { Project } from "@/data/projects";
@@ -17,7 +16,7 @@ type RequestOptions = {
   token?: string;
 };
 
-const emptyContent: CmsContent = {
+export const emptyContent: CmsContent = {
   news: [],
   projects: [],
   jobs: [],
@@ -96,27 +95,6 @@ export async function clearCmsContent(options: RequestOptions = {}) {
   window.dispatchEvent(new Event("huu-thanh-cms-content-updated"));
 }
 
-export function useCmsContent() {
-  const [content, setContent] = useState<CmsContent>(emptyContent);
-
-  useEffect(() => {
-    const refresh = () => {
-      setContent(loadCmsContent());
-      void fetchCmsContent().then(setContent);
-    };
-    refresh();
-    window.addEventListener("storage", refresh);
-    window.addEventListener("huu-thanh-cms-content-updated", refresh);
-
-    return () => {
-      window.removeEventListener("storage", refresh);
-      window.removeEventListener("huu-thanh-cms-content-updated", refresh);
-    };
-  }, []);
-
-  return content;
-}
-
 export function mergeById<T extends { id: string; slug?: string; name?: string; title?: string }>(base: T[], custom: T[]): T[] {
   const customKeys = new Set(custom.flatMap(getContentKeys));
   return [...custom, ...base.filter((item) => !getContentKeys(item).some((key) => customKeys.has(key)))];
@@ -125,9 +103,7 @@ export function mergeById<T extends { id: string; slug?: string; name?: string; 
 function getContentKeys<T extends { id: string; slug?: string; name?: string; title?: string }>(item: T) {
   const keys = [`id:${item.id}`];
   if (item.slug) keys.push(`slug:${item.slug}`);
-
   const title = item.name || item.title;
   if (title) keys.push(`title:${slugify(title)}`);
-
   return keys;
 }

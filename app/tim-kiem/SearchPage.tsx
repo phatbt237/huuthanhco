@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Search } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { searchSite } from "@/data/search";
-import { useCmsContent } from "@/lib/cmsContent";
+import { useCmsContent } from "@/lib/useCmsContent";
 
 export default function SearchPage() {
   const { lang, t } = useLanguage();

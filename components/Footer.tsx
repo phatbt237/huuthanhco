@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { Building2, FileText, Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getSetting, useSiteSettings } from "@/lib/siteApi";
+import { getSetting } from "@/lib/siteApi";
+import { useSiteSettings } from "@/lib/useSiteSettings";
 
 export default function Footer() {
   const { lang, t } = useLanguage();

@@ -5,11 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { MapPin, Calendar, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
-import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { useCmsContent } from "@/lib/useCmsContent";
+import { mergeById } from "@/lib/cmsContent";
 import { getProjectDetailHref, sortProjectsByYearDesc } from "@/lib/projects";
 import { mediaFileUrl } from "@/lib/siteApi";
+import { projects } from "@/data/projects";
 
 const PER_PAGE = 4;
 

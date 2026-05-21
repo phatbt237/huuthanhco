@@ -250,6 +250,54 @@ export async function deleteMedia(token: string, id: string) {
   return requestJson<void>(`/api/media/${id}`, { method: "DELETE", headers: authHeaders(token) });
 }
 
+export async function uploadMedia(
+  token: string,
+  file: File,
+  folder: string,
+  altText = "",
+  altTextEn = "",
+): Promise<string> {
+  const formData = new FormData();
+  formData.append("files", file);
+  formData.append("folder", folder);
+  formData.append("altText", altText);
+  formData.append("altTextEn", altTextEn);
+
+  const response = await fetch(cmsApiUrl("/api/media/upload"), {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    throw new Error(detail || `Upload lỗi ${response.status}`);
+  }
+
+  const data = (await response.json()) as unknown;
+  const findUrl = (obj: unknown): string => {
+    if (!obj || typeof obj !== "object") return "";
+    if (Array.isArray(obj)) return findUrl(obj[0]);
+    const o = obj as Record<string, unknown>;
+    return (
+      (typeof o.fileUrl === "string" ? o.fileUrl : "") ||
+      (typeof o.url === "string" ? o.url : "") ||
+      (typeof o.location === "string" ? o.location : "") ||
+      (typeof o.path === "string" ? o.path : "") ||
+      findUrl(o.data) ||
+      findUrl(o.file) ||
+      findUrl(o.files) ||
+      findUrl(o.items) ||
+      findUrl(o.result) ||
+      ""
+    );
+  };
+
+  const url = findUrl(data);
+  if (!url) throw new Error(`Upload thành công nhưng không tìm được URL. Response: ${JSON.stringify(data)}`);
+  return url;
+}
+
 export function mediaFileUrl(fileUrl: string) {
   if (!fileUrl) return "";
   if (/^(https?:|data:|blob:)/.test(fileUrl)) return fileUrl;
@@ -272,7 +320,6 @@ export function settingLines(settings: SettingsMap, key: string) {
 export function settingJson<T>(settings: SettingsMap, key: string, fallback: T): T {
   const raw = getSetting(settings, key);
   if (!raw) return fallback;
-
   try {
     return JSON.parse(String(raw)) as T;
   } catch {
@@ -282,10 +329,8 @@ export function settingJson<T>(settings: SettingsMap, key: string, fallback: T):
 
 export function useSiteSettings(prefix?: string) {
   const [settings, setSettings] = useState<SettingsMap>(defaultSiteSettings);
-
   useEffect(() => {
     void getSettingsMap(prefix).then(setSettings).catch(() => setSettings(defaultSiteSettings));
   }, [prefix]);
-
   return settings;
 }

@@ -1,7 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(sed -i 's|import { getSetting, useSiteSettings } from \"@/lib/siteApi\"|import { getSetting } from \"@/lib/siteApi\";\\\\nimport { useSiteSettings } from \"@/lib/useSiteSettings\"|g' components/Footer.tsx app/lien-he/ContactPage.tsx)",
+      "Bash(sed -i 's|import { getSetting, settingLines, useSiteSettings } from \"@/lib/siteApi\"|import { getSetting, settingLines } from \"@/lib/siteApi\";\\\\nimport { useSiteSettings } from \"@/lib/useSiteSettings\"|g' sections/HeroSection.tsx)",
+      "Bash(cat .env.local)",
+      "Bash(cat .env)",
+      "Bash(xargs grep -l \"upload\\\\|image.*form\\\\|file.*input\")",
+      "PowerShell(Set-Location \"D:\\\\HuuThanhCo-FE\\\\huuthanhco\"; Get-ChildItem -Path \".\" -Directory | Where-Object {$_.Name -like \"public\" -or $_.Name -like \"static\"}; if\\(Test-Path \"public\"\\) { Get-ChildItem -Path \"public\" -Recurse })"
     ]
   }
 }

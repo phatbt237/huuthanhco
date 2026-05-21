@@ -6,7 +6,8 @@ import { ArrowLeft, ArrowRight, Calendar, CheckCircle2, MapPin, Tag } from "luci
 import { projects } from "@/data/projects";
 import type { Project } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { mergeById } from "@/lib/cmsContent";
+import { useCmsContent } from "@/lib/useCmsContent";
 import { getProjectDetailHref, getProjectSlug } from "@/lib/projects";
 import { mediaFileUrl } from "@/lib/siteApi";
 

@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Search } from "lucide-react";
-import { projects } from "@/data/projects";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById, useCmsContent } from "@/lib/cmsContent";
+import { useCmsContent } from "@/lib/useCmsContent";
+import { mergeById } from "@/lib/cmsContent";
 import { getProjectDetailHref, sortProjectsByYearDesc } from "@/lib/projects";
 import { mediaFileUrl } from "@/lib/siteApi";
+import { projects } from "@/data/projects";
 import { normalizeSearchText } from "@/lib/utils";
 
 const categoryMapVi: Record<string, string> = {
