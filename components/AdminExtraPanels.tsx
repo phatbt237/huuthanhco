@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Plus, RefreshCw, Save, Trash2 } from "lucide-react";
+import ImageUploadField from "@/components/ImageUploadField";
 import {
   createAdminUser,
   createMedia,
@@ -266,8 +267,8 @@ function SettingsPanel({ token }: { token: string }) {
             <h3 className="mb-3 font-black">Media / banner</h3>
             <div className="space-y-3">
               <Field label="Tên file" value={mediaForm.fileName} onChange={(value) => setMediaForm({ ...mediaForm, fileName: value })} />
-              <Field label="URL file" value={mediaForm.fileUrl} onChange={(value) => setMediaForm({ ...mediaForm, fileUrl: value })} />
               <Field label="Folder" value={mediaForm.folder} onChange={(value) => setMediaForm({ ...mediaForm, folder: value })} />
+              <ImageUploadField label="Ảnh" value={mediaForm.fileUrl} onChange={(value) => setMediaForm({ ...mediaForm, fileUrl: value })} folder={mediaForm.folder} token={token} altText={mediaForm.altText} altTextEn={mediaForm.altText} />
               <Field label="Alt text" value={mediaForm.altText} onChange={(value) => setMediaForm({ ...mediaForm, altText: value })} />
               <button onClick={addMedia} className="inline-flex h-10 items-center gap-2 bg-slate-950 px-3 text-sm font-black text-white">
                 <Plus size={16} />

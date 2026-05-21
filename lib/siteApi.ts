@@ -219,6 +219,58 @@ export async function deleteMedia(token: string, id: string) {
   return requestJson<void>(`/api/media/${id}`, { method: "DELETE", headers: authHeaders(token) });
 }
 
+export async function uploadMedia(
+  token: string,
+  file: File,
+  folder: string,
+  altText = "",
+  altTextEn = "",
+): Promise<string> {
+  const formData = new FormData();
+  formData.append("files", file);
+  formData.append("folder", folder);
+  formData.append("altText", altText);
+  formData.append("altTextEn", altTextEn);
+
+  const response = await fetch(cmsApiUrl("/api/media/upload"), {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    throw new Error(detail || `Upload lỗi ${response.status}`);
+  }
+
+  const data = (await response.json()) as unknown;
+  // Log để debug response shape
+  console.log("[uploadMedia] response:", JSON.stringify(data));
+
+  // Tìm URL trong các cấu trúc phổ biến
+  const findUrl = (obj: unknown): string => {
+    if (!obj || typeof obj !== "object") return "";
+    if (Array.isArray(obj)) return findUrl(obj[0]);
+    const o = obj as Record<string, unknown>;
+    return (
+      (typeof o.fileUrl === "string" ? o.fileUrl : "") ||
+      (typeof o.url === "string" ? o.url : "") ||
+      (typeof o.location === "string" ? o.location : "") ||
+      (typeof o.path === "string" ? o.path : "") ||
+      findUrl(o.data) ||
+      findUrl(o.file) ||
+      findUrl(o.files) ||
+      findUrl(o.items) ||
+      findUrl(o.result) ||
+      ""
+    );
+  };
+
+  const url = findUrl(data);
+  if (!url) throw new Error(`Upload thành công nhưng không tìm được URL. Response: ${JSON.stringify(data)}`);
+  return url;
+}
+
 export function getSetting(settings: SettingsMap, key: string) {
   return settings[key] ?? defaultSiteSettings[key] ?? "";
 }

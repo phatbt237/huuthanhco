@@ -24,6 +24,7 @@ import {
   Users,
 } from "lucide-react";
 import AdminExtraPanels, { type ExtraAdminTab } from "@/components/AdminExtraPanels";
+import ImageUploadField from "@/components/ImageUploadField";
 import type { Job } from "@/data/jobs";
 import type { NewsItem } from "@/data/news";
 import type { Project } from "@/data/projects";
@@ -52,7 +53,7 @@ const blankNews: NewsItem = {
   date: new Date().toISOString().slice(0, 10),
   category: "Tin tức",
   categoryEn: "News",
-  thumbnail: "/images/du-an/huu-thanh-co_132827983464005202.jpg",
+  thumbnail: "",
   excerpt: "",
   excerptEn: "",
   content: "",
@@ -67,7 +68,7 @@ const blankProject: Project = {
   year: new Date().getFullYear(),
   category: "Cảng biển",
   categoryEn: "Seaport",
-  image: "/images/du-an/huu-thanh-co_132827983464005202.jpg",
+  image: "",
   description: "",
   descriptionEn: "",
 };
@@ -641,7 +642,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                         <Input label="Danh mục" value={newsForm.category} onChange={(v) => setNewsForm({ ...newsForm, category: v })} />
                         <Input label="Danh mục EN" value={newsForm.categoryEn} onChange={(v) => setNewsForm({ ...newsForm, categoryEn: v })} />
                       </div>
-                      <Input label="Ảnh đại diện" value={newsForm.thumbnail} onChange={(v) => setNewsForm({ ...newsForm, thumbnail: v })} />
+                      <ImageUploadField label="Ảnh đại diện" value={newsForm.thumbnail} onChange={(v) => setNewsForm({ ...newsForm, thumbnail: v })} folder="news" token={session.accessToken} />
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <Textarea label="Mô tả ngắn (VI)" value={newsForm.excerpt} onChange={(v) => setNewsForm({ ...newsForm, excerpt: v })} />
                         <Textarea label="Mô tả ngắn (EN)" value={newsForm.excerptEn} onChange={(v) => setNewsForm({ ...newsForm, excerptEn: v })} />
@@ -664,7 +665,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                         <Input label="Năm" type="number" value={String(projectForm.year)} onChange={(v) => setProjectForm({ ...projectForm, year: Number(v) })} />
                         <Input label="Loại" value={projectForm.category} onChange={(v) => setProjectForm({ ...projectForm, category: v })} />
                       </div>
-                      <Input label="Ảnh dự án" value={projectForm.image} onChange={(v) => setProjectForm({ ...projectForm, image: v })} />
+                      <ImageUploadField label="Ảnh dự án" value={projectForm.image} onChange={(v) => setProjectForm({ ...projectForm, image: v })} folder="project" token={session.accessToken} />
                       <Textarea label="Mô tả" value={projectForm.description} onChange={(v) => setProjectForm({ ...projectForm, description: v })} />
                       <Textarea label="Mô tả EN" value={projectForm.descriptionEn} onChange={(v) => setProjectForm({ ...projectForm, descriptionEn: v })} />
                       <SaveButton disabled={isSaving} onClick={saveProject} />
