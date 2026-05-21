@@ -255,12 +255,12 @@ export async function uploadMedia(
   folder: string,
   altText = "",
   altTextEn = "",
-): Promise<string> {
+): Promise<MediaRecord> {
   const formData = new FormData();
   formData.append("files", file);
   formData.append("folder", folder);
-  formData.append("altText", altText);
-  formData.append("altTextEn", altTextEn);
+  formData.append("altText", altText || file.name);
+  formData.append("altTextEn", altTextEn || file.name);
 
   const response = await fetch(cmsApiUrl("/api/media/upload"), {
     method: "POST",
@@ -274,27 +274,19 @@ export async function uploadMedia(
   }
 
   const data = (await response.json()) as unknown;
-  const findUrl = (obj: unknown): string => {
-    if (!obj || typeof obj !== "object") return "";
-    if (Array.isArray(obj)) return findUrl(obj[0]);
+
+  // API trả về { items: [MediaRecord] }
+  const findRecord = (obj: unknown): MediaRecord | null => {
+    if (!obj || typeof obj !== "object") return null;
+    if (Array.isArray(obj)) return findRecord(obj[0]);
     const o = obj as Record<string, unknown>;
-    return (
-      (typeof o.fileUrl === "string" ? o.fileUrl : "") ||
-      (typeof o.url === "string" ? o.url : "") ||
-      (typeof o.location === "string" ? o.location : "") ||
-      (typeof o.path === "string" ? o.path : "") ||
-      findUrl(o.data) ||
-      findUrl(o.file) ||
-      findUrl(o.files) ||
-      findUrl(o.items) ||
-      findUrl(o.result) ||
-      ""
-    );
+    if (typeof o.fileUrl === "string") return o as unknown as MediaRecord;
+    return findRecord(o.items) ?? findRecord(o.data) ?? findRecord(o.result) ?? null;
   };
 
-  const url = findUrl(data);
-  if (!url) throw new Error(`Upload thành công nhưng không tìm được URL. Response: ${JSON.stringify(data)}`);
-  return url;
+  const record = findRecord(data);
+  if (!record?.fileUrl) throw new Error(`Upload thành công nhưng không tìm được URL. Response: ${JSON.stringify(data)}`);
+  return record;
 }
 
 export function mediaFileUrl(fileUrl: string) {

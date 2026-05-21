@@ -24,8 +24,8 @@ export default function ImageUploadField({ label, value, onChange, folder, token
     setError("");
     setIsUploading(true);
     try {
-      const url = await uploadMedia(token, file, folder, altText || file.name, altTextEn || file.name);
-      onChange(url);
+      const record = await uploadMedia(token, file, folder, altText || file.name, altTextEn || file.name);
+      onChange(record.fileUrl);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload thất bại");
     } finally {

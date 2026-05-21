@@ -36,7 +36,7 @@ import {
   validateAdminSession,
   type AdminUser,
 } from "@/lib/adminAuth";
-import { listMedia, mediaFileUrl, uploadMediaFile, type MediaRecord } from "@/lib/siteApi";
+import { listMedia, mediaFileUrl, uploadMedia, type MediaRecord } from "@/lib/siteApi";
 
 type CmsTab = "news" | "projects" | "jobs";
 type Tab = CmsTab | ExtraAdminTab;
@@ -1177,13 +1177,7 @@ function ImageUploadButton({
     setIsUploading(true);
     try {
       for (const file of Array.from(files)) {
-        const dataUrl = await readFileAsDataUrl(file);
-        const item = await uploadMediaFile(token, {
-          fileName: file.name,
-          dataUrl,
-          folder,
-          altText: file.name.replace(/\.[^.]+$/, ""),
-        });
+        const item = await uploadMedia(token, file, folder, file.name.replace(/\.[^.]+$/, ""));
         onUploaded(item);
       }
     } catch (err) {
