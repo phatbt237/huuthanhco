@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   AlertCircle,
   Briefcase,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Download,
   FolderOpen,
   Inbox,
@@ -18,13 +20,14 @@ import {
   Save,
   Search,
   Settings,
+  Star,
   Trash2,
   Upload,
   UserCheck,
   Users,
+  X,
 } from "lucide-react";
 import AdminExtraPanels, { type ExtraAdminTab } from "@/components/AdminExtraPanels";
-import ImageUploadField from "@/components/ImageUploadField";
 import type { Job } from "@/data/jobs";
 import type { NewsItem } from "@/data/news";
 import type { Project } from "@/data/projects";
@@ -74,6 +77,7 @@ const blankNews: NewsItem = {
   category: "Tin tức",
   categoryEn: "News",
   thumbnail: "",
+  galleryImages: [],
   excerpt: "",
   excerptEn: "",
   content: "",
@@ -439,11 +443,17 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
     setIsEditorOpen(true);
     if (activeTab === "news") {
       const item = content.news.find((entry) => entry.id === id);
-      if (item) setNewsForm(item);
+      if (item) {
+        const merged = Array.from(new Set([item.thumbnail, ...(item.galleryImages ?? [])].filter(Boolean)));
+        setNewsForm({ ...item, galleryImages: merged });
+      }
     }
     if (activeTab === "projects") {
       const item = content.projects.find((entry) => entry.id === id);
-      if (item) setProjectForm(item);
+      if (item) {
+        const merged = Array.from(new Set([item.image, ...(item.galleryImages ?? [])].filter(Boolean)));
+        setProjectForm({ ...item, galleryImages: merged });
+      }
     }
     if (activeTab === "jobs") {
       const item = content.jobs.find((entry) => entry.id === id);
@@ -466,6 +476,10 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
   };
 
   const saveNews = async () => {
+    const gallery = (newsForm.galleryImages ?? []).filter(Boolean);
+    const thumbnail = (newsForm.thumbnail && gallery.includes(newsForm.thumbnail))
+      ? newsForm.thumbnail
+      : gallery[0] ?? newsForm.thumbnail ?? "";
     const item: NewsItem = {
       ...newsForm,
       id: newsForm.id || nextId("news"),
@@ -474,13 +488,18 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
       categoryEn: newsForm.categoryEn || newsForm.category,
       excerptEn: newsForm.excerptEn || newsForm.excerpt,
       contentEn: newsForm.contentEn || newsForm.content,
+      thumbnail,
+      galleryImages: gallery,
     };
     await persist({ ...content, news: upsert(content.news, item) });
     resetForm();
   };
 
   const saveProject = async () => {
-    const galleryImages = normalizeProjectGallery(projectForm);
+    const gallery = (projectForm.galleryImages ?? []).filter(Boolean);
+    const image = (projectForm.image && gallery.includes(projectForm.image))
+      ? projectForm.image
+      : gallery[0] ?? projectForm.image ?? "";
     const item: Project = {
       ...projectForm,
       id: projectForm.id || nextId("project"),
@@ -488,7 +507,8 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
       nameEn: projectForm.nameEn || projectForm.name,
       categoryEn: projectForm.categoryEn || projectForm.category,
       descriptionEn: projectForm.descriptionEn || projectForm.description,
-      galleryImages,
+      image,
+      galleryImages: gallery,
     };
     await persist({ ...content, projects: upsert(content.projects, item) });
     resetForm();
@@ -662,7 +682,17 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                         <Input label="Danh mục" value={newsForm.category} onChange={(v) => setNewsForm({ ...newsForm, category: v })} />
                         <Input label="Danh mục EN" value={newsForm.categoryEn} onChange={(v) => setNewsForm({ ...newsForm, categoryEn: v })} />
                       </div>
-                      <ImageUploadField label="Ảnh đại diện" value={newsForm.thumbnail} onChange={(v) => setNewsForm({ ...newsForm, thumbnail: v })} folder="news" token={session.accessToken} />
+                      <GalleryWithThumbnail
+                        label="Ảnh tin tức"
+                        images={newsForm.galleryImages ?? []}
+                        thumbnail={newsForm.thumbnail}
+                        media={mediaLibrary}
+                        token={session.accessToken}
+                        folder="news"
+                        onImagesChange={(v) => setNewsForm({ ...newsForm, galleryImages: v })}
+                        onThumbnailChange={(v) => setNewsForm({ ...newsForm, thumbnail: v })}
+                        onUploaded={(item) => setMediaLibrary((prev) => [item, ...prev.filter((m) => m.id !== item.id)])}
+                      />
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <Textarea label="Mô tả ngắn (VI)" value={newsForm.excerpt} onChange={(v) => setNewsForm({ ...newsForm, excerpt: v })} />
                         <Textarea label="Mô tả ngắn (EN)" value={newsForm.excerptEn} onChange={(v) => setNewsForm({ ...newsForm, excerptEn: v })} />
@@ -698,7 +728,17 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                           options={projectCategories.map((category) => ({ value: category.value, label: category.value }))}
                         />
                       </div>
-                      <ImageUploadField label="Ảnh dự án" value={projectForm.image} onChange={(v) => setProjectForm({ ...projectForm, image: v })} folder="project" token={session.accessToken} />
+                      <GalleryWithThumbnail
+                        label="Ảnh dự án"
+                        images={projectForm.galleryImages ?? []}
+                        thumbnail={projectForm.image}
+                        media={mediaLibrary}
+                        token={session.accessToken}
+                        folder="projects"
+                        onImagesChange={(v) => setProjectForm({ ...projectForm, galleryImages: v })}
+                        onThumbnailChange={(v) => setProjectForm({ ...projectForm, image: v })}
+                        onUploaded={(item) => setMediaLibrary((prev) => [item, ...prev.filter((m) => m.id !== item.id)])}
+                      />
                       <Textarea label="Mô tả" value={projectForm.description} onChange={(v) => setProjectForm({ ...projectForm, description: v })} />
                       <Textarea label="Mô tả EN" value={projectForm.descriptionEn} onChange={(v) => setProjectForm({ ...projectForm, descriptionEn: v })} />
                       <SaveButton disabled={isSaving} onClick={saveProject} />
@@ -1089,50 +1129,243 @@ function MediaSelect({
   );
 }
 
-function ProjectGalleryPicker({
-  value,
+function GalleryWithThumbnail({
+  label = "Ảnh",
+  images,
+  thumbnail,
   media,
   token,
-  onChange,
+  folder,
+  onImagesChange,
+  onThumbnailChange,
   onUploaded,
 }: {
-  value: string[];
+  label?: string;
+  images: string[];
+  thumbnail: string;
   media: MediaRecord[];
   token: string;
-  onChange: (value: string[]) => void;
+  folder: string;
+  onImagesChange: (images: string[]) => void;
+  onThumbnailChange: (thumbnail: string) => void;
   onUploaded: (item: MediaRecord) => void;
 }) {
-  const imageMedia = media.filter((item) => isImageMedia(item));
-  const selectedUrls = Array.from(new Set(value.filter(Boolean)));
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const toggle = (src: string) => {
-    const next = new Set(selectedUrls);
-    if (next.has(src)) next.delete(src);
-    else next.add(src);
-    onChange(Array.from(next));
+  const imageMedia = media.filter((m) => isImageMedia(m));
+  const validImages = Array.from(new Set(images.filter(Boolean)));
+  const isExplicit = !!thumbnail && validImages.includes(thumbnail);
+  const effectiveThumb = isExplicit ? thumbnail : validImages[0] ?? "";
+
+  const openLightbox = (index: number) => setLightboxIndex(index);
+  const closeLightbox = () => setLightboxIndex(null);
+  const prevImage = () => setLightboxIndex((i) => (i !== null ? (i - 1 + validImages.length) % validImages.length : null));
+  const nextImage = () => setLightboxIndex((i) => (i !== null ? (i + 1) % validImages.length : null));
+
+  const triggerPicker = () => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+      inputRef.current.click();
+    }
+  };
+
+  const uploadFiles = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setUploadError("");
+    setIsUploading(true);
+    const added: string[] = [];
+    try {
+      for (const file of Array.from(files)) {
+        const item = await uploadMedia(token, file, folder, file.name.replace(/\.[^.]+$/, ""));
+        added.push(item.fileUrl);
+        onUploaded(item);
+      }
+      onImagesChange([...validImages, ...added]);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Không upload được ảnh.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const removeImage = (src: string) => {
+    onImagesChange(validImages.filter((u) => u !== src));
+    if (thumbnail === src) onThumbnailChange("");
+  };
+
+  const pickThumbnail = (src: string) => {
+    onThumbnailChange(src === thumbnail ? "" : src);
   };
 
   return (
     <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-      <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">Ảnh gallery dự án</div>
-          <p className="mt-1 text-xs font-semibold text-slate-500">
-            Chỉ các ảnh được chọn ở đây mới thuộc gallery của dự án này.
-          </p>
-        </div>
-        <ImageUploadButton token={token} folder="projects" onUploaded={onUploaded} />
+      <div className="mb-3">
+        <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</div>
+        <p className="mt-1 text-xs font-semibold text-slate-500">
+          Nhấn vào khung để chọn ảnh. Nhấn{" "}
+          <Star size={11} className="inline-block align-middle" />{" "}
+          để đặt ảnh đại diện — mặc định lấy ảnh đầu tiên.
+        </p>
       </div>
 
-      {selectedUrls.length > 0 ? (
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp,image/gif"
+        multiple
+        className="hidden"
+        onChange={(e) => void uploadFiles(e.target.files)}
+      />
+
+      {validImages.length > 0 ? (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {selectedUrls.map((src) => (
-            <SelectedMediaCard key={src} src={src} label={getMediaLabel(imageMedia, src)} onRemove={() => toggle(src)} />
-          ))}
+          {validImages.map((src, idx) => {
+            const isThumb = src === effectiveThumb;
+            const isAutoThumb = isThumb && !isExplicit;
+            return (
+              <div
+                key={src}
+                className={`group relative overflow-hidden rounded-xl border-2 bg-white transition-all ${
+                  isThumb ? "border-orange-400 shadow-md" : "border-slate-200"
+                }`}
+              >
+                <img
+                  src={mediaFileUrl(src)}
+                  alt={getMediaLabel(imageMedia, src)}
+                  className="h-32 w-full cursor-zoom-in object-cover"
+                  onClick={() => openLightbox(idx)}
+                />
+
+                <button
+                  type="button"
+                  onClick={() => pickThumbnail(src)}
+                  title={src === thumbnail ? "Bỏ chọn đại diện" : "Đặt làm ảnh đại diện"}
+                  className={`absolute left-2 top-2 flex h-7 w-7 items-center justify-center rounded-lg shadow-sm transition-all ${
+                    isThumb && !isAutoThumb
+                      ? "bg-orange-500 text-white"
+                      : "bg-white/90 text-slate-400 opacity-0 group-hover:opacity-100 hover:bg-orange-100 hover:text-orange-500"
+                  }`}
+                >
+                  <Star size={13} fill={isThumb && !isAutoThumb ? "currentColor" : "none"} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => removeImage(src)}
+                  className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-lg bg-white/90 text-red-500 opacity-0 shadow-sm transition group-hover:opacity-100 hover:bg-red-500 hover:text-white"
+                  aria-label="Xóa ảnh"
+                >
+                  <Trash2 size={13} />
+                </button>
+
+                {isThumb ? (
+                  <div className="bg-orange-500 px-2 py-1 text-center text-[10px] font-black uppercase tracking-widest text-white">
+                    {isAutoThumb ? "Đại diện (tự động)" : "Đại diện"}
+                  </div>
+                ) : (
+                  <div className="truncate px-2 py-1.5 text-xs font-semibold text-slate-500">
+                    {getMediaLabel(imageMedia, src)}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Add more card */}
+          <button
+            type="button"
+            onClick={triggerPicker}
+            disabled={isUploading}
+            className="flex min-h-[9.5rem] flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-300 bg-white text-slate-400 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isUploading ? (
+              <Loader2 className="animate-spin" size={22} />
+            ) : (
+              <Plus size={22} />
+            )}
+            <span className="text-xs font-semibold">
+              {isUploading ? "Đang tải…" : "Thêm ảnh"}
+            </span>
+          </button>
         </div>
       ) : (
-        <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm font-semibold text-slate-500">
-          Chưa chọn ảnh gallery. Ảnh chính vẫn sẽ được dùng làm ảnh đại diện khi lưu.
+        <button
+          type="button"
+          onClick={triggerPicker}
+          disabled={isUploading}
+          className="flex w-full flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-slate-300 bg-white py-12 text-slate-400 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {isUploading ? (
+            <Loader2 className="animate-spin" size={28} />
+          ) : (
+            <Upload size={28} />
+          )}
+          <div className="text-center">
+            <p className="text-sm font-bold">
+              {isUploading ? "Đang tải ảnh lên…" : "Nhấn để chọn ảnh"}
+            </p>
+            {!isUploading && (
+              <p className="mt-0.5 text-xs">Có thể chọn nhiều ảnh cùng lúc</p>
+            )}
+          </div>
+        </button>
+      )}
+
+      {uploadError && (
+        <p className="mt-2 text-xs font-semibold text-red-600">{uploadError}</p>
+      )}
+
+      {lightboxIndex !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+          onClick={closeLightbox}
+        >
+          {/* Close */}
+          <button
+            type="button"
+            onClick={closeLightbox}
+            className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
+          >
+            <X size={18} />
+          </button>
+
+          {/* Prev */}
+          {validImages.length > 1 && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); prevImage(); }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
+            >
+              <ChevronLeft size={22} />
+            </button>
+          )}
+
+          {/* Image */}
+          <img
+            src={mediaFileUrl(validImages[lightboxIndex])}
+            alt={getMediaLabel(imageMedia, validImages[lightboxIndex])}
+            className="max-h-[88vh] max-w-[88vw] rounded-xl object-contain shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          {/* Next */}
+          {validImages.length > 1 && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); nextImage(); }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
+            >
+              <ChevronRight size={22} />
+            </button>
+          )}
+
+          {/* Counter */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/40 px-3 py-1 text-xs font-bold text-white/80">
+            {lightboxIndex + 1} / {validImages.length}
+          </div>
         </div>
       )}
     </div>

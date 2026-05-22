@@ -7,6 +7,7 @@ export interface NewsItem {
   category: string;
   categoryEn: string;
   thumbnail: string;
+  galleryImages?: string[];
   excerpt: string;
   excerptEn: string;
   content: string;
