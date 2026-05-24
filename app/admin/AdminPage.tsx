@@ -12,10 +12,12 @@ import {
   FolderOpen,
   Inbox,
   Lock,
+  Eye,
   Loader2,
   LogOut,
   Mail,
   Newspaper,
+  Pencil,
   Plus,
   Save,
   Search,
@@ -28,6 +30,7 @@ import {
   X,
 } from "lucide-react";
 import AdminExtraPanels, { type ExtraAdminTab } from "@/components/AdminExtraPanels";
+import { canAccess, canDelete, canWrite, defaultTab } from "@/lib/permissions";
 import type { Job } from "@/data/jobs";
 import type { NewsItem } from "@/data/news";
 import type { Project } from "@/data/projects";
@@ -421,8 +424,9 @@ function getSafeRedirect(rawUrl: string | null) {
 }
 
 function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () => void }) {
+  const role = session.user.role;
   const [content, setContent] = useState<CmsContent>({ news: [], projects: [], jobs: [] });
-  const [activeTab, setActiveTab] = useState<Tab>("projects");
+  const [activeTab, setActiveTab] = useState<Tab>(() => defaultTab(role) as Tab);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -646,19 +650,25 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto px-3 py-4">
-          <NavSection label="Nội dung">
-            <SideNavItem icon={<FolderOpen size={16} />} label="Dự án" active={activeTab === "projects"} onClick={() => changeTab("projects")} />
-            <SideNavItem icon={<Newspaper size={16} />} label="Tin tức" active={activeTab === "news"} onClick={() => changeTab("news")} />
-            <SideNavItem icon={<Briefcase size={16} />} label="Tuyển dụng" active={activeTab === "jobs"} onClick={() => changeTab("jobs")} />
-          </NavSection>
-          <NavSection label="Liên hệ">
-            <SideNavItem icon={<Inbox size={16} />} label="Hộp thư" active={activeTab === "contacts"} onClick={() => changeTab("contacts")} />
-            <SideNavItem icon={<UserCheck size={16} />} label="Ứng tuyển" active={activeTab === "applications"} onClick={() => changeTab("applications")} />
-          </NavSection>
-          <NavSection label="Hệ thống">
-            <SideNavItem icon={<Users size={16} />} label="Tài khoản" active={activeTab === "accounts"} onClick={() => changeTab("accounts")} />
-            <SideNavItem icon={<Settings size={16} />} label="Cài đặt" active={activeTab === "settings"} onClick={() => changeTab("settings")} />
-          </NavSection>
+          {(canAccess(role, "projects") || canAccess(role, "news") || canAccess(role, "jobs")) && (
+            <NavSection label="Nội dung">
+              {canAccess(role, "projects") && <SideNavItem icon={<FolderOpen size={16} />} label="Dự án" active={activeTab === "projects"} onClick={() => changeTab("projects")} />}
+              {canAccess(role, "news") && <SideNavItem icon={<Newspaper size={16} />} label="Tin tức" active={activeTab === "news"} onClick={() => changeTab("news")} />}
+              {canAccess(role, "jobs") && <SideNavItem icon={<Briefcase size={16} />} label="Tuyển dụng" active={activeTab === "jobs"} onClick={() => changeTab("jobs")} />}
+            </NavSection>
+          )}
+          {(canAccess(role, "contacts") || canAccess(role, "applications")) && (
+            <NavSection label="Liên hệ">
+              {canAccess(role, "contacts") && <SideNavItem icon={<Inbox size={16} />} label="Hộp thư" active={activeTab === "contacts"} onClick={() => changeTab("contacts")} />}
+              {canAccess(role, "applications") && <SideNavItem icon={<UserCheck size={16} />} label="Ứng tuyển" active={activeTab === "applications"} onClick={() => changeTab("applications")} />}
+            </NavSection>
+          )}
+          {(canAccess(role, "accounts") || canAccess(role, "settings")) && (
+            <NavSection label="Hệ thống">
+              {canAccess(role, "accounts") && <SideNavItem icon={<Users size={16} />} label="Tài khoản" active={activeTab === "accounts"} onClick={() => changeTab("accounts")} />}
+              {canAccess(role, "settings") && <SideNavItem icon={<Settings size={16} />} label="Cài đặt" active={activeTab === "settings"} onClick={() => changeTab("settings")} />}
+            </NavSection>
+          )}
         </nav>
 
         {/* User footer */}
@@ -734,7 +744,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                 <div className="p-6">
                   {activeTab === "news" && (
                     <div className="space-y-5">
-                      <FormHeader title="Tin tức" onDelete={newsForm.id ? () => removeItem(newsForm.id) : undefined} />
+                      <FormHeader title="Tin tức" onDelete={newsForm.id && canDelete(role, "news") ? () => removeItem(newsForm.id) : undefined} />
                       <Input label="Tiêu đề" value={newsForm.title} onChange={(v) => setNewsForm({ ...newsForm, title: v, slug: newsForm.slug || slugify(v) })} />
                       <Input label="Tiêu đề EN" value={newsForm.titleEn} onChange={(v) => setNewsForm({ ...newsForm, titleEn: v })} />
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
@@ -768,7 +778,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
 
                   {activeTab === "projects" && (
                     <div className="space-y-5">
-                      <FormHeader title="Dự án" onDelete={projectForm.id ? () => removeItem(projectForm.id) : undefined} />
+                      <FormHeader title="Dự án" onDelete={projectForm.id && canDelete(role, "projects") ? () => removeItem(projectForm.id) : undefined} />
                       <Input label="Tên dự án" value={projectForm.name} onChange={(v) => setProjectForm({ ...projectForm, name: v })} />
                       <Input label="Tên dự án EN" value={projectForm.nameEn} onChange={(v) => setProjectForm({ ...projectForm, nameEn: v })} />
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -808,7 +818,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
 
                   {activeTab === "jobs" && (
                     <div className="space-y-5">
-                      <FormHeader title="Tuyển dụng" onDelete={jobForm.id ? () => removeItem(jobForm.id) : undefined} />
+                      <FormHeader title="Tuyển dụng" onDelete={jobForm.id && canDelete(role, "jobs") ? () => removeItem(jobForm.id) : undefined} />
                       <Input label="Vị trí" value={jobForm.title} onChange={(v) => setJobForm({ ...jobForm, title: v })} />
                       <Input label="Vị trí EN" value={jobForm.titleEn} onChange={(v) => setJobForm({ ...jobForm, titleEn: v })} />
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -845,13 +855,15 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                         className="h-9 w-full rounded-lg border border-slate-200 pl-9 pr-4 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100"
                       />
                     </label>
-                    <button
-                      onClick={openCreateForm}
-                      className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-red-600 px-4 text-sm font-black text-white transition hover:bg-red-700"
-                    >
-                      <Plus size={15} />
-                      Tạo mới
-                    </button>
+                    {canWrite(role, activeTab) && (
+                      <button
+                        onClick={openCreateForm}
+                        className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-red-600 px-4 text-sm font-black text-white transition hover:bg-red-700"
+                      >
+                        <Plus size={15} />
+                        Tạo mới
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -890,22 +902,31 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                               </td>
                             )}
                             <td className="px-5 py-3">
-                              <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-700">Hiện</span>
+                              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-700">
+                                <Eye size={11} />
+                                Hiện
+                              </span>
                             </td>
                             <td className="px-5 py-3">
                               <div className="flex gap-1.5">
-                                <button
-                                  onClick={() => editItem(item.id)}
-                                  className="rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-black text-blue-700 transition hover:bg-blue-100"
-                                >
-                                  Sửa
-                                </button>
-                                <button
-                                  onClick={() => removeItem(item.id)}
-                                  className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-black text-red-600 transition hover:bg-red-100"
-                                >
-                                  Xóa
-                                </button>
+                                {canWrite(role, activeTab) && (
+                                  <button
+                                    onClick={() => editItem(item.id)}
+                                    className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-black text-blue-700 transition hover:bg-blue-100"
+                                  >
+                                    <Pencil size={12} />
+                                    Sửa
+                                  </button>
+                                )}
+                                {canDelete(role, activeTab) && (
+                                  <button
+                                    onClick={() => removeItem(item.id)}
+                                    className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-black text-red-600 transition hover:bg-red-100"
+                                  >
+                                    <Trash2 size={12} />
+                                    Xóa
+                                  </button>
+                                )}
                               </div>
                             </td>
                           </tr>
@@ -917,7 +938,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
               </div>
             )
           ) : (
-            <AdminExtraPanels tab={activeTab} token={session.accessToken} currentUserId={session.user.id} />
+            <AdminExtraPanels tab={activeTab} token={session.accessToken} currentUserId={session.user.id} role={session.user.role} />
           )}
         </main>
       </div>

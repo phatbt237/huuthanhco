@@ -3,6 +3,10 @@ import { services } from "@/data/services";
 
 const DEFAULT_CMS_API_BASE_URL = "https://huuthanhco.onrender.com";
 
+export class ForbiddenError extends Error {
+  constructor() { super("Không có quyền truy cập chức năng này."); this.name = "ForbiddenError"; }
+}
+
 export const CMS_API_BASE_URL = (process.env.NEXT_PUBLIC_CMS_API_URL ?? DEFAULT_CMS_API_BASE_URL).replace(/\/$/, "");
 
 export type AdminRole = "super_admin" | "editor" | "hr" | "viewer";
@@ -117,6 +121,7 @@ async function requestJson<T>(path: string, init: RequestInit = {}) {
   });
 
   if (!response.ok) {
+    if (response.status === 403) throw new ForbiddenError();
     const detail = await response.text().catch(() => "");
     throw new Error(detail || `API lỗi ${response.status}`);
   }

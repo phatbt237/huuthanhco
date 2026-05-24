@@ -1,21 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, CalendarDays, Download, Eye, FileText, Mail, Phone, Plus, RefreshCw, Save, Search, Trash2, UserRound } from "lucide-react";
+import { canDelete, canWrite } from "@/lib/permissions";
+import { AlertTriangle, ArrowLeft, ArrowRight, CalendarDays, Download, Eye, FileText, Mail, Phone, Plus, RefreshCw, Save, Search, Trash2, UserRound, X } from "lucide-react";
 import ImageUploadField from "@/components/ImageUploadField";
 import {
   createAdminUser,
-  createMedia,
   defaultSiteSettings,
   deleteAdminUser,
   deleteConsultation,
   deleteJobApplication,
-  deleteMedia,
+  ForbiddenError,
   getSettingsFull,
   listAdminUsers,
   listConsultations,
   listJobApplications,
-  listMedia,
   saveSettingsBulk,
   updateConsultationStatus,
   updateAdminUser,
@@ -24,7 +23,6 @@ import {
   type AdminUserRecord,
   type ConsultationRecord,
   type JobApplicationRecord,
-  type MediaRecord,
   type SettingRecord,
 } from "@/lib/siteApi";
 
@@ -60,22 +58,38 @@ const applicationStatusOptions = [
   { value: "rejected", label: "Từ chối" },
 ];
 
-export default function AdminExtraPanels({ tab, token, currentUserId }: { tab: ExtraAdminTab; token: string; currentUserId: string }) {
-  if (tab === "accounts") return <AccountsPanel token={token} currentUserId={currentUserId} />;
-  if (tab === "contacts") return <ContactsPanel token={token} />;
-  if (tab === "applications") return <ApplicationsPanel token={token} />;
-  return <SettingsPanel token={token} />;
+export default function AdminExtraPanels({ tab, token, currentUserId, role }: { tab: ExtraAdminTab; token: string; currentUserId: string; role: AdminRole }) {
+  if (tab === "accounts") return <AccountsPanel token={token} currentUserId={currentUserId} role={role} />;
+  if (tab === "contacts") return <ContactsPanel token={token} role={role} />;
+  if (tab === "applications") return <ApplicationsPanel token={token} role={role} />;
+  return <SettingsPanel token={token} role={role} />;
 }
 
-function AccountsPanel({ token, currentUserId }: { token: string; currentUserId: string }) {
+function NoPermission() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
+      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-50">
+        <AlertTriangle size={26} className="text-red-500" />
+      </div>
+      <p className="text-base font-black text-slate-900">Không có quyền truy cập</p>
+      <p className="text-sm text-slate-500">Bạn không có quyền sử dụng chức năng này.</p>
+    </div>
+  );
+}
+
+function AccountsPanel({ token, currentUserId, role }: { token: string; currentUserId: string; role: AdminRole }) {
   const [users, setUsers] = useState<AdminUserRecord[]>([]);
   const [form, setForm] = useState({ email: "", password: "", fullName: "", role: "editor" as AdminRole });
   const [isCreating, setIsCreating] = useState(false);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState("");
+  const [forbidden, setForbidden] = useState(false);
 
-  const refresh = () => void listAdminUsers(token).then(setUsers).catch((err) => setMessage(err.message));
+  const refresh = () => void listAdminUsers(token).then(setUsers).catch((err) => {
+    if (err instanceof ForbiddenError) { setForbidden(true); return; }
+    setMessage(err.message);
+  });
 
   useEffect(refresh, [token]);
 
@@ -123,6 +137,8 @@ function AccountsPanel({ token, currentUserId }: { token: string; currentUserId:
     setForm({ email: "", password: "", fullName: "", role: "editor" });
     setIsCreating(false);
   };
+
+  if (forbidden) return <NoPermission />;
 
   return (
     <PanelFrame title="Tài khoản quản trị">
@@ -186,13 +202,15 @@ function AccountsPanel({ token, currentUserId }: { token: string; currentUserId:
                 className="h-12 w-full border border-slate-200 bg-white pl-11 pr-4 text-sm font-semibold outline-none transition focus:border-orange-300 sm:w-80"
               />
             </label>
-            <button
-              onClick={openCreateForm}
-              className="inline-flex h-12 items-center justify-center gap-2 bg-red-600 px-5 text-sm font-black text-white transition hover:bg-red-700"
-            >
-              <Plus size={17} />
-              Tạo mới
-            </button>
+            {canWrite(role, "accounts") && (
+              <button
+                onClick={openCreateForm}
+                className="inline-flex h-12 items-center justify-center gap-2 bg-red-600 px-5 text-sm font-black text-white transition hover:bg-red-700"
+              >
+                <Plus size={17} />
+                Tạo mới
+              </button>
+            )}
           </div>
         </div>
         <div className="overflow-auto">
@@ -215,24 +233,28 @@ function AccountsPanel({ token, currentUserId }: { token: string; currentUserId:
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => openEditForm(user)}
-                        className="inline-flex h-9 items-center gap-1.5 border border-blue-100 bg-blue-50 px-3 text-sm font-black text-blue-700 transition hover:border-blue-200 hover:bg-blue-100"
-                      >
-                        Sửa
-                      </button>
-                      <button
-                        disabled={user.id === currentUserId}
-                        onClick={() => {
-                          if (window.confirm("Xóa tài khoản này?")) {
-                            void deleteAdminUser(token, user.id).then(refresh);
-                          }
-                        }}
-                        className="inline-flex h-9 items-center gap-1.5 border border-red-100 bg-red-50 px-3 text-sm font-black text-red-600 transition hover:border-red-200 hover:bg-red-100 disabled:cursor-not-allowed disabled:border-slate-100 disabled:bg-slate-50 disabled:text-slate-300"
-                      >
-                        <Trash2 size={15} />
-                        Xóa
-                      </button>
+                      {canWrite(role, "accounts") && (
+                        <button
+                          onClick={() => openEditForm(user)}
+                          className="inline-flex h-9 items-center gap-1.5 border border-blue-100 bg-blue-50 px-3 text-sm font-black text-blue-700 transition hover:border-blue-200 hover:bg-blue-100"
+                        >
+                          Sửa
+                        </button>
+                      )}
+                      {canDelete(role, "accounts") && (
+                        <button
+                          disabled={user.id === currentUserId}
+                          onClick={() => {
+                            if (window.confirm("Xóa tài khoản này?")) {
+                              void deleteAdminUser(token, user.id).then(refresh);
+                            }
+                          }}
+                          className="inline-flex h-9 items-center gap-1.5 border border-red-100 bg-red-50 px-3 text-sm font-black text-red-600 transition hover:border-red-200 hover:bg-red-100 disabled:cursor-not-allowed disabled:border-slate-100 disabled:bg-slate-50 disabled:text-slate-300"
+                        >
+                          <Trash2 size={15} />
+                          Xóa
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -252,10 +274,11 @@ function AccountsPanel({ token, currentUserId }: { token: string; currentUserId:
   );
 }
 
-function ContactsPanel({ token }: { token: string }) {
+function ContactsPanel({ token, role }: { token: string; role: AdminRole }) {
   const [items, setItems] = useState<ConsultationRecord[]>([]);
   const [selectedItem, setSelectedItem] = useState<ConsultationRecord | null>(null);
   const [message, setMessage] = useState("");
+  const [forbidden, setForbidden] = useState(false);
   const refresh = () => {
     setMessage("");
     void listConsultations(token)
@@ -266,14 +289,19 @@ function ContactsPanel({ token }: { token: string }) {
           return result.find((item) => item.id === current.id) ?? null;
         });
       })
-      .catch((err) => setMessage(err.message || "Không tải được dữ liệu liên hệ."));
+      .catch((err) => {
+        if (err instanceof ForbiddenError) { setForbidden(true); return; }
+        setMessage(err.message || "Không tải được dữ liệu liên hệ.");
+      });
   };
   useEffect(refresh, [token]);
 
   const openDetail = async (item: ConsultationRecord) => {
     setMessage("");
     try {
-      const viewedItem = item.status === "new" ? await updateConsultationStatus(token, item.id, "read") : item;
+      const viewedItem = (item.status === "new" && canWrite(role, "contacts"))
+        ? await updateConsultationStatus(token, item.id, "read")
+        : item;
       setItems((current) => current.map((entry) => (entry.id === item.id ? viewedItem : entry)));
       setSelectedItem(viewedItem);
     } catch (error) {
@@ -301,33 +329,39 @@ function ContactsPanel({ token }: { token: string }) {
           <MessageBox label="Nội dung thư" value={selectedItem.message || "-"} />
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <SelectStatus
-              value={selectedItem.status}
-              options={[
-                { value: "new", label: "Chưa xem" },
-                { value: "read", label: "Đã xem" },
-                { value: "done", label: "Đã xử lý" },
-              ]}
-              onChange={(status) => {
-                void updateConsultationStatus(token, selectedItem.id, status as ConsultationRecord["status"]).then((updated) => {
-                  setSelectedItem(updated);
-                  setItems((current) => current.map((entry) => (entry.id === updated.id ? updated : entry)));
-                });
-              }}
-            />
-            <DeleteButton
-              onClick={() => {
-                void deleteConsultation(token, selectedItem.id).then(() => {
-                  setSelectedItem(null);
-                  refresh();
-                });
-              }}
-            />
+            {canWrite(role, "contacts") && (
+              <SelectStatus
+                value={selectedItem.status}
+                options={[
+                  { value: "new", label: "Chưa xem" },
+                  { value: "read", label: "Đã xem" },
+                  { value: "done", label: "Đã xử lý" },
+                ]}
+                onChange={(status) => {
+                  void updateConsultationStatus(token, selectedItem.id, status as ConsultationRecord["status"]).then((updated) => {
+                    setSelectedItem(updated);
+                    setItems((current) => current.map((entry) => (entry.id === updated.id ? updated : entry)));
+                  });
+                }}
+              />
+            )}
+            {canDelete(role, "contacts") && (
+              <DeleteButton
+                onClick={() => {
+                  void deleteConsultation(token, selectedItem.id).then(() => {
+                    setSelectedItem(null);
+                    refresh();
+                  });
+                }}
+              />
+            )}
           </div>
         </AdminDetailCard>
       </PanelFrame>
     );
   }
+
+  if (forbidden) return <NoPermission />;
 
   return (
     <PanelFrame title="Hộp thư liên hệ">
@@ -341,25 +375,17 @@ function ContactsPanel({ token }: { token: string }) {
         <table className="w-full min-w-[62rem] text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-400">
             <tr>
-              <th className="w-32 px-5 py-4 font-black">Thao tác</th>
               <th className="px-5 py-4 font-black">Người gửi</th>
               <th className="px-5 py-4 font-black">Số điện thoại</th>
               <th className="px-5 py-4 font-black">Tiêu đề / nội dung</th>
               <th className="px-5 py-4 font-black">Ngày gửi</th>
               <th className="px-5 py-4 font-black">Tình trạng</th>
+              <th className="w-32 px-5 py-4 font-black">Thao tác</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => (
               <tr key={item.id} className="border-t border-slate-100 align-top transition hover:bg-orange-50/40">
-                <td className="px-5 py-4">
-                  <RowActions
-                    onView={() => void openDetail(item)}
-                    onDelete={() => {
-                      if (window.confirm("Xóa thư liên hệ này?")) void deleteConsultation(token, item.id).then(refresh);
-                    }}
-                  />
-                </td>
                 <td className="px-5 py-4">
                   <div className="font-black text-slate-950">{item.name}</div>
                   <div className="mt-1 text-xs font-semibold text-slate-400">{item.email || "Chưa có email"}</div>
@@ -373,6 +399,14 @@ function ContactsPanel({ token }: { token: string }) {
                 <td className="px-5 py-4">
                   <ContactStatusBadge status={item.status} />
                 </td>
+                <td className="px-5 py-4">
+                  <RowActions
+                    onView={() => void openDetail(item)}
+                    onDelete={canDelete(role, "contacts") ? () => {
+                      if (window.confirm("Xóa thư liên hệ này?")) void deleteConsultation(token, item.id).then(refresh);
+                    } : undefined}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -382,10 +416,11 @@ function ContactsPanel({ token }: { token: string }) {
   );
 }
 
-function ApplicationsPanel({ token }: { token: string }) {
+function ApplicationsPanel({ token, role }: { token: string; role: AdminRole }) {
   const [items, setItems] = useState<JobApplicationRecord[]>([]);
   const [selectedItem, setSelectedItem] = useState<JobApplicationRecord | null>(null);
   const [message, setMessage] = useState("");
+  const [forbidden, setForbidden] = useState(false);
   const refresh = () => {
     setMessage("");
     void listJobApplications(token)
@@ -396,12 +431,15 @@ function ApplicationsPanel({ token }: { token: string }) {
           return result.data.find((item) => item.id === current.id) ?? null;
         });
       })
-      .catch((err) => setMessage(err.message || "Không tải được hồ sơ ứng tuyển."));
+      .catch((err) => {
+        if (err instanceof ForbiddenError) { setForbidden(true); return; }
+        setMessage(err.message || "Không tải được hồ sơ ứng tuyển.");
+      });
   };
   useEffect(refresh, [token]);
 
   const markAsViewed = async (item: JobApplicationRecord) => {
-    if (item.status !== "new") return item;
+    if (!canWrite(role, "applications") || item.status !== "new") return item;
     const updated = await updateJobApplicationStatus(token, item.id, "reviewing");
     setItems((current) => current.map((entry) => (entry.id === item.id ? updated : entry)));
     return updated;
@@ -480,19 +518,23 @@ function ApplicationsPanel({ token }: { token: string }) {
             ) : (
               <div className="text-sm font-semibold text-slate-400">Hồ sơ này chưa đính kèm CV.</div>
             )}
-            <DeleteButton
-              onClick={() => {
-                void deleteJobApplication(token, selectedItem.id).then(() => {
-                  setSelectedItem(null);
-                  refresh();
-                });
-              }}
-            />
+            {canDelete(role, "applications") && (
+              <DeleteButton
+                onClick={() => {
+                  void deleteJobApplication(token, selectedItem.id).then(() => {
+                    setSelectedItem(null);
+                    refresh();
+                  });
+                }}
+              />
+            )}
           </div>
         </AdminDetailCard>
       </PanelFrame>
     );
   }
+
+  if (forbidden) return <NoPermission />;
 
   return (
     <PanelFrame title="Hồ sơ tuyển dụng">
@@ -521,9 +563,9 @@ function ApplicationsPanel({ token }: { token: string }) {
                   <td className="px-5 py-4">
                     <RowActions
                       onView={() => void openDetail(item)}
-                      onDelete={() => {
+                      onDelete={canDelete(role, "applications") ? () => {
                         if (window.confirm("Xóa hồ sơ này?")) void deleteJobApplication(token, item.id).then(refresh);
-                      }}
+                      } : undefined}
                     />
                   </td>
                   <td className="px-5 py-4">
@@ -545,15 +587,17 @@ function ApplicationsPanel({ token }: { token: string }) {
   );
 }
 
-function SettingsPanel({ token }: { token: string }) {
+function SettingsPanel({ token, role }: { token: string; role: AdminRole }) {
   const [settings, setSettings] = useState<Record<string, SettingRecord>>({});
-  const [media, setMedia] = useState<MediaRecord[]>([]);
-  const [mediaForm, setMediaForm] = useState({ fileName: "", fileUrl: "", folder: "banners", altText: "" });
   const [message, setMessage] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [showEditConfirm, setShowEditConfirm] = useState(false);
+  const [forbidden, setForbidden] = useState(false);
 
   const refresh = () => {
-    void getSettingsFull(token).then((items) => setSettings(Object.fromEntries(items.map((item) => [item.key, item]))));
-    void listMedia(token).then(setMedia);
+    void getSettingsFull(token)
+      .then((items) => setSettings(Object.fromEntries(items.map((item) => [item.key, item]))))
+      .catch((err) => { if (err instanceof ForbiddenError) setForbidden(true); });
   };
 
   useEffect(refresh, [token]);
@@ -565,84 +609,171 @@ function SettingsPanel({ token }: { token: string }) {
     }));
   };
 
+  const cancelEdit = () => {
+    setIsEditing(false);
+    setMessage("");
+    refresh();
+  };
+
   const save = async () => {
     const payload = editableSettings.map(({ key }) => settings[key] ?? { key, value: defaultSiteSettings[key] ?? "", type: "text" as const });
     await saveSettingsBulk(token, payload);
+    setIsEditing(false);
     setMessage("Đã lưu cấu hình website.");
     refresh();
   };
 
-  const addMedia = async () => {
-    await createMedia(token, {
-      fileName: mediaForm.fileName || mediaForm.fileUrl.split("/").pop() || "media",
-      fileUrl: mediaForm.fileUrl,
-      fileType: mediaForm.fileUrl.match(/\.(png|jpg|jpeg|webp|gif)$/i) ? "image" : "file",
-      folder: mediaForm.folder,
-      altText: mediaForm.altText,
-      altTextEn: mediaForm.altText,
-    });
-    setMediaForm({ fileName: "", fileUrl: "", folder: "banners", altText: "" });
+  const saveHeroImages = async (urls: string[]) => {
+    const value = urls.join("\n");
+    setValue("hero.images", value);
+    await saveSettingsBulk(token, [{ key: "hero.images", value, type: "text", valueEn: null }]);
     refresh();
   };
 
   const heroImagesPreview = useMemo(() => String(settings["hero.images"]?.value ?? "").split("\n").filter(Boolean), [settings]);
 
+  if (forbidden) return <NoPermission />;
+
   return (
-    <PanelFrame title="Cấu hình website" action={<RefreshButton onClick={refresh} />}>
+    <PanelFrame
+      title="Cấu hình website"
+      action={
+        <div className="flex items-center gap-2">
+          {canWrite(role, "settings") && (
+            !isEditing ? (
+              <button onClick={() => setShowEditConfirm(true)} className="inline-flex h-9 items-center gap-2 bg-slate-800 px-3 text-sm font-black text-white hover:bg-slate-900">
+                <AlertTriangle size={15} />
+                Chỉnh sửa
+              </button>
+            ) : (
+              <>
+                <button onClick={cancelEdit} className="inline-flex h-9 items-center px-3 text-sm font-bold text-slate-600 hover:text-slate-900">
+                  Huỷ
+                </button>
+                <button onClick={() => void save()} className="inline-flex h-9 items-center gap-2 bg-orange-500 px-3 text-sm font-black text-white hover:bg-orange-600">
+                  <Save size={15} />
+                  Lưu cấu hình
+                </button>
+              </>
+            )
+          )}
+          <RefreshButton onClick={refresh} />
+        </div>
+      }
+    >
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_22rem]">
         <div className="border border-slate-200 bg-white p-5">
-          <div className="grid grid-cols-1 gap-4">
-            {editableSettings.map((item) =>
-              item.type === "textarea" ? (
-                <TextAreaField key={item.key} label={item.label} value={settings[item.key]?.value ?? defaultSiteSettings[item.key] ?? ""} onChange={(value) => setValue(item.key, value)} />
-              ) : (
-                <Field key={item.key} label={item.label} value={settings[item.key]?.value ?? defaultSiteSettings[item.key] ?? ""} onChange={(value) => setValue(item.key, value)} />
-              )
-            )}
-          </div>
-          <button onClick={save} className="mt-5 inline-flex h-11 items-center gap-2 bg-orange-500 px-4 text-sm font-black text-white">
-            <Save size={16} />
-            Lưu cấu hình
-          </button>
+          {!isEditing ? (
+            <div className="grid grid-cols-1 gap-3">
+              {editableSettings.map(({ key, label }) => {
+                const val = settings[key]?.value ?? defaultSiteSettings[key] ?? "";
+                return (
+                  <div key={key}>
+                    <div className="mb-0.5 text-xs font-black uppercase text-slate-500">{label}</div>
+                    <div className="min-h-[2.5rem] border border-slate-100 bg-slate-50 px-3 py-2 text-sm text-slate-700 whitespace-pre-wrap break-all">{val || <span className="text-slate-400 italic">Chưa có</span>}</div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4">
+              {editableSettings.map((item) =>
+                item.type === "textarea" ? (
+                  <TextAreaField key={item.key} label={item.label} value={settings[item.key]?.value ?? defaultSiteSettings[item.key] ?? ""} onChange={(value) => setValue(item.key, value)} />
+                ) : (
+                  <Field key={item.key} label={item.label} value={settings[item.key]?.value ?? defaultSiteSettings[item.key] ?? ""} onChange={(value) => setValue(item.key, value)} />
+                )
+              )}
+            </div>
+          )}
           {message && <Notice>{message}</Notice>}
         </div>
 
-        <div className="space-y-4">
-          <div className="border border-slate-200 bg-white p-5">
-            <h3 className="mb-3 font-black">Media / banner</h3>
-            <div className="space-y-3">
-              <Field label="Tên file" value={mediaForm.fileName} onChange={(value) => setMediaForm({ ...mediaForm, fileName: value })} />
-              <Field label="Folder" value={mediaForm.folder} onChange={(value) => setMediaForm({ ...mediaForm, folder: value })} />
-              <ImageUploadField label="Ảnh" value={mediaForm.fileUrl} onChange={(value) => setMediaForm({ ...mediaForm, fileUrl: value })} folder={mediaForm.folder} token={token} altText={mediaForm.altText} altTextEn={mediaForm.altText} />
-              <Field label="Alt text" value={mediaForm.altText} onChange={(value) => setMediaForm({ ...mediaForm, altText: value })} />
-              <button onClick={addMedia} className="inline-flex h-10 items-center gap-2 bg-slate-950 px-3 text-sm font-black text-white">
-                <Plus size={16} />
-                Thêm media
-              </button>
+        {showEditConfirm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="w-full max-w-sm bg-white shadow-xl">
+              <div className="flex items-center gap-3 border-b border-slate-200 px-5 py-4">
+                <AlertTriangle size={20} className="shrink-0 text-orange-500" />
+                <span className="font-black text-slate-950">Xác nhận chỉnh sửa</span>
+              </div>
+              <div className="px-5 py-5 text-sm text-slate-600">
+                Bạn có muốn chỉnh sửa thông tin cấu hình website không? Hãy chắc chắn rằng bạn biết mình đang làm gì.
+              </div>
+              <div className="flex justify-end gap-3 border-t border-slate-200 px-5 py-4">
+                <button onClick={() => setShowEditConfirm(false)} className="inline-flex h-10 items-center px-4 text-sm font-bold text-slate-600 hover:text-slate-900">
+                  Không
+                </button>
+                <button
+                  onClick={() => { setShowEditConfirm(false); setIsEditing(true); }}
+                  className="inline-flex h-10 items-center gap-2 bg-slate-800 px-4 text-sm font-black text-white hover:bg-slate-900"
+                >
+                  Có, cho tôi chỉnh sửa
+                </button>
+              </div>
             </div>
           </div>
+        )}
 
-          <div className="border border-slate-200 bg-white p-5">
-            <h3 className="mb-3 font-black">Flash hiện tại</h3>
-            <div className="space-y-2">
-              {heroImagesPreview.slice(0, 5).map((src) => (
-                <img key={src} src={src} alt="" className="h-20 w-full object-cover" />
-              ))}
-            </div>
+
+        <div className="border border-slate-200 bg-white p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="font-black">Flash / Slideshow trang chủ</h3>
+            <span className="text-xs text-slate-400">{heroImagesPreview.length} ảnh</span>
           </div>
 
-          <div className="border border-slate-200 bg-white p-5">
-            <h3 className="mb-3 font-black">Media đã lưu</h3>
-            <div className="space-y-2">
-              {media.map((item) => (
-                <div key={item.id} className="flex items-center justify-between gap-3 border border-slate-100 p-2 text-sm">
-                  <span className="truncate">{item.fileName}</span>
-                  <button onClick={() => void deleteMedia(token, item.id).then(refresh)} className="text-red-600">
-                    <Trash2 size={15} />
-                  </button>
-                </div>
-              ))}
-            </div>
+          {canWrite(role, "settings") && (
+            <ImageUploadField
+              label="Tải lên ảnh mới"
+              value=""
+              onChange={(url) => { if (url) void saveHeroImages([...heroImagesPreview, url]); }}
+              folder="banners"
+              token={token}
+              altText=""
+              altTextEn=""
+            />
+          )}
+
+          <div className="mt-4 space-y-2">
+            {heroImagesPreview.length === 0 && (
+              <p className="text-sm italic text-slate-400">Chưa có ảnh flash nào.</p>
+            )}
+            {heroImagesPreview.map((src, i) => (
+              <div key={src} className="group relative">
+                <img src={src} alt="" className="h-24 w-full object-cover" />
+                {canWrite(role, "settings") && (
+                  <div className="absolute inset-0 flex items-center justify-end gap-1.5 bg-black/0 px-2 opacity-0 transition group-hover:bg-black/30 group-hover:opacity-100">
+                    <button
+                      disabled={i === 0}
+                      onClick={() => {
+                        const next = [...heroImagesPreview];
+                        [next[i - 1], next[i]] = [next[i], next[i - 1]];
+                        void saveHeroImages(next);
+                      }}
+                      className="flex h-7 w-7 items-center justify-center bg-white/90 text-slate-700 disabled:opacity-30 hover:bg-white"
+                    >
+                      <ArrowLeft size={13} />
+                    </button>
+                    <button
+                      disabled={i === heroImagesPreview.length - 1}
+                      onClick={() => {
+                        const next = [...heroImagesPreview];
+                        [next[i + 1], next[i]] = [next[i], next[i + 1]];
+                        void saveHeroImages(next);
+                      }}
+                      className="flex h-7 w-7 items-center justify-center bg-white/90 text-slate-700 disabled:opacity-30 hover:bg-white"
+                    >
+                      <ArrowRight size={13} />
+                    </button>
+                    <button
+                      onClick={() => void saveHeroImages(heroImagesPreview.filter((_, idx) => idx !== i))}
+                      className="flex h-7 w-7 items-center justify-center bg-red-600 text-white hover:bg-red-700"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -728,7 +859,7 @@ function AdminDetailCard({
   );
 }
 
-function RowActions({ onView, onDelete }: { onView: () => void; onDelete: () => void }) {
+function RowActions({ onView, onDelete }: { onView: () => void; onDelete?: () => void }) {
   return (
     <div className="flex items-center gap-2">
       <button
@@ -738,13 +869,15 @@ function RowActions({ onView, onDelete }: { onView: () => void; onDelete: () => 
         <Eye size={15} />
         Xem
       </button>
-      <button
-        onClick={onDelete}
-        className="inline-flex h-9 items-center gap-1.5 border border-red-100 bg-red-50 px-3 text-sm font-black text-red-600 transition hover:border-red-200 hover:bg-red-100"
-      >
-        <Trash2 size={15} />
-        Xóa
-      </button>
+      {onDelete && (
+        <button
+          onClick={onDelete}
+          className="inline-flex h-9 items-center gap-1.5 border border-red-100 bg-red-50 px-3 text-sm font-black text-red-600 transition hover:border-red-200 hover:bg-red-100"
+        >
+          <Trash2 size={15} />
+          Xóa
+        </button>
+      )}
     </div>
   );
 }
