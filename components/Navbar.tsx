@@ -150,7 +150,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 shrink-0">
             <img
-              src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/69ba7546394f41773827398.jpg"
+              src="/images/huu-thanh-logo.png"
               alt="Logo Hữu Thành"
               className="w-10 h-10 object-contain rounded"
             />

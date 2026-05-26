@@ -45,7 +45,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
               <img
-                src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/69ba7546394f41773827398.jpg"
+                src="/images/huu-thanh-logo.png"
                 alt="Logo Hữu Thành"
                 className="w-12 h-12 object-contain rounded"
               />

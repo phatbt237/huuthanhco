@@ -1,14 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   AlertCircle,
   Briefcase,
   CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  Download,
   FolderOpen,
   Inbox,
   Lock,
@@ -19,22 +16,27 @@ import {
   Newspaper,
   Pencil,
   Plus,
-  Save,
   Search,
   Settings,
-  Star,
   Trash2,
-  Upload,
   UserCheck,
   Users,
-  X,
 } from "lucide-react";
 import AdminExtraPanels, { type ExtraAdminTab } from "@/components/AdminExtraPanels";
+import {
+  ItemThumbnail,
+  LoginField,
+  NavSection,
+  SideNavItem,
+} from "@/components/admin/AdminCmsUi";
+import JobEditorForm from "@/components/admin/JobEditorForm";
+import NewsEditorForm from "@/components/admin/NewsEditorForm";
+import ProjectEditorForm from "@/components/admin/ProjectEditorForm";
 import { canAccess, canDelete, canWrite, defaultTab } from "@/lib/permissions";
 import type { Job } from "@/data/jobs";
 import type { NewsItem } from "@/data/news";
 import type { Project } from "@/data/projects";
-import { clearCmsContent, fetchCmsContent, saveCmsContent, type CmsContent } from "@/lib/cmsContent";
+import { fetchCmsContent, type CmsContent } from "@/lib/cmsContent";
 import {
   getStoredAdminSession,
   loginAdmin,
@@ -42,7 +44,19 @@ import {
   validateAdminSession,
   type AdminUser,
 } from "@/lib/adminAuth";
-import { listMedia, mediaFileUrl, uploadMedia, type MediaRecord } from "@/lib/siteApi";
+import {
+  createJob,
+  createNews,
+  createProject,
+  deleteJob,
+  deleteNews,
+  deleteProject,
+  listMedia,
+  updateJob,
+  updateNews,
+  updateProject,
+  type MediaRecord,
+} from "@/lib/siteApi";
 
 type CmsTab = "news" | "projects" | "jobs";
 type Tab = CmsTab | ExtraAdminTab;
@@ -51,86 +65,6 @@ type Session = {
   refreshToken: string;
   user: AdminUser;
 };
-
-const projectCategories = [
-  { value: "Cảng biển", valueEn: "Seaport" },
-  { value: "Thủy lợi", valueEn: "Hydraulics" },
-  { value: "Nạo vét", valueEn: "Dredging" },
-  { value: "Hạ tầng", valueEn: "Infrastructure" },
-  { value: "Dịch vụ", valueEn: "Services" },
-];
-
-const projectLocations = [
-  // Vùng / tổng hợp
-  "Miền Bắc",
-  "Miền Trung",
-  "Miền Nam",
-  "Toàn quốc",
-  // 63 tỉnh thành
-  "An Giang",
-  "Bà Rịa - Vũng Tàu",
-  "Bắc Giang",
-  "Bắc Kạn",
-  "Bạc Liêu",
-  "Bắc Ninh",
-  "Bến Tre",
-  "Bình Định",
-  "Bình Dương",
-  "Bình Phước",
-  "Bình Thuận",
-  "Cà Mau",
-  "Cần Thơ",
-  "Cao Bằng",
-  "Đà Nẵng",
-  "Đắk Lắk",
-  "Đắk Nông",
-  "Điện Biên",
-  "Đồng Nai",
-  "Đồng Tháp",
-  "Gia Lai",
-  "Hà Giang",
-  "Hà Nam",
-  "Hà Nội",
-  "Hà Tĩnh",
-  "Hải Dương",
-  "Hải Phòng",
-  "Hậu Giang",
-  "Hòa Bình",
-  "Hưng Yên",
-  "Khánh Hòa",
-  "Kiên Giang",
-  "Kon Tum",
-  "Lai Châu",
-  "Lâm Đồng",
-  "Lạng Sơn",
-  "Lào Cai",
-  "Long An",
-  "Nam Định",
-  "Nghệ An",
-  "Ninh Bình",
-  "Ninh Thuận",
-  "Phú Thọ",
-  "Phú Yên",
-  "Quảng Bình",
-  "Quảng Nam",
-  "Quảng Ngãi",
-  "Quảng Ninh",
-  "Quảng Trị",
-  "Sóc Trăng",
-  "Sơn La",
-  "Tây Ninh",
-  "Thái Bình",
-  "Thái Nguyên",
-  "Thanh Hóa",
-  "Thừa Thiên Huế",
-  "Tiền Giang",
-  "TP. Hồ Chí Minh",
-  "Trà Vinh",
-  "Tuyên Quang",
-  "Vĩnh Long",
-  "Vĩnh Phúc",
-  "Yên Bái",
-];
 
 const blankNews: NewsItem = {
   id: "",
@@ -360,7 +294,7 @@ function AdminLogin({ onLoggedIn }: { onLoggedIn: (session: Session) => void }) 
           <div className="mb-8 flex flex-col items-center text-center">
             <div className="mb-3 flex h-20 w-20 items-center justify-center bg-white/95 p-2 shadow-lg">
               <img
-                src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/69ba7546394f41773827398.jpg"
+                src="/images/huu-thanh-logo.png"
                 alt="Hữu Thành"
                 className="h-full w-full object-contain"
               />
@@ -462,22 +396,6 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
     setStatusKind(kind);
   };
 
-  const persist = async (nextContent: CmsContent) => {
-    setIsSaving(true);
-    setStatusMessage("");
-    try {
-      await saveCmsContent(nextContent, { token: session.accessToken });
-      const savedContent = await fetchCmsContent();
-      setContent(savedContent);
-      showStatus("Đã lưu dữ liệu CMS.");
-    } catch (error) {
-      showStatus(error instanceof Error ? error.message : "Không lưu được dữ liệu CMS.", "error");
-      throw error;
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
   const resetFields = () => {
     setEditingId(null);
     setNewsForm(blankNews);
@@ -490,6 +408,21 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
   const resetForm = () => {
     resetFields();
     setIsEditorOpen(false);
+  };
+
+  const mutateContent = async (action: () => Promise<unknown>, successMessage: string) => {
+    setIsSaving(true);
+    setStatusMessage("");
+    try {
+      await action();
+      setContent(await fetchCmsContent());
+      showStatus(successMessage);
+      resetForm();
+    } catch (error) {
+      showStatus(error instanceof Error ? error.message : "Không lưu được dữ liệu.", "error");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const openCreateForm = () => {
@@ -532,12 +465,13 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
 
   const removeItem = (id: string) => {
     if (!window.confirm("Xóa nội dung này?")) return;
-    const nextContent: CmsContent = {
-      news: content.news.filter((item) => item.id !== id),
-      projects: content.projects.filter((item) => item.id !== id),
-      jobs: content.jobs.filter((item) => item.id !== id),
-    };
-    void persist(nextContent).then(resetForm);
+    if (activeTab === "news") {
+      void mutateContent(() => deleteNews(session.accessToken, id), "Đã xóa tin tức.");
+    } else if (activeTab === "projects") {
+      void mutateContent(() => deleteProject(session.accessToken, id), "Đã xóa dự án.");
+    } else if (activeTab === "jobs") {
+      void mutateContent(() => deleteJob(session.accessToken, id), "Đã xóa vị trí tuyển dụng.");
+    }
   };
 
   const saveNews = async () => {
@@ -556,8 +490,12 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
       thumbnail,
       galleryImages: gallery,
     };
-    await persist({ ...content, news: upsert(content.news, item) });
-    resetForm();
+    await mutateContent(
+      () => (newsForm.id
+        ? updateNews(session.accessToken, item.id, item)
+        : createNews(session.accessToken, item)),
+      "Đã lưu tin tức.",
+    );
   };
 
   const saveProject = async () => {
@@ -575,8 +513,12 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
       image,
       galleryImages: gallery,
     };
-    await persist({ ...content, projects: upsert(content.projects, item) });
-    resetForm();
+    await mutateContent(
+      () => (projectForm.id
+        ? updateProject(session.accessToken, item.id, item)
+        : createProject(session.accessToken, item)),
+      "Đã lưu dự án.",
+    );
   };
 
   const saveJob = async () => {
@@ -589,42 +531,13 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
       requirements: textToList(jobRequirements),
       requirementsEn: textToList(jobRequirementsEn || jobRequirements),
     };
-    await persist({ ...content, jobs: upsert(content.jobs, item) });
-    resetForm();
-  };
 
-  const exportJson = () => {
-    const blob = new Blob([JSON.stringify(content, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "huu-thanh-cms-content.json";
-    link.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const importJson = async (file: File | null) => {
-    if (!file) return;
-    const text = await file.text();
-    const imported = JSON.parse(text) as Partial<CmsContent>;
-    await persist({
-      news: Array.isArray(imported.news) ? imported.news : [],
-      projects: Array.isArray(imported.projects) ? imported.projects : [],
-      jobs: Array.isArray(imported.jobs) ? imported.jobs : [],
-    });
-    resetForm();
-  };
-
-  const clearAll = async () => {
-    if (!window.confirm("Xóa toàn bộ dữ liệu CMS?")) return;
-    try {
-      await clearCmsContent({ token: session.accessToken });
-      setContent({ news: [], projects: [], jobs: [] });
-      resetForm();
-      showStatus("Đã xóa dữ liệu CMS.");
-    } catch (error) {
-      showStatus(error instanceof Error ? error.message : "Không xóa được dữ liệu CMS.", "error");
-    }
+    await mutateContent(
+      () => (jobForm.id
+        ? updateJob(session.accessToken, item.id, item)
+        : createJob(session.accessToken, item)),
+      "Đã lưu vị trí tuyển dụng.",
+    );
   };
 
   const userInitial = (session.user.fullName || session.user.email)[0].toUpperCase();
@@ -637,7 +550,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
         <div className="flex items-center gap-3 border-b border-slate-700/60 px-4 py-4">
           <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/10 p-1">
             <img
-              src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/69ba7546394f41773827398.jpg"
+              src="/images/huu-thanh-logo.png"
               alt="Hữu Thành"
               className="h-full w-full object-contain"
             />
@@ -743,95 +656,45 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
 
                 <div className="p-6">
                   {activeTab === "news" && (
-                    <div className="space-y-5">
-                      <FormHeader title="Tin tức" onDelete={newsForm.id && canDelete(role, "news") ? () => removeItem(newsForm.id) : undefined} />
-                      <Input label="Tiêu đề" value={newsForm.title} onChange={(v) => setNewsForm({ ...newsForm, title: v, slug: newsForm.slug || slugify(v) })} />
-                      <Input label="Tiêu đề EN" value={newsForm.titleEn} onChange={(v) => setNewsForm({ ...newsForm, titleEn: v })} />
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-                        <Input label="Slug" value={newsForm.slug} onChange={(v) => setNewsForm({ ...newsForm, slug: slugify(v) })} />
-                        <Input label="Ngày" type="date" value={newsForm.date} onChange={(v) => setNewsForm({ ...newsForm, date: v })} />
-                        <Input label="Danh mục" value={newsForm.category} onChange={(v) => setNewsForm({ ...newsForm, category: v })} />
-                        <Input label="Danh mục EN" value={newsForm.categoryEn} onChange={(v) => setNewsForm({ ...newsForm, categoryEn: v })} />
-                      </div>
-                      <GalleryWithThumbnail
-                        label="Ảnh tin tức"
-                        images={newsForm.galleryImages ?? []}
-                        thumbnail={newsForm.thumbnail}
-                        media={mediaLibrary}
-                        token={session.accessToken}
-                        folder="news"
-                        onImagesChange={(v) => setNewsForm({ ...newsForm, galleryImages: v })}
-                        onThumbnailChange={(v) => setNewsForm({ ...newsForm, thumbnail: v })}
-                        onUploaded={(item) => setMediaLibrary((prev) => [item, ...prev.filter((m) => m.id !== item.id)])}
-                      />
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <Textarea label="Mô tả ngắn (VI)" value={newsForm.excerpt} onChange={(v) => setNewsForm({ ...newsForm, excerpt: v })} />
-                        <Textarea label="Mô tả ngắn (EN)" value={newsForm.excerptEn} onChange={(v) => setNewsForm({ ...newsForm, excerptEn: v })} />
-                      </div>
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <Textarea label="Nội dung (VI)" rows={8} value={newsForm.content} onChange={(v) => setNewsForm({ ...newsForm, content: v })} />
-                        <Textarea label="Nội dung (EN)" rows={8} value={newsForm.contentEn} onChange={(v) => setNewsForm({ ...newsForm, contentEn: v })} />
-                      </div>
-                      <SaveButton disabled={isSaving} onClick={saveNews} />
-                    </div>
+                    <NewsEditorForm
+                      value={newsForm}
+                      media={mediaLibrary}
+                      token={session.accessToken}
+                      isSaving={isSaving}
+                      onChange={setNewsForm}
+                      onTitleChange={(title) => setNewsForm({ ...newsForm, title, slug: newsForm.slug || slugify(title) })}
+                      onSlugChange={(slug) => setNewsForm({ ...newsForm, slug: slugify(slug) })}
+                      onUploaded={(item) => setMediaLibrary((previous) => [item, ...previous.filter((entry) => entry.id !== item.id)])}
+                      onDelete={newsForm.id && canDelete(role, "news") ? () => removeItem(newsForm.id) : undefined}
+                      onSave={saveNews}
+                    />
                   )}
 
                   {activeTab === "projects" && (
-                    <div className="space-y-5">
-                      <FormHeader title="Dự án" onDelete={projectForm.id && canDelete(role, "projects") ? () => removeItem(projectForm.id) : undefined} />
-                      <Input label="Tên dự án" value={projectForm.name} onChange={(v) => setProjectForm({ ...projectForm, name: v })} />
-                      <Input label="Tên dự án EN" value={projectForm.nameEn} onChange={(v) => setProjectForm({ ...projectForm, nameEn: v })} />
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <SelectField
-                          label="Địa điểm"
-                          value={projectForm.location}
-                          onChange={(v) => setProjectForm({ ...projectForm, location: v })}
-                          options={projectLocations.map((location) => ({ value: location, label: location }))}
-                        />
-                        <Input label="Năm" type="number" value={String(projectForm.year)} onChange={(v) => setProjectForm({ ...projectForm, year: Number(v) })} />
-                        <SelectField
-                          label="Loại"
-                          value={projectForm.category}
-                          onChange={(v) => {
-                            const category = projectCategories.find((item) => item.value === v);
-                            setProjectForm({ ...projectForm, category: v, categoryEn: category?.valueEn ?? v });
-                          }}
-                          options={projectCategories.map((category) => ({ value: category.value, label: category.value }))}
-                        />
-                      </div>
-                      <GalleryWithThumbnail
-                        label="Ảnh dự án"
-                        images={projectForm.galleryImages ?? []}
-                        thumbnail={projectForm.image}
-                        media={mediaLibrary}
-                        token={session.accessToken}
-                        folder="projects"
-                        onImagesChange={(v) => setProjectForm({ ...projectForm, galleryImages: v })}
-                        onThumbnailChange={(v) => setProjectForm({ ...projectForm, image: v })}
-                        onUploaded={(item) => setMediaLibrary((prev) => [item, ...prev.filter((m) => m.id !== item.id)])}
-                      />
-                      <Textarea label="Mô tả" value={projectForm.description} onChange={(v) => setProjectForm({ ...projectForm, description: v })} />
-                      <Textarea label="Mô tả EN" value={projectForm.descriptionEn} onChange={(v) => setProjectForm({ ...projectForm, descriptionEn: v })} />
-                      <SaveButton disabled={isSaving} onClick={saveProject} />
-                    </div>
+                    <ProjectEditorForm
+                      value={projectForm}
+                      media={mediaLibrary}
+                      token={session.accessToken}
+                      isSaving={isSaving}
+                      onChange={setProjectForm}
+                      onUploaded={(item) => setMediaLibrary((previous) => [item, ...previous.filter((entry) => entry.id !== item.id)])}
+                      onDelete={projectForm.id && canDelete(role, "projects") ? () => removeItem(projectForm.id) : undefined}
+                      onSave={saveProject}
+                    />
                   )}
 
                   {activeTab === "jobs" && (
-                    <div className="space-y-5">
-                      <FormHeader title="Tuyển dụng" onDelete={jobForm.id && canDelete(role, "jobs") ? () => removeItem(jobForm.id) : undefined} />
-                      <Input label="Vị trí" value={jobForm.title} onChange={(v) => setJobForm({ ...jobForm, title: v })} />
-                      <Input label="Vị trí EN" value={jobForm.titleEn} onChange={(v) => setJobForm({ ...jobForm, titleEn: v })} />
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <Input label="Địa điểm" value={jobForm.location} onChange={(v) => setJobForm({ ...jobForm, location: v })} />
-                        <Input label="Loại hình" value={jobForm.type} onChange={(v) => setJobForm({ ...jobForm, type: v })} />
-                        <Input label="Lương" value={jobForm.salary} onChange={(v) => setJobForm({ ...jobForm, salary: v })} />
-                      </div>
-                      <Textarea label="Mô tả công việc" value={jobForm.description} onChange={(v) => setJobForm({ ...jobForm, description: v })} />
-                      <Textarea label="Mô tả EN" value={jobForm.descriptionEn} onChange={(v) => setJobForm({ ...jobForm, descriptionEn: v })} />
-                      <Textarea label="Yêu cầu, mỗi dòng một ý" value={jobRequirements} onChange={setJobRequirements} />
-                      <Textarea label="Yêu cầu EN, mỗi dòng một ý" value={jobRequirementsEn} onChange={setJobRequirementsEn} />
-                      <SaveButton disabled={isSaving} onClick={saveJob} />
-                    </div>
+                    <JobEditorForm
+                      value={jobForm}
+                      requirements={jobRequirements}
+                      requirementsEn={jobRequirementsEn}
+                      isSaving={isSaving}
+                      onChange={setJobForm}
+                      onRequirementsChange={setJobRequirements}
+                      onRequirementsEnChange={setJobRequirementsEn}
+                      onDelete={jobForm.id && canDelete(role, "jobs") ? () => removeItem(jobForm.id) : undefined}
+                      onSave={saveJob}
+                    />
                   )}
                 </div>
               </div>
@@ -948,11 +811,6 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
 
 /* ── Helpers ── */
 
-function upsert<T extends { id: string }>(items: T[], item: T): T[] {
-  const exists = items.some((entry) => entry.id === item.id);
-  return exists ? items.map((entry) => (entry.id === item.id ? item : entry)) : [item, ...items];
-}
-
 function getItemTitle(item: NewsItem | Project | Job) {
   if ("title" in item) return item.title;
   if ("name" in item) return item.name;
@@ -995,578 +853,4 @@ function tabTitle(tab: Tab) {
 
 function isCmsTab(tab: Tab): tab is CmsTab {
   return tab === "news" || tab === "projects" || tab === "jobs";
-}
-
-function normalizeProjectGallery(project: Project) {
-  return Array.from(new Set([project.image, ...(project.galleryImages ?? [])].map((src) => src.trim()).filter(Boolean)));
-}
-
-/* ── UI Components ── */
-
-function NavSection({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="mb-5">
-      <div className="mb-1.5 px-3 text-[10px] font-black uppercase tracking-widest text-slate-600">{label}</div>
-      <div className="space-y-0.5">{children}</div>
-    </div>
-  );
-}
-
-function SideNavItem({
-  icon,
-  label,
-  active,
-  onClick,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
-        active
-          ? "bg-red-600 text-white shadow-sm"
-          : "text-slate-400 hover:bg-slate-800 hover:text-slate-100"
-      }`}
-    >
-      {icon}
-      {label}
-    </button>
-  );
-}
-
-function LoginField({
-  icon,
-  placeholder,
-  value,
-  onChange,
-  type,
-  autoComplete,
-}: {
-  icon: React.ReactNode;
-  placeholder: string;
-  value: string;
-  onChange: (value: string) => void;
-  type: string;
-  autoComplete?: string;
-}) {
-  return (
-    <label className="relative block">
-      <input
-        type={type}
-        value={value}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-12 w-full border border-slate-300 bg-white pl-4 pr-12 text-base text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-[#3f98c4] focus:ring-2 focus:ring-[#3f98c4]/15"
-      />
-      <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-500">
-        {icon}
-      </span>
-    </label>
-  );
-}
-
-function ItemThumbnail({ src, alt }: { src: string; alt: string }) {
-  if (!src) {
-    return <div className="h-12 w-18 rounded-lg border border-dashed border-slate-200 bg-slate-50" />;
-  }
-  return (
-    <div className="h-12 w-[4.5rem] overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
-      <img src={src} alt={alt || "Ảnh nội dung"} className="h-full w-full object-cover" />
-    </div>
-  );
-}
-
-function FormHeader({ title, onDelete }: { title: string; onDelete?: () => void }) {
-  return (
-    <div className="flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div className="text-[11px] font-black uppercase tracking-widest text-red-500">Biên tập</div>
-        <h2 className="mt-0.5 text-xl font-black text-slate-900">{title}</h2>
-      </div>
-      {onDelete && (
-        <button
-          onClick={onDelete}
-          className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-red-200 px-3 text-sm font-semibold text-red-600 transition hover:bg-red-50"
-        >
-          <Trash2 size={15} />
-          Xóa
-        </button>
-      )}
-    </div>
-  );
-}
-
-function Input({
-  label,
-  value,
-  onChange,
-  type = "text",
-  autoComplete,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  type?: string;
-  autoComplete?: string;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-1.5 block text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</span>
-      <input
-        type={type}
-        value={value}
-        autoComplete={autoComplete}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-10 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100"
-      />
-    </label>
-  );
-}
-
-function SelectField({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  options: { value: string; label: string }[];
-}) {
-  return (
-    <label className="block">
-      <span className="mb-1.5 block text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-10 w-full rounded-lg border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100"
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-function MediaSelect({
-  label,
-  value,
-  media,
-  token,
-  onChange,
-  onUploaded,
-}: {
-  label: string;
-  value: string;
-  media: MediaRecord[];
-  token: string;
-  onChange: (value: string) => void;
-  onUploaded: (item: MediaRecord) => void;
-}) {
-  const imageMedia = media.filter((item) => isImageMedia(item));
-
-  return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-      <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</div>
-          <p className="mt-1 text-xs font-semibold text-slate-500">Upload ảnh mới từ máy để dùng cho dự án.</p>
-        </div>
-        <ImageUploadButton token={token} folder="projects" onUploaded={onUploaded} />
-      </div>
-
-      {value && (
-        <div className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white">
-          <img src={mediaFileUrl(value)} alt={label} className="h-56 w-full object-cover" />
-          <button
-            type="button"
-            onClick={() => onChange("")}
-            className="absolute right-3 top-3 inline-flex h-9 items-center gap-1.5 rounded-lg bg-white/95 px-3 text-xs font-black text-red-600 shadow-sm transition hover:bg-red-600 hover:text-white"
-          >
-            <Trash2 size={14} />
-            Bỏ chọn
-          </button>
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-sm font-bold text-white">
-            {getMediaLabel(imageMedia, value)}
-          </div>
-        </div>
-      )}
-
-      {!value && (
-        <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm font-semibold text-slate-500">
-          Chưa chọn ảnh chính cho dự án.
-        </div>
-      )}
-    </div>
-  );
-}
-
-function GalleryWithThumbnail({
-  label = "Ảnh",
-  images,
-  thumbnail,
-  media,
-  token,
-  folder,
-  onImagesChange,
-  onThumbnailChange,
-  onUploaded,
-}: {
-  label?: string;
-  images: string[];
-  thumbnail: string;
-  media: MediaRecord[];
-  token: string;
-  folder: string;
-  onImagesChange: (images: string[]) => void;
-  onThumbnailChange: (thumbnail: string) => void;
-  onUploaded: (item: MediaRecord) => void;
-}) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState("");
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const imageMedia = media.filter((m) => isImageMedia(m));
-  const validImages = Array.from(new Set(images.filter(Boolean)));
-  const isExplicit = !!thumbnail && validImages.includes(thumbnail);
-  const effectiveThumb = isExplicit ? thumbnail : validImages[0] ?? "";
-
-  const openLightbox = (index: number) => setLightboxIndex(index);
-  const closeLightbox = () => setLightboxIndex(null);
-  const prevImage = () => setLightboxIndex((i) => (i !== null ? (i - 1 + validImages.length) % validImages.length : null));
-  const nextImage = () => setLightboxIndex((i) => (i !== null ? (i + 1) % validImages.length : null));
-
-  const triggerPicker = () => {
-    if (inputRef.current) {
-      inputRef.current.value = "";
-      inputRef.current.click();
-    }
-  };
-
-  const uploadFiles = async (files: FileList | null) => {
-    if (!files?.length) return;
-    setUploadError("");
-    setIsUploading(true);
-    const added: string[] = [];
-    try {
-      for (const file of Array.from(files)) {
-        const item = await uploadMedia(token, file, folder, file.name.replace(/\.[^.]+$/, ""));
-        added.push(item.fileUrl);
-        onUploaded(item);
-      }
-      onImagesChange([...validImages, ...added]);
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Không upload được ảnh.");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const removeImage = (src: string) => {
-    onImagesChange(validImages.filter((u) => u !== src));
-    if (thumbnail === src) onThumbnailChange("");
-  };
-
-  const pickThumbnail = (src: string) => {
-    onThumbnailChange(src === thumbnail ? "" : src);
-  };
-
-  return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-      <div className="mb-3">
-        <div className="text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</div>
-        <p className="mt-1 text-xs font-semibold text-slate-500">
-          Nhấn vào khung để chọn ảnh. Nhấn{" "}
-          <Star size={11} className="inline-block align-middle" />{" "}
-          để đặt ảnh đại diện — mặc định lấy ảnh đầu tiên.
-        </p>
-      </div>
-
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/png,image/jpeg,image/webp,image/gif"
-        multiple
-        className="hidden"
-        onChange={(e) => void uploadFiles(e.target.files)}
-      />
-
-      {validImages.length > 0 ? (
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {validImages.map((src, idx) => {
-            const isThumb = src === effectiveThumb;
-            const isAutoThumb = isThumb && !isExplicit;
-            return (
-              <div
-                key={src}
-                className={`group relative overflow-hidden rounded-xl border-2 bg-white transition-all ${
-                  isThumb ? "border-orange-400 shadow-md" : "border-slate-200"
-                }`}
-              >
-                <img
-                  src={mediaFileUrl(src)}
-                  alt={getMediaLabel(imageMedia, src)}
-                  className="h-32 w-full cursor-zoom-in object-cover"
-                  onClick={() => openLightbox(idx)}
-                />
-
-                <button
-                  type="button"
-                  onClick={() => pickThumbnail(src)}
-                  title={src === thumbnail ? "Bỏ chọn đại diện" : "Đặt làm ảnh đại diện"}
-                  className={`absolute left-2 top-2 flex h-7 w-7 items-center justify-center rounded-lg shadow-sm transition-all ${
-                    isThumb && !isAutoThumb
-                      ? "bg-orange-500 text-white"
-                      : "bg-white/90 text-slate-400 opacity-0 group-hover:opacity-100 hover:bg-orange-100 hover:text-orange-500"
-                  }`}
-                >
-                  <Star size={13} fill={isThumb && !isAutoThumb ? "currentColor" : "none"} />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => removeImage(src)}
-                  className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-lg bg-white/90 text-red-500 opacity-0 shadow-sm transition group-hover:opacity-100 hover:bg-red-500 hover:text-white"
-                  aria-label="Xóa ảnh"
-                >
-                  <Trash2 size={13} />
-                </button>
-
-                {isThumb ? (
-                  <div className="bg-orange-500 px-2 py-1 text-center text-[10px] font-black uppercase tracking-widest text-white">
-                    {isAutoThumb ? "Đại diện (tự động)" : "Đại diện"}
-                  </div>
-                ) : (
-                  <div className="truncate px-2 py-1.5 text-xs font-semibold text-slate-500">
-                    {getMediaLabel(imageMedia, src)}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          {/* Add more card */}
-          <button
-            type="button"
-            onClick={triggerPicker}
-            disabled={isUploading}
-            className="flex min-h-[9.5rem] flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-300 bg-white text-slate-400 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {isUploading ? (
-              <Loader2 className="animate-spin" size={22} />
-            ) : (
-              <Plus size={22} />
-            )}
-            <span className="text-xs font-semibold">
-              {isUploading ? "Đang tải…" : "Thêm ảnh"}
-            </span>
-          </button>
-        </div>
-      ) : (
-        <button
-          type="button"
-          onClick={triggerPicker}
-          disabled={isUploading}
-          className="flex w-full flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-slate-300 bg-white py-12 text-slate-400 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isUploading ? (
-            <Loader2 className="animate-spin" size={28} />
-          ) : (
-            <Upload size={28} />
-          )}
-          <div className="text-center">
-            <p className="text-sm font-bold">
-              {isUploading ? "Đang tải ảnh lên…" : "Nhấn để chọn ảnh"}
-            </p>
-            {!isUploading && (
-              <p className="mt-0.5 text-xs">Có thể chọn nhiều ảnh cùng lúc</p>
-            )}
-          </div>
-        </button>
-      )}
-
-      {uploadError && (
-        <p className="mt-2 text-xs font-semibold text-red-600">{uploadError}</p>
-      )}
-
-      {lightboxIndex !== null && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
-          onClick={closeLightbox}
-        >
-          {/* Close */}
-          <button
-            type="button"
-            onClick={closeLightbox}
-            className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
-          >
-            <X size={18} />
-          </button>
-
-          {/* Prev */}
-          {validImages.length > 1 && (
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); prevImage(); }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
-            >
-              <ChevronLeft size={22} />
-            </button>
-          )}
-
-          {/* Image */}
-          <img
-            src={mediaFileUrl(validImages[lightboxIndex])}
-            alt={getMediaLabel(imageMedia, validImages[lightboxIndex])}
-            className="max-h-[88vh] max-w-[88vw] rounded-xl object-contain shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
-
-          {/* Next */}
-          {validImages.length > 1 && (
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); nextImage(); }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
-            >
-              <ChevronRight size={22} />
-            </button>
-          )}
-
-          {/* Counter */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/40 px-3 py-1 text-xs font-bold text-white/80">
-            {lightboxIndex + 1} / {validImages.length}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ImageUploadButton({
-  token,
-  folder,
-  onUploaded,
-}: {
-  token: string;
-  folder: string;
-  onUploaded: (item: MediaRecord) => void;
-}) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [error, setError] = useState("");
-
-  const uploadFiles = async (files: FileList | null) => {
-    if (!files?.length) return;
-    setError("");
-    setIsUploading(true);
-    try {
-      for (const file of Array.from(files)) {
-        const item = await uploadMedia(token, file, folder, file.name.replace(/\.[^.]+$/, ""));
-        onUploaded(item);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Không upload được ảnh.");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  return (
-    <div>
-      <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-slate-950 px-4 text-sm font-black text-white transition hover:bg-slate-800">
-        {isUploading ? <Loader2 className="animate-spin" size={16} /> : <Upload size={16} />}
-        {isUploading ? "Đang upload..." : "Chọn ảnh từ máy"}
-        <input
-          type="file"
-          accept="image/png,image/jpeg,image/webp,image/gif"
-          multiple
-          className="hidden"
-          onChange={(event) => void uploadFiles(event.target.files)}
-        />
-      </label>
-      {error && <div className="mt-2 text-xs font-semibold text-red-600">{error}</div>}
-    </div>
-  );
-}
-
-function SelectedMediaCard({ src, label, onRemove }: { src: string; label: string; onRemove: () => void }) {
-  return (
-    <div className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white">
-      <img src={mediaFileUrl(src)} alt={label} className="h-32 w-full object-cover" />
-      <button
-        type="button"
-        onClick={onRemove}
-        className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/95 text-red-600 opacity-100 shadow-sm transition hover:bg-red-600 hover:text-white md:opacity-0 md:group-hover:opacity-100"
-        aria-label="Bỏ ảnh khỏi gallery"
-      >
-        <Trash2 size={14} />
-      </button>
-      <div className="truncate px-3 py-2 text-xs font-bold text-slate-600">{label}</div>
-    </div>
-  );
-}
-
-function getMediaLabel(media: MediaRecord[], src: string) {
-  return media.find((item) => item.fileUrl === src)?.fileName ?? src.split("/").pop() ?? "Ảnh dự án";
-}
-
-function readFileAsDataUrl(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error ?? new Error("Không đọc được file."));
-    reader.readAsDataURL(file);
-  });
-}
-
-function isImageMedia(item: MediaRecord) {
-  return item.fileType === "image" || /\.(png|jpe?g|webp|gif|avif)$/i.test(item.fileUrl);
-}
-
-function Textarea({
-  label,
-  value,
-  onChange,
-  rows = 4,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  rows?: number;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-1.5 block text-[11px] font-black uppercase tracking-widest text-slate-400">{label}</span>
-      <textarea
-        rows={rows}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-100"
-      />
-    </label>
-  );
-}
-
-function SaveButton({ disabled, onClick }: { disabled?: boolean; onClick: () => void }) {
-  return (
-    <button
-      disabled={disabled}
-      onClick={onClick}
-      className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-red-600 px-5 text-sm font-black text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
-    >
-      {disabled ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
-      {disabled ? "Đang lưu…" : "Lưu nội dung"}
-    </button>
-  );
 }
