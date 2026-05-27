@@ -66,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className="h-full">
+    <html lang="vi" className="h-full" data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Building2, FileText, Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
+import { Building2, Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getSetting } from "@/lib/siteApi";
 import { useSiteSettings } from "@/lib/useSiteSettings";
@@ -139,12 +139,6 @@ export default function Footer() {
                 <a href={`mailto:${getSetting(settings, "company.email")}`} className="text-white/60 hover:text-orange-400 text-sm transition-colors">
                   {getSetting(settings, "company.email")}
                 </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <FileText size={16} className="text-orange-400 shrink-0" />
-                <span className="text-white/60 text-sm">
-                  {t("MST", "Tax ID")}: {getSetting(settings, "company.taxCode")}
-                </span>
               </li>
             </ul>
           </div>
