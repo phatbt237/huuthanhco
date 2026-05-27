@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Calendar, ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/SectionTitle";
+import { getNewsDetailHref } from "@/lib/news";
 import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCmsContent } from "@/lib/useCmsContent";
@@ -40,7 +41,7 @@ export default function NewsSection() {
               transition={{ delay: i * 0.15, duration: 0.5 }}
               className="group bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
-              <Link href={`/tin-tuc#tin-tuc-${item.id}`} className="block">
+              <Link href={getNewsDetailHref(item)} className="block">
                 <div className="relative h-52 overflow-hidden">
                   <img
                     src={item.thumbnail}

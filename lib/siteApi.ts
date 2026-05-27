@@ -1,4 +1,7 @@
 import { equipment } from "@/data/equipment";
+import type { Job } from "@/data/jobs";
+import type { NewsItem } from "@/data/news";
+import type { Project } from "@/data/projects";
 import { services } from "@/data/services";
 
 const DEFAULT_CMS_API_BASE_URL = "https://huuthanhco.onrender.com";
@@ -208,6 +211,66 @@ export async function submitJobApplication(data: {
   return requestJson<JobApplicationRecord>("/api/job-applications", { method: "POST", body: JSON.stringify(data) });
 }
 
+export async function createJob(token: string, data: Job) {
+  return requestJson<Job>("/api/jobs", {
+    method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateJob(token: string, id: string, data: Job) {
+  return requestJson<Job>(`/api/jobs/${id}`, {
+    method: "PUT",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteJob(token: string, id: string) {
+  return requestJson<void>(`/api/jobs/${id}`, { method: "DELETE", headers: authHeaders(token) });
+}
+
+export async function createNews(token: string, data: NewsItem) {
+  return requestJson<NewsItem>("/api/news", {
+    method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateNews(token: string, id: string, data: NewsItem) {
+  return requestJson<NewsItem>(`/api/news/${id}`, {
+    method: "PUT",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteNews(token: string, id: string) {
+  return requestJson<void>(`/api/news/${id}`, { method: "DELETE", headers: authHeaders(token) });
+}
+
+export async function createProject(token: string, data: Project) {
+  return requestJson<Project>("/api/projects", {
+    method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateProject(token: string, id: string, data: Project) {
+  return requestJson<Project>(`/api/projects/${id}`, {
+    method: "PUT",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteProject(token: string, id: string) {
+  return requestJson<void>(`/api/projects/${id}`, { method: "DELETE", headers: authHeaders(token) });
+}
+
 export async function getSettingsMap(prefix?: string) {
   const query = prefix ? `?prefix=${encodeURIComponent(prefix)}` : "";
   const settings = await requestJson<SettingsMap>(`/api/settings${query}`);
@@ -322,4 +385,3 @@ export function settingJson<T>(settings: SettingsMap, key: string, fallback: T):
     return fallback;
   }
 }
-

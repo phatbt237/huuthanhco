@@ -41,7 +41,7 @@ const jsonLd = {
   name: "Công ty Cổ phần Xây dựng Hữu Thành",
   alternateName: "Hữu Thành Construction",
   url: "https://huuthanh.vn",
-  logo: "https://huuthanh.vn/logo.png",
+  logo: "https://huuthanh.vn/images/huu-thanh-logo.png",
   taxID: "0309349692",
   description: "Đơn vị thi công công trình thủy công, cảng biển và hạ tầng giao thông uy tín tại Việt Nam.",
   address: {
@@ -66,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className="h-full">
+    <html lang="vi" className="h-full" data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"

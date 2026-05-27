@@ -36,5 +36,6 @@ export function canDelete(role: AdminRole, tab: Tab): boolean {
 }
 
 export function defaultTab(role: AdminRole): Tab {
+  if (canAccess(role, "projects")) return "projects";
   return ACCESS[role][0];
 }
