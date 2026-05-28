@@ -8,14 +8,14 @@ import SectionTitle from "@/components/SectionTitle";
 import { equipment } from "@/data/equipment";
 import type { Equipment } from "@/data/equipment";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { settingJson } from "@/lib/siteApi";
+import { settingJson, type SettingsMap } from "@/lib/siteApi";
 import { useSiteSettings } from "@/lib/useSiteSettings";
 
 const PER_PAGE = 4;
 
-export default function EquipmentSection() {
+export default function EquipmentSection({ initialSettings }: { initialSettings?: SettingsMap }) {
   const { lang, t } = useLanguage();
-  const settings = useSiteSettings("equipment");
+  const settings = useSiteSettings("equipment", initialSettings);
   const equipmentItems = settingJson<Equipment[]>(settings, "equipment.items", equipment);
   const [page, setPage] = useState(0);
 

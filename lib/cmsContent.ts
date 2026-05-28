@@ -5,15 +5,12 @@ import { cmsApiUrl } from "@/lib/siteApi";
 import { slugify } from "@/lib/utils";
 
 const CMS_STORAGE_KEY = "huu-thanh-cms-content-v1";
+const legacyContentFallbackEnabled = process.env.NODE_ENV !== "production";
 
 export type CmsContent = {
   news: NewsItem[];
   projects: Project[];
   jobs: Job[];
-};
-
-type RequestOptions = {
-  token?: string;
 };
 
 export const emptyContent: CmsContent = {
@@ -27,7 +24,7 @@ function isBrowser() {
 }
 
 export function loadCmsContent(): CmsContent {
-  if (!isBrowser()) return emptyContent;
+  if (!legacyContentFallbackEnabled || !isBrowser()) return emptyContent;
 
   try {
     const raw = window.localStorage.getItem(CMS_STORAGE_KEY);
@@ -60,42 +57,8 @@ export async function fetchCmsContent(): Promise<CmsContent> {
   }
 }
 
-function authHeaders(token?: string): Record<string, string> {
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
-export async function saveCmsContent(content: CmsContent, options: RequestOptions = {}) {
-  if (!isBrowser()) return;
-  window.localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(content));
-  const response = await fetch(cmsApiUrl("/api/cms"), {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...authHeaders(options.token) },
-    body: JSON.stringify(content),
-  });
-
-  if (!response.ok) {
-    const detail = await response.text().catch(() => "");
-    throw new Error(detail || "Không lưu được dữ liệu CMS vào database.");
-  }
-
-  window.dispatchEvent(new Event("huu-thanh-cms-content-updated"));
-}
-
-export async function clearCmsContent(options: RequestOptions = {}) {
-  if (!isBrowser()) return;
-  window.localStorage.removeItem(CMS_STORAGE_KEY);
-  const response = await fetch(cmsApiUrl("/api/cms"), {
-    method: "DELETE",
-    headers: authHeaders(options.token),
-  });
-  if (!response.ok) {
-    const detail = await response.text().catch(() => "");
-    throw new Error(detail || "Không xóa được dữ liệu CMS trong database.");
-  }
-  window.dispatchEvent(new Event("huu-thanh-cms-content-updated"));
-}
-
 export function mergeById<T extends { id: string; slug?: string; name?: string; title?: string }>(base: T[], custom: T[]): T[] {
+  if (!legacyContentFallbackEnabled) return custom;
   const customKeys = new Set(custom.flatMap(getContentKeys));
   return [...custom, ...base.filter((item) => !getContentKeys(item).some((key) => customKeys.has(key)))];
 }

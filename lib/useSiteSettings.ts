@@ -3,10 +3,14 @@
 import { useEffect, useState } from "react";
 import { defaultSiteSettings, getSettingsMap, type SettingsMap } from "@/lib/siteApi";
 
-export function useSiteSettings(prefix?: string) {
-  const [settings, setSettings] = useState<SettingsMap>(defaultSiteSettings);
+export function useSiteSettings(prefix?: string, initialSettings?: SettingsMap) {
+  const baseSettings = initialSettings ?? defaultSiteSettings;
+  const [settings, setSettings] = useState<SettingsMap>(baseSettings);
+
   useEffect(() => {
-    void getSettingsMap(prefix).then(setSettings).catch(() => setSettings(defaultSiteSettings));
-  }, [prefix]);
+    setSettings(baseSettings);
+    void getSettingsMap(prefix).then(setSettings).catch(() => setSettings(baseSettings));
+  }, [baseSettings, prefix]);
+
   return settings;
 }

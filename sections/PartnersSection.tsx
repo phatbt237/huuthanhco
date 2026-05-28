@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { settingLines } from "@/lib/siteApi";
+import { legacyContentFallbackEnabled, settingLines, type SettingsMap } from "@/lib/siteApi";
 import { useSiteSettings } from "@/lib/useSiteSettings";
 
 function CountUp({ to, suffix }: { to: number; suffix: string }) {
@@ -43,11 +43,11 @@ const partnerImages = [
   "/images/doi-tac/huu-thanh-co_132747921728510246.jpg",
 ];
 
-export default function PartnersSection() {
+export default function PartnersSection({ initialSettings }: { initialSettings?: SettingsMap }) {
   const { t } = useLanguage();
-  const settings = useSiteSettings("partners");
+  const settings = useSiteSettings("partners", initialSettings);
   const configuredImages = settingLines(settings, "partners.images");
-  const visiblePartnerImages = configuredImages.length ? configuredImages : partnerImages;
+  const visiblePartnerImages = configuredImages.length ? configuredImages : legacyContentFallbackEnabled ? partnerImages : [];
   const track = [...visiblePartnerImages, ...visiblePartnerImages];
 
   const stats = [
@@ -82,7 +82,7 @@ export default function PartnersSection() {
       </div>
 
       {/* Marquee */}
-      <div className="relative overflow-hidden mb-16">
+      {visiblePartnerImages.length > 0 && <div className="relative overflow-hidden mb-16">
         <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
@@ -101,7 +101,7 @@ export default function PartnersSection() {
             </div>
           ))}
         </div>
-      </div>
+      </div>}
 
       {/* Stats */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

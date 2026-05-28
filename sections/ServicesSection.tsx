@@ -7,12 +7,12 @@ import SectionTitle from "@/components/SectionTitle";
 import { services } from "@/data/services";
 import type { Service } from "@/data/services";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { settingJson } from "@/lib/siteApi";
+import { settingJson, type SettingsMap } from "@/lib/siteApi";
 import { useSiteSettings } from "@/lib/useSiteSettings";
 
-export default function ServicesSection() {
+export default function ServicesSection({ initialSettings }: { initialSettings?: SettingsMap }) {
   const { lang, t } = useLanguage();
-  const settings = useSiteSettings("services");
+  const settings = useSiteSettings("services", initialSettings);
   const serviceItems = settingJson<Service[]>(settings, "services.items", services);
   const serviceLinks = [
     "/du-an?loai=cang-bien",

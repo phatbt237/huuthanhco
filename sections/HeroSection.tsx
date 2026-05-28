@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getSetting, settingLines } from "@/lib/siteApi";
+import { getSetting, legacyContentFallbackEnabled, settingLines, type SettingsMap } from "@/lib/siteApi";
 import { useSiteSettings } from "@/lib/useSiteSettings";
 
 const fallbackHeroImages = [
@@ -18,15 +18,17 @@ const fallbackHeroImages = [
 
 const INTERVAL = 5000;
 
-export default function HeroSection() {
+export default function HeroSection({ initialSettings }: { initialSettings?: SettingsMap }) {
   const { t } = useLanguage();
-  const settings = useSiteSettings();
+  const settings = useSiteSettings(undefined, initialSettings);
   const heroImages = settingLines(settings, "hero.images");
-  const slides = heroImages.length ? heroImages : fallbackHeroImages;
+  const slides = heroImages.length ? heroImages : legacyContentFallbackEnabled ? fallbackHeroImages : [];
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+  const activeSlide = slides[current];
 
   useEffect(() => {
+    if (slides.length < 2) return;
     const timer = setInterval(() => {
       setDirection(1);
       setCurrent((prev) => (prev + 1) % slides.length);
@@ -44,11 +46,13 @@ export default function HeroSection() {
   };
 
   const prev = () => {
+    if (!slides.length) return;
     setDirection(-1);
     setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
   const next = () => {
+    if (!slides.length) return;
     setDirection(1);
     setCurrent((prev) => (prev + 1) % slides.length);
   };
@@ -57,7 +61,7 @@ export default function HeroSection() {
     <section className="relative flex h-screen min-h-[620px] w-full items-center overflow-hidden">
 
       {/* Slideshow background */}
-      <AnimatePresence initial={false} custom={direction}>
+      {activeSlide && <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={current}
           custom={direction}
@@ -71,9 +75,9 @@ export default function HeroSection() {
           exit="exit"
           transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url('${slides[current]}')` }}
+          style={{ backgroundImage: `url('${activeSlide}')` }}
         />
-      </AnimatePresence>
+      </AnimatePresence>}
 
       {/* Overlays */}
       <div className="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/58 via-slate-950/16 to-slate-950/8" />
@@ -81,27 +85,27 @@ export default function HeroSection() {
       <div className="absolute bottom-0 left-0 right-0 z-10 h-28 bg-gradient-to-t from-slate-50 to-transparent" />
 
       {/* Prev / Next buttons */}
-      <button
+      {slides.length > 1 && <button
         onClick={prev}
         className="absolute left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-slate-950/20 text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/25 md:left-8"
         aria-label="Previous"
       >
         <ChevronLeft size={20} />
-      </button>
-      <button
+      </button>}
+      {slides.length > 1 && <button
         onClick={next}
         className="absolute right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-slate-950/20 text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/25 md:right-8"
         aria-label="Next"
       >
         <ChevronRight size={20} />
-      </button>
+      </button>}
 
       {/* Content */}
       <div className="relative z-20 mx-auto w-full max-w-7xl px-6 text-left text-white sm:px-8 lg:px-12">
         <div className="max-w-2xl pt-16 md:pt-20 lg:pt-24">
         <motion.div initial={{ opacity: 0, x: -18 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, delay: 0.15 }}>
           <span className="mb-5 inline-block rounded-full border border-orange-300/45 bg-slate-950/18 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.26em] text-orange-200 shadow-sm backdrop-blur-sm">
-            {getSetting(settings, "hero.eyebrow") || t("Công Ty Cổ phần Xây Dựng Hữu Thành", "Huu Thanh Construction Co., Ltd.")}
+            {getSetting(settings, "hero.eyebrow") || (legacyContentFallbackEnabled ? t("Công Ty Cổ phần Xây Dựng Hữu Thành", "Huu Thanh Construction Co., Ltd.") : "")}
           </span>
         </motion.div>
 
@@ -111,7 +115,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.25 }}
         >
-          {getSetting(settings, "hero.title") || t("Đơn vị thi công công trình chuyên nghiệp", "Professional Construction Contractor")}
+          {getSetting(settings, "hero.title") || (legacyContentFallbackEnabled ? t("Đơn vị thi công công trình chuyên nghiệp", "Professional Construction Contractor") : "")}
         </motion.h1>
 
         <motion.p
@@ -121,10 +125,11 @@ export default function HeroSection() {
           transition={{ duration: 0.55, delay: 0.4 }}
         >
           {getSetting(settings, "hero.description") ||
+            (legacyContentFallbackEnabled ?
             t(
               "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
               "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam"
-            )}
+            ) : "")}
         </motion.p>
 
         <motion.div
@@ -169,7 +174,7 @@ export default function HeroSection() {
       </div>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-16 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+      {slides.length > 1 && <div className="absolute bottom-16 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
         {slides.map((_, i) => (
           <button
             key={i}
@@ -182,7 +187,7 @@ export default function HeroSection() {
             aria-label={`Slide ${i + 1}`}
           />
         ))}
-      </div>
+      </div>}
 
       <motion.div
         className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2"

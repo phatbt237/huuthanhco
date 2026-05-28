@@ -7,6 +7,7 @@ import EquipmentSection from "@/sections/EquipmentSection";
 import NewsSection from "@/sections/NewsSection";
 import PartnersSection from "@/sections/PartnersSection";
 import CtaSection from "@/sections/CtaSection";
+import { getSettingsMap } from "@/lib/siteApi";
 
 export const metadata: Metadata = {
   title: "Công ty Cổ phần Xây dựng Hữu Thành | Trang chủ",
@@ -15,16 +16,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await getSettingsMap().catch(() => undefined);
+
   return (
     <>
-      <HeroSection />
+      <HeroSection initialSettings={settings} />
       <AboutSection />
-      <ServicesSection />
+      <ServicesSection initialSettings={settings} />
       <ProjectsSection />
-      <EquipmentSection />
+      <EquipmentSection initialSettings={settings} />
       <NewsSection />
-      <PartnersSection />
+      <PartnersSection initialSettings={settings} />
       <CtaSection />
     </>
   );
