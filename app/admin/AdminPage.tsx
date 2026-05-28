@@ -152,11 +152,11 @@ export default function AdminPage() {
         return;
       }
 
-      const isValid = await validateAdminSession(storedSession);
+      const verifiedSession = await validateAdminSession(storedSession);
       if (ignore) return;
 
-      if (isValid) {
-        setSession(storedSession);
+      if (verifiedSession) {
+        setSession(verifiedSession);
       } else {
         await logoutAdmin(storedSession.refreshToken);
         setSession(null);
@@ -227,10 +227,10 @@ export function AdminLoginPage() {
         return;
       }
 
-      const isValid = await validateAdminSession(currentSession);
+      const verifiedSession = await validateAdminSession(currentSession);
       if (ignore) return;
 
-      if (isValid) {
+      if (verifiedSession) {
         router.replace(getSafeRedirect(searchParams.get("url")));
         return;
       }
