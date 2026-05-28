@@ -19,10 +19,9 @@ export default function CareersPage() {
     fullName: "",
     phone: "",
     email: "",
-    cvFileUrl: "",
-    cvFileName: "",
     message: "",
   });
+  const [cvFile, setCvFile] = useState<File | null>(null);
   const [applicationError, setApplicationError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const cvInputRef = useRef<HTMLInputElement | null>(null);
@@ -36,14 +35,13 @@ export default function CareersPage() {
         fullName: applicationForm.fullName,
         phone: applicationForm.phone,
         email: applicationForm.email || undefined,
-        cvFileUrl: applicationForm.cvFileUrl || undefined,
         positionApplied: lang === "vi" ? job.title : job.titleEn,
-        message: applicationForm.cvFileName
-          ? `${applicationForm.message}\nCV: ${applicationForm.cvFileName}`.trim()
-          : applicationForm.message,
-      });
+        message: applicationForm.message,
+      }, cvFile);
       setApplied(job.id);
-      setApplicationForm({ fullName: "", phone: "", email: "", cvFileUrl: "", cvFileName: "", message: "" });
+      setApplicationForm({ fullName: "", phone: "", email: "", message: "" });
+      setCvFile(null);
+      if (cvInputRef.current) cvInputRef.current.value = "";
     } catch {
       setApplicationError(t("Không gửi được hồ sơ. Vui lòng thử lại.", "Could not submit your application. Please try again."));
     } finally {
@@ -54,7 +52,7 @@ export default function CareersPage() {
   const handleCvFile = (file: File | null) => {
     setApplicationError("");
     if (!file) {
-      setApplicationForm((current) => ({ ...current, cvFileUrl: "", cvFileName: "" }));
+      setCvFile(null);
       if (cvInputRef.current) cvInputRef.current.value = "";
       return;
     }
@@ -66,23 +64,17 @@ export default function CareersPage() {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      setApplicationForm((current) => ({
-        ...current,
-        cvFileUrl: String(reader.result ?? ""),
-        cvFileName: file.name,
-      }));
-    };
-    reader.onerror = () => {
-      setApplicationError(t("Không đọc được file CV. Vui lòng thử lại.", "Could not read the CV file. Please try again."));
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
+      setApplicationError(t("CV cần là file PDF.", "CV must be a PDF file."));
       if (cvInputRef.current) cvInputRef.current.value = "";
-    };
-    reader.readAsDataURL(file);
+      return;
+    }
+
+    setCvFile(file);
   };
 
   const clearCvFile = () => {
-    setApplicationForm((current) => ({ ...current, cvFileUrl: "", cvFileName: "" }));
+    setCvFile(null);
     if (cvInputRef.current) cvInputRef.current.value = "";
   };
 
@@ -199,17 +191,17 @@ export default function CareersPage() {
                                 <input
                                   ref={cvInputRef}
                                   type="file"
-                                  accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                  accept=".pdf,application/pdf"
                                   onClick={(event) => {
                                     event.currentTarget.value = "";
                                   }}
                                   onChange={(event) => handleCvFile(event.target.files?.[0] ?? null)}
                                   className="block w-full text-sm"
                                 />
-                                {applicationForm.cvFileName && (
+                                {cvFile && (
                                   <div className="mt-3 flex flex-wrap items-center gap-3 rounded-lg bg-green-50 px-3 py-2 text-xs font-semibold text-green-700">
                                     <span>
-                                      {t("Đã chọn:", "Selected:")} {applicationForm.cvFileName}
+                                      {t("Đã chọn:", "Selected:")} {cvFile.name}
                                     </span>
                                     <button type="button" onClick={clearCvFile} className="font-black text-red-600 underline-offset-2 hover:underline">
                                       {t("Xóa / chọn lại", "Remove / choose again")}

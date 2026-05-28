@@ -6,6 +6,7 @@ import { canDelete, canWrite } from "@/lib/permissions";
 import {
   deleteJobApplication,
   ForbiddenError,
+  getJobApplicationCvUrl,
   listJobApplications,
   updateJobApplicationStatus,
   type AdminRole,
@@ -24,19 +25,6 @@ import {
   RowActions,
 } from "./AdminPanelUi";
 
-function getCvFileName(item: JobApplicationRecord) {
-  const fromMessage = item.message.match(/CV:\s*(.+)$/im)?.[1]?.trim();
-  if (fromMessage) return fromMessage;
-
-  try {
-    const parsed = new URL(item.cvFileUrl ?? "", window.location.origin);
-    const fileName = decodeURIComponent(parsed.pathname.split("/").pop() || "");
-    return fileName || "cv-ung-tuyen.pdf";
-  } catch {
-    return "cv-ung-tuyen.pdf";
-  }
-}
-
 function getApplicationMessage(item: JobApplicationRecord) {
   return item.message
     .split("\n")
@@ -45,40 +33,12 @@ function getApplicationMessage(item: JobApplicationRecord) {
     .trim();
 }
 
-function dataUrlToObjectUrl(dataUrl: string) {
-  const [meta = "", payload = ""] = dataUrl.split(",");
-  const mimeType = meta.match(/^data:([^;]+)/)?.[1] || "application/octet-stream";
-  const binary = atob(payload);
-  const bytes = new Uint8Array(binary.length);
-  for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
-  return URL.createObjectURL(new Blob([bytes], { type: mimeType }));
-}
-
-function getOpenableCvUrl(fileUrl: string) {
-  if (!fileUrl.startsWith("data:")) return { url: fileUrl, shouldRevoke: false };
-  return { url: dataUrlToObjectUrl(fileUrl), shouldRevoke: true };
-}
-
-function openCvFile(fileUrl: string, fileName: string, targetWindow: Window | null) {
-  const { url, shouldRevoke } = getOpenableCvUrl(fileUrl);
-  if (targetWindow) {
-    targetWindow.document.title = fileName;
-    targetWindow.location.href = url;
-  } else {
-    window.open(url, "_blank", "noopener,noreferrer");
-  }
-  if (shouldRevoke) window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
-}
-
-function downloadCvFile(fileUrl: string, fileName: string) {
-  const { url, shouldRevoke } = getOpenableCvUrl(fileUrl);
+function downloadSignedCv(url: string) {
   const link = document.createElement("a");
   link.href = url;
-  link.download = fileName;
   document.body.appendChild(link);
   link.click();
   link.remove();
-  if (shouldRevoke) window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
 
 export default function ApplicationsPanel({ token, role }: { token: string; role: AdminRole }) {
@@ -120,11 +80,13 @@ export default function ApplicationsPanel({ token, role }: { token: string; role
   };
 
   const viewCv = async (item: JobApplicationRecord) => {
-    if (!item.cvFileUrl) return;
+    if (!item.hasCv) return;
     const viewer = window.open("", "_blank");
     try {
       await markAsViewed(item);
-      openCvFile(item.cvFileUrl, getCvFileName(item), viewer);
+      const access = await getJobApplicationCvUrl(token, item.id);
+      if (viewer) viewer.location.href = access.url;
+      else window.open(access.url, "_blank", "noopener,noreferrer");
     } catch (error) {
       viewer?.close();
       setMessage(error instanceof Error ? error.message : "Không mở được CV.");
@@ -132,10 +94,11 @@ export default function ApplicationsPanel({ token, role }: { token: string; role
   };
 
   const downloadCv = async (item: JobApplicationRecord) => {
-    if (!item.cvFileUrl) return;
+    if (!item.hasCv) return;
     try {
       await markAsViewed(item);
-      downloadCvFile(item.cvFileUrl, getCvFileName(item));
+      const access = await getJobApplicationCvUrl(token, item.id, true);
+      downloadSignedCv(access.url);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Không tải được CV.");
     }
@@ -162,7 +125,7 @@ export default function ApplicationsPanel({ token, role }: { token: string; role
           <MessageBox label="Nội dung ứng tuyển" value={getApplicationMessage(selectedItem) || "-"} />
 
           <div className="mt-6 flex flex-wrap gap-3">
-            {selectedItem.cvFileUrl ? (
+            {selectedItem.hasCv ? (
               <>
                 <button
                   onClick={() => void viewCv(selectedItem)}

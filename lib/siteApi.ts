@@ -43,7 +43,10 @@ export type JobApplicationRecord = {
   phone: string;
   email?: string;
   positionApplied?: string;
-  cvFileUrl?: string;
+  hasCv: boolean;
+  cvFileName?: string;
+  cvContentType?: string;
+  cvFileSize?: number;
   message: string;
   status: "new" | "reviewing" | "interviewed" | "hired" | "rejected";
   note?: string;
@@ -78,7 +81,9 @@ export type MediaRecord = {
 
 export type SettingsMap = Record<string, string | null>;
 
-export const defaultSiteSettings: SettingsMap = {
+export const legacyContentFallbackEnabled = process.env.NODE_ENV !== "production";
+
+const developmentDefaultSiteSettings: SettingsMap = {
   "company.name": "Công ty Cổ phần Xây dựng Hữu Thành",
   "company.phone": "0901 234 567",
   "company.email": "info@huuthanh.vn",
@@ -102,6 +107,8 @@ export const defaultSiteSettings: SettingsMap = {
   "partners.images":
     "/images/doi-tac/huu-thanh-co_132747886943964272.jpg\n/images/doi-tac/huu-thanh-co_132747887169276799.jpg\n/images/doi-tac/huu-thanh-co_132747906276479099.jpg\n/images/doi-tac/huu-thanh-co_132747911027105033.jpg\n/images/doi-tac/huu-thanh-co_132747915873354052.jpg\n/images/doi-tac/huu-thanh-co_132747916552729392.jpg\n/images/doi-tac/huu-thanh-co_132747917517885233.jpg\n/images/doi-tac/huu-thanh-co_132747921285697744.jpg\n/images/doi-tac/huu-thanh-co_132747921436010275.jpg\n/images/doi-tac/huu-thanh-co_132747921578197710.jpg\n/images/doi-tac/huu-thanh-co_132747921728510246.jpg",
 };
+
+export const defaultSiteSettings: SettingsMap = legacyContentFallbackEnabled ? developmentDefaultSiteSettings : {};
 
 export function cmsApiUrl(path: string) {
   const normalizedPath =
@@ -205,10 +212,31 @@ export async function submitJobApplication(data: {
   phone: string;
   email?: string;
   positionApplied?: string;
-  cvFileUrl?: string;
   message: string;
-}) {
-  return requestJson<JobApplicationRecord>("/api/job-applications", { method: "POST", body: JSON.stringify(data) });
+}, cvFile?: File | null) {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (value !== null && value !== undefined && value !== "") formData.append(key, String(value));
+  });
+  if (cvFile) formData.append("cvFile", cvFile);
+
+  const response = await fetch(cmsApiUrl("/api/job-applications"), {
+    method: "POST",
+    body: formData,
+    cache: "no-store",
+  });
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    throw new Error(detail || `API lỗi ${response.status}`);
+  }
+  return (await response.json()) as JobApplicationRecord;
+}
+
+export async function getJobApplicationCvUrl(token: string, id: string, download = false) {
+  const query = download ? "?download=1" : "";
+  return requestJson<{ url: string; expiresIn: number }>(`/api/job-applications/${id}/cv${query}`, {
+    headers: authHeaders(token),
+  });
 }
 
 export async function createJob(token: string, data: Job) {
@@ -302,17 +330,6 @@ export async function createMedia(token: string, data: Omit<MediaRecord, "id">) 
   });
 }
 
-export async function uploadMediaFile(
-  token: string,
-  data: { fileName: string; dataUrl: string; folder: string; altText?: string; altTextEn?: string }
-) {
-  return requestJson<MediaRecord>("/api/media/upload", {
-    method: "POST",
-    headers: authHeaders(token),
-    body: JSON.stringify(data),
-  });
-}
-
 export async function deleteMedia(token: string, id: string) {
   return requestJson<void>(`/api/media/${id}`, { method: "DELETE", headers: authHeaders(token) });
 }
@@ -378,10 +395,11 @@ export function settingLines(settings: SettingsMap, key: string) {
 
 export function settingJson<T>(settings: SettingsMap, key: string, fallback: T): T {
   const raw = getSetting(settings, key);
-  if (!raw) return fallback;
+  const allowedFallback = legacyContentFallbackEnabled ? fallback : ([] as unknown as T);
+  if (!raw) return allowedFallback;
   try {
     return JSON.parse(String(raw)) as T;
   } catch {
-    return fallback;
+    return allowedFallback;
   }
 }
