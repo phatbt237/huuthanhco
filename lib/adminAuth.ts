@@ -1,6 +1,6 @@
 const ACCESS_TOKEN_KEY = "huu-thanh-admin-access-token";
 const REFRESH_TOKEN_KEY = "huu-thanh-admin-refresh-token";
-const ADMIN_USER_KEY = "huu-thanh-admin-user";
+const LEGACY_ADMIN_USER_KEY = "huu-thanh-admin-user";
 
 export type AdminUser = {
   id: string;
@@ -16,7 +16,7 @@ type LoginResponse = {
   user: AdminUser;
 };
 
-type StoredSession = LoginResponse;
+type StoredTokens = Pick<LoginResponse, "accessToken" | "refreshToken">;
 
 function isBrowser() {
   return typeof window !== "undefined";
@@ -26,44 +26,47 @@ export function getStoredAdminSession() {
   if (!isBrowser()) return null;
   const accessToken = window.localStorage.getItem(ACCESS_TOKEN_KEY);
   const refreshToken = window.localStorage.getItem(REFRESH_TOKEN_KEY);
-  const rawUser = window.localStorage.getItem(ADMIN_USER_KEY);
-  if (!accessToken || !refreshToken || !rawUser) return null;
-
-  try {
-    const user = JSON.parse(rawUser) as AdminUser;
-    return { accessToken, refreshToken, user };
-  } catch {
-    clearStoredAdminSession();
-    return null;
-  }
+  window.localStorage.removeItem(LEGACY_ADMIN_USER_KEY);
+  if (!accessToken || !refreshToken) return null;
+  return { accessToken, refreshToken };
 }
 
-export async function validateAdminSession(session: Pick<StoredSession, "accessToken">) {
-  // Always call local proxy — it handles both external and local tokens server-side
+function isAdminUser(value: unknown): value is AdminUser {
+  if (!value || typeof value !== "object") return false;
+  const user = value as Partial<AdminUser>;
+  return (
+    typeof user.id === "string"
+    && typeof user.email === "string"
+    && ["super_admin", "editor", "hr", "viewer"].includes(String(user.role))
+  );
+}
+
+export async function validateAdminSession(session: StoredTokens): Promise<LoginResponse | null> {
   const response = await fetch("/api/auth/me", {
     cache: "no-store",
     headers: { Authorization: `Bearer ${session.accessToken}` },
   }).catch(() => null);
 
-  return response?.ok ?? false;
+  if (!response?.ok) return null;
+  const user = await response.json().catch(() => null);
+  return isAdminUser(user) ? { ...session, user } : null;
 }
 
 export function storeAdminSession(session: LoginResponse) {
   if (!isBrowser()) return;
   window.localStorage.setItem(ACCESS_TOKEN_KEY, session.accessToken);
   window.localStorage.setItem(REFRESH_TOKEN_KEY, session.refreshToken);
-  window.localStorage.setItem(ADMIN_USER_KEY, JSON.stringify(session.user));
+  window.localStorage.removeItem(LEGACY_ADMIN_USER_KEY);
 }
 
 export function clearStoredAdminSession() {
   if (!isBrowser()) return;
   window.localStorage.removeItem(ACCESS_TOKEN_KEY);
   window.localStorage.removeItem(REFRESH_TOKEN_KEY);
-  window.localStorage.removeItem(ADMIN_USER_KEY);
+  window.localStorage.removeItem(LEGACY_ADMIN_USER_KEY);
 }
 
 export async function loginAdmin(email: string, password: string) {
-  // Always call local proxy — it proxies to external backend server-side, then falls back to local credentials
   const response = await fetch("/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -75,6 +78,9 @@ export async function loginAdmin(email: string, password: string) {
   }
 
   const session = (await response.json()) as LoginResponse;
+  if (!session.accessToken || !session.refreshToken || !isAdminUser(session.user)) {
+    throw new Error("Phản hồi đăng nhập không hợp lệ.");
+  }
   storeAdminSession(session);
   return session;
 }
