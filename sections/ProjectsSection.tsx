@@ -7,16 +7,16 @@ import { MapPin, Calendar, ChevronLeft, ChevronRight, ArrowRight } from "lucide-
 import SectionTitle from "@/components/SectionTitle";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCmsContent } from "@/lib/useCmsContent";
-import { mergeById } from "@/lib/cmsContent";
+import { mergeById, type CmsContent } from "@/lib/cmsContent";
 import { getProjectDetailHref, sortProjectsByYearDesc } from "@/lib/projects";
 import { mediaFileUrl } from "@/lib/siteApi";
 import { projects } from "@/data/projects";
 
 const PER_PAGE = 4;
 
-export default function ProjectsSection() {
+export default function ProjectsSection({ initialContent }: { initialContent?: CmsContent }) {
   const { lang, t } = useLanguage();
-  const cmsContent = useCmsContent();
+  const cmsContent = useCmsContent(initialContent);
   const projectItems = sortProjectsByYearDesc(mergeById(projects, cmsContent.projects));
   const [page, setPage] = useState(0);
 

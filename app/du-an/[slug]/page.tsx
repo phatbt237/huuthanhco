@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import ProjectDetailPage from "./ProjectDetailPage";
-import { fetchCmsContent } from "@/lib/cmsContent";
+import { fetchPublicCmsContent } from "@/lib/cmsContent";
 import { findProjectBySlug, getRelatedProjects } from "@/lib/projects";
 
 type Props = PageProps<"/du-an/[slug]">;
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const { projects } = await fetchCmsContent();
+  const { projects } = await fetchPublicCmsContent();
   const project = findProjectBySlug(projects, slug);
   if (!project) return {};
 
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const { projects } = await fetchCmsContent();
+  const { projects } = await fetchPublicCmsContent();
   const project = findProjectBySlug(projects, slug);
   if (!project) notFound();
 

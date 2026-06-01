@@ -11,11 +11,19 @@ export function getNewsDetailHref(item: Pick<NewsItem, "id" | "title" | "slug">)
 }
 
 export function findStaticNewsBySlug(slug: string) {
-  return news.find((item) => getNewsSlug(item) === slug || item.id === slug);
+  return findNewsBySlug(news, slug);
 }
 
 export function getRelatedStaticNews(item: NewsItem, limit = 4) {
-  const sameCategory = news.filter((newsItem) => newsItem.id !== item.id && newsItem.category === item.category);
-  const others = news.filter((newsItem) => newsItem.id !== item.id && newsItem.category !== item.category);
+  return getRelatedNews(news, item, limit);
+}
+
+export function findNewsBySlug(items: NewsItem[], slug: string) {
+  return items.find((item) => getNewsSlug(item) === slug || item.id === slug);
+}
+
+export function getRelatedNews(items: NewsItem[], item: NewsItem, limit = 4) {
+  const sameCategory = items.filter((newsItem) => newsItem.id !== item.id && newsItem.category === item.category);
+  const others = items.filter((newsItem) => newsItem.id !== item.id && newsItem.category !== item.category);
   return [...sameCategory, ...others].slice(0, limit);
 }

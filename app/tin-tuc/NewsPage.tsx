@@ -7,13 +7,13 @@ import Link from "next/link";
 import { news } from "@/data/news";
 import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById } from "@/lib/cmsContent";
+import { mergeById, type CmsContent } from "@/lib/cmsContent";
 import { useCmsContent } from "@/lib/useCmsContent";
 import { getNewsDetailHref } from "@/lib/news";
 
-export default function NewsPage() {
+export default function NewsPage({ initialContent }: { initialContent?: CmsContent }) {
   const { lang, t } = useLanguage();
-  const cmsContent = useCmsContent();
+  const cmsContent = useCmsContent(initialContent);
   const newsItems = mergeById(news, cmsContent.news);
   const [query, setQuery] = useState("");
 

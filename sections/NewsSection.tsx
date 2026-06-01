@@ -8,10 +8,11 @@ import { getNewsDetailHref } from "@/lib/news";
 import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCmsContent } from "@/lib/useCmsContent";
+import type { CmsContent } from "@/lib/cmsContent";
 
-export default function NewsSection() {
+export default function NewsSection({ initialContent }: { initialContent?: CmsContent }) {
   const { lang, t } = useLanguage();
-  const cmsContent = useCmsContent();
+  const cmsContent = useCmsContent(initialContent);
   const latest = cmsContent.news.slice(0, 3);
 
   return (

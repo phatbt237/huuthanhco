@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Briefcase, DollarSign, ChevronDown, CheckCircle2 } from "lucide-react";
 import { jobs } from "@/data/jobs";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById } from "@/lib/cmsContent";
+import { mergeById, type CmsContent } from "@/lib/cmsContent";
 import { useCmsContent } from "@/lib/useCmsContent";
 import { submitJobApplication } from "@/lib/siteApi";
 
-export default function CareersPage() {
+export default function CareersPage({ initialContent }: { initialContent?: CmsContent }) {
   const { lang, t } = useLanguage();
-  const cmsContent = useCmsContent();
+  const cmsContent = useCmsContent(initialContent);
   const jobItems = mergeById(jobs, cmsContent.jobs);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [applied, setApplied] = useState<string | null>(null);

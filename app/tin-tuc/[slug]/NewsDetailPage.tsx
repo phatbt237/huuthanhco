@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Calendar, ChevronLeft, ChevronRight, Home, X } from "lucide-react";
-import { mediaFileUrl } from "@/lib/siteApi";
+import { legacyContentFallbackEnabled, mediaFileUrl } from "@/lib/siteApi";
 import { news } from "@/data/news";
 import type { NewsItem } from "@/data/news";
 import { formatDate } from "@/lib/utils";
@@ -23,7 +23,7 @@ export default function NewsDetailPage({
 }) {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent();
-  const allNews = mergeById(news, cmsContent.news);
+  const allNews = mergeById(legacyContentFallbackEnabled ? news : [], cmsContent.news);
   const activeItem = item ?? allNews.find((newsItem) => getNewsSlug(newsItem) === slug || newsItem.id === slug);
 
   const [galleryPage, setGalleryPage] = useState(0);

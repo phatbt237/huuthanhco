@@ -5,6 +5,8 @@ import type { Project } from "@/data/projects";
 import { services } from "@/data/services";
 
 const DEFAULT_CMS_API_BASE_URL = "https://huuthanhco.onrender.com";
+const PUBLIC_REVALIDATE_SECONDS = 60;
+const PUBLIC_FETCH_TIMEOUT_MS = 3500;
 
 export class ForbiddenError extends Error {
   constructor() { super("Không có quyền truy cập chức năng này."); this.name = "ForbiddenError"; }
@@ -138,6 +140,43 @@ async function requestJson<T>(path: string, init: RequestInit = {}) {
 
   if (response.status === 204) return undefined as T;
   return (await response.json()) as T;
+}
+
+type NextFetchInit = RequestInit & {
+  next?: {
+    revalidate?: number | false;
+    tags?: string[];
+  };
+};
+
+async function publicRequestJson<T>(path: string, init: NextFetchInit = {}) {
+  const controller = new AbortController();
+  const timeout = windowlessSetTimeout(() => controller.abort(), PUBLIC_FETCH_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(cmsApiUrl(path), {
+      ...init,
+      cache: "force-cache",
+      next: { revalidate: PUBLIC_REVALIDATE_SECONDS, ...(init.next ?? {}) },
+      signal: init.signal ?? controller.signal,
+      headers: {
+        ...(init.headers as Record<string, string> | undefined),
+      },
+    });
+
+    if (!response.ok) {
+      const detail = await response.text().catch(() => "");
+      throw new Error(detail || `API lỗi ${response.status}`);
+    }
+
+    return (await response.json()) as T;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function windowlessSetTimeout(handler: () => void, timeout: number) {
+  return setTimeout(handler, timeout);
 }
 
 export async function listAdminUsers(token: string) {
@@ -302,6 +341,14 @@ export async function deleteProject(token: string, id: string) {
 export async function getSettingsMap(prefix?: string) {
   const query = prefix ? `?prefix=${encodeURIComponent(prefix)}` : "";
   const settings = await requestJson<SettingsMap>(`/api/settings${query}`);
+  return { ...defaultSiteSettings, ...settings };
+}
+
+export async function getPublicSettingsMap(prefix?: string) {
+  const query = prefix ? `?prefix=${encodeURIComponent(prefix)}` : "";
+  const settings = await publicRequestJson<SettingsMap>(`/api/settings${query}`, {
+    next: { tags: ["site-settings"] },
+  });
   return { ...defaultSiteSettings, ...settings };
 }
 

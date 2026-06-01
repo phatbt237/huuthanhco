@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
 import NewsDetailPage from "./NewsDetailPage";
-import { news } from "@/data/news";
-import { findStaticNewsBySlug, getNewsSlug, getRelatedStaticNews } from "@/lib/news";
+import { fetchPublicCmsContent } from "@/lib/cmsContent";
+import { findNewsBySlug, getRelatedNews } from "@/lib/news";
 
 type Props = PageProps<"/tin-tuc/[slug]">;
 
-export function generateStaticParams() {
-  return news.map((item) => ({ slug: getNewsSlug(item) }));
+export const dynamic = "force-dynamic";
+
+async function getNewsBySlug(slug: string) {
+  const cmsContent = await fetchPublicCmsContent();
+  const item = findNewsBySlug(cmsContent.news, slug);
+  return { item, news: cmsContent.news };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const item = findStaticNewsBySlug(slug);
+  const { item } = await getNewsBySlug(slug);
   if (!item) {
     return {
       title: "Tin tức",
@@ -32,8 +36,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const item = findStaticNewsBySlug(slug);
+  const { item, news } = await getNewsBySlug(slug);
   if (!item) return <NewsDetailPage slug={slug} />;
 
-  return <NewsDetailPage item={item} relatedNews={getRelatedStaticNews(item)} />;
+  return <NewsDetailPage item={item} relatedNews={getRelatedNews(news, item)} />;
 }

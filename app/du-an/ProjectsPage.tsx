@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Calendar, MapPin, Search } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCmsContent } from "@/lib/useCmsContent";
-import { mergeById } from "@/lib/cmsContent";
+import { mergeById, type CmsContent } from "@/lib/cmsContent";
 import { getProjectDetailHref, sortProjectsByYearDesc } from "@/lib/projects";
 import { mediaFileUrl } from "@/lib/siteApi";
 import { projects } from "@/data/projects";
@@ -20,9 +20,9 @@ const categoryMapVi: Record<string, string> = {
   "dich-vu": "Dịch vụ",
 };
 
-export default function ProjectsPage() {
+export default function ProjectsPage({ initialContent }: { initialContent?: CmsContent }) {
   const { lang, t } = useLanguage();
-  const cmsContent = useCmsContent();
+  const cmsContent = useCmsContent(initialContent);
   const projectItems = sortProjectsByYearDesc(mergeById(projects, cmsContent.projects));
   const searchParams = useSearchParams();
   const loaiParam = searchParams.get("loai");

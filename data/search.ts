@@ -4,6 +4,7 @@ import { news } from "@/data/news";
 import type { Project } from "@/data/projects";
 import { projects } from "@/data/projects";
 import { getProjectDetailHref } from "@/lib/projects";
+import { legacyContentFallbackEnabled } from "@/lib/siteApi";
 import { normalizeSearchText } from "@/lib/utils";
 
 export type Lang = "vi" | "en";
@@ -173,12 +174,14 @@ export function searchSite(query: string, lang: Lang, extras?: { projects?: Proj
   if (!normalizedQuery) return [];
 
   const words = normalizedQuery.split(/\s+/).filter(Boolean);
-  const projectItems = mergeProjectsWithStaticPriority(extras?.projects ?? []);
+  const projectItems = legacyContentFallbackEnabled
+    ? mergeProjectsWithStaticPriority(extras?.projects ?? [])
+    : extras?.projects ?? [];
   const rawSearchItems = [
     ...baseRawSearchItems,
     ...projectItems.map(projectToSearchItem),
-    ...equipment.map(equipmentToSearchItem),
-    ...news.map(newsToSearchItem),
+    ...(legacyContentFallbackEnabled ? equipment.map(equipmentToSearchItem) : []),
+    ...(legacyContentFallbackEnabled ? news.map(newsToSearchItem) : []),
     ...(extras?.news ?? []).map(newsToSearchItem),
   ];
 

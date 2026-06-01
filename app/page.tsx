@@ -7,7 +7,8 @@ import EquipmentSection from "@/sections/EquipmentSection";
 import NewsSection from "@/sections/NewsSection";
 import PartnersSection from "@/sections/PartnersSection";
 import CtaSection from "@/sections/CtaSection";
-import { getSettingsMap } from "@/lib/siteApi";
+import { fetchPublicCmsContent } from "@/lib/cmsContent";
+import { getPublicSettingsMap } from "@/lib/siteApi";
 
 export const metadata: Metadata = {
   title: "Công ty Cổ phần Xây dựng Hữu Thành | Trang chủ",
@@ -17,16 +18,19 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const settings = await getSettingsMap().catch(() => undefined);
+  const [settings, cmsContent] = await Promise.all([
+    getPublicSettingsMap().catch(() => undefined),
+    fetchPublicCmsContent().catch(() => undefined),
+  ]);
 
   return (
     <>
       <HeroSection initialSettings={settings} />
       <AboutSection />
       <ServicesSection initialSettings={settings} />
-      <ProjectsSection />
+      <ProjectsSection initialContent={cmsContent} />
       <EquipmentSection initialSettings={settings} />
-      <NewsSection />
+      <NewsSection initialContent={cmsContent} />
       <PartnersSection initialSettings={settings} />
       <CtaSection />
     </>
