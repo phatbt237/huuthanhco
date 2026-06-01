@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const initialContent = await fetchPublicCmsContent().catch(() => undefined);
+  const initialContent = await fetchPublicCmsContent();
 
   return (
     <Suspense>

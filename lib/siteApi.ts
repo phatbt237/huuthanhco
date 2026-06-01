@@ -6,7 +6,7 @@ import { services } from "@/data/services";
 
 const DEFAULT_CMS_API_BASE_URL = "https://huuthanhco.onrender.com";
 const PUBLIC_REVALIDATE_SECONDS = 60;
-const PUBLIC_FETCH_TIMEOUT_MS = 3500;
+const PUBLIC_FETCH_TIMEOUT_MS = 10000;
 
 export class ForbiddenError extends Error {
   constructor() { super("Không có quyền truy cập chức năng này."); this.name = "ForbiddenError"; }

@@ -103,7 +103,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
       {/* Content */}
       <div className="relative z-20 mx-auto w-full max-w-7xl px-6 text-left text-white sm:px-8 lg:px-12">
         <div className="max-w-2xl pt-16 md:pt-20 lg:pt-24">
-        <motion.div initial={{ opacity: 0, x: -18 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, delay: 0.15 }}>
+        <motion.div initial={false} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, delay: 0.15 }}>
           <span className="mb-5 inline-block rounded-full border border-orange-300/45 bg-slate-950/18 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.26em] text-orange-200 shadow-sm backdrop-blur-sm">
             {getSetting(settings, "hero.eyebrow") || (legacyContentFallbackEnabled ? t("Công Ty Cổ phần Xây Dựng Hữu Thành", "Huu Thanh Construction Co., Ltd.") : "")}
           </span>
@@ -111,7 +111,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
 
         <motion.h1
           className="mb-5 max-w-xl text-3xl font-extrabold uppercase leading-tight drop-shadow-[0_3px_10px_rgba(0,0,0,0.55)] sm:text-4xl md:text-5xl lg:text-[54px]"
-          initial={{ opacity: 0, x: -24 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.25 }}
         >
@@ -120,7 +120,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
 
         <motion.p
           className="mb-8 max-w-xl text-base font-medium leading-8 text-white/86 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] md:text-lg"
-          initial={{ opacity: 0, x: -18 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.4 }}
         >
@@ -134,7 +134,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
 
         <motion.div
           className="flex flex-col items-start gap-3 sm:flex-row"
-          initial={{ opacity: 0, x: -18 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.55 }}
         >
@@ -155,7 +155,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
 
         <motion.div
           className="mt-12 grid max-w-md grid-cols-3 gap-5"
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1 }}
         >

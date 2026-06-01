@@ -7,7 +7,7 @@ import { slugify } from "@/lib/utils";
 const CMS_STORAGE_KEY = "huu-thanh-cms-content-v1";
 const legacyContentFallbackEnabled = process.env.NODE_ENV !== "production";
 const PUBLIC_REVALIDATE_SECONDS = 60;
-const PUBLIC_FETCH_TIMEOUT_MS = 3500;
+const PUBLIC_FETCH_TIMEOUT_MS = 10000;
 
 export type CmsContent = {
   news: NewsItem[];
@@ -66,9 +66,13 @@ export async function fetchPublicCmsContent(): Promise<CmsContent> {
       },
       signal: controller.signal,
     });
-    if (!response.ok) return loadCmsContent();
+    if (!response.ok) {
+      if (!legacyContentFallbackEnabled) throw new Error(`CMS API lỗi ${response.status}`);
+      return loadCmsContent();
+    }
     return normalizeCmsContent(await response.json());
-  } catch {
+  } catch (error) {
+    if (!legacyContentFallbackEnabled) throw error;
     return loadCmsContent();
   } finally {
     clearTimeout(timeout);

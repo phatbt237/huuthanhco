@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const [settings, cmsContent] = await Promise.all([
-    getPublicSettingsMap().catch(() => undefined),
-    fetchPublicCmsContent().catch(() => undefined),
+    getPublicSettingsMap(),
+    fetchPublicCmsContent(),
   ]);
 
   return (
