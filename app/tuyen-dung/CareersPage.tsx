@@ -235,8 +235,8 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                 "Không tìm thấy vị trí phù hợp? Gửi CV của bạn đến",
                 "Didn't find a suitable position? Send your CV to"
               )}{" "}
-              <a href="mailto:tuyendung@huuthanh.vn" className="text-orange-500 font-semibold">
-                tuyendung@huuthanh.vn
+              <a href="mailto:huuthanhco09@gmail.com" className="text-orange-500 font-semibold">
+                huuthanhco09@gmail.com
               </a>{" "}
               {t("— chúng tôi luôn chào đón nhân tài.", "— we always welcome talented candidates.")}
             </p>

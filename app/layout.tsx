@@ -53,11 +53,12 @@ const jsonLd = {
   },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+84-901-234-567",
+    telephone: "+84-981-806-676",
+    email: "huuthanhco09@gmail.com",
     contactType: "customer service",
     availableLanguage: "Vietnamese",
   },
-  sameAs: ["https://facebook.com/huuthanh"],
+  sameAs: ["https://www.facebook.com/HuuThanhJSC"],
 };
 
 export default function RootLayout({

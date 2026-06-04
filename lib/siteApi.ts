@@ -87,8 +87,9 @@ export const legacyContentFallbackEnabled = process.env.NODE_ENV !== "production
 
 const developmentDefaultSiteSettings: SettingsMap = {
   "company.name": "Công ty Cổ phần Xây dựng Hữu Thành",
-  "company.phone": "0901 234 567",
-  "company.email": "info@huuthanh.vn",
+  "company.phone": "0981 80 66 76",
+  "company.email": "huuthanhco09@gmail.com",
+  "company.facebook": "https://www.facebook.com/HuuThanhJSC",
   "company.taxCode": "0309349692",
   "company.headOffice": "16 Nguyễn Văn Lượng, Phường An Nhơn, TP.HCM",
   "company.headOfficeEn": "16 Nguyen Van Luong Street, An Nhon Ward, Ho Chi Minh City, Vietnam",

@@ -48,11 +48,11 @@ export default function CtaSection() {
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
-              href="tel:0901234567"
+              href="tel:0981806676"
               className="flex items-center gap-2 border border-white/30 hover:border-white text-white px-8 py-4 rounded font-semibold text-base transition-all duration-200 hover:bg-white/10"
             >
               <Phone size={18} />
-              0901 234 567
+              0981 80 66 76
             </a>
           </div>
         </motion.div>

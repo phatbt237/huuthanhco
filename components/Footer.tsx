@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Building2, Phone, Mail, MapPin, Globe, Video, Share2 } from "lucide-react";
+import { Building2, Phone, Mail, MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getSetting } from "@/lib/siteApi";
 import { useSiteSettings } from "@/lib/useSiteSettings";
+
+const DEFAULT_FACEBOOK_URL = "https://www.facebook.com/HuuThanhJSC";
 
 export default function Footer() {
   const { lang, t } = useLanguage();
@@ -17,6 +19,7 @@ export default function Footer() {
     lang === "vi"
       ? getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.address")
       : getSetting(settings, "company.transactionOfficeEn") || getSetting(settings, "company.transactionOffice") || getSetting(settings, "company.addressEn");
+  const facebookUrl = getSetting(settings, "company.facebook") || DEFAULT_FACEBOOK_URL;
 
   const quickLinks = [
     { href: "/gioi-thieu", label: t("Giới thiệu", "About") },
@@ -61,14 +64,14 @@ export default function Footer() {
               )}
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200" aria-label="Facebook">
-                <Globe size={16} />
-              </a>
-              <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200" aria-label="Youtube">
-                <Video size={16} />
-              </a>
-              <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200" aria-label="LinkedIn">
-                <Share2 size={16} />
+              <a
+                href={facebookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200"
+                aria-label="Facebook Hữu Thành"
+              >
+                <span className="text-sm font-black leading-none">f</span>
               </a>
             </div>
           </div>

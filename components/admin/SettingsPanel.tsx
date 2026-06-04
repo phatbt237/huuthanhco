@@ -19,6 +19,7 @@ const editableSettings = [
   { key: "company.name", label: "Tên công ty", type: "text" },
   { key: "company.phone", label: "Số điện thoại", type: "text" },
   { key: "company.email", label: "Email", type: "text" },
+  { key: "company.facebook", label: "Facebook", type: "text" },
   { key: "company.taxCode", label: "Mã số thuế", type: "text" },
   { key: "company.headOffice", label: "Trụ sở", type: "text" },
   { key: "company.headOfficeEn", label: "Trụ sở tiếng Anh", type: "text" },
