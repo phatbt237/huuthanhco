@@ -134,7 +134,7 @@ export default function ContactPage() {
                           {info.value}
                         </a>
                       ) : (
-                        <p className="text-slate-700 font-medium">{info.value}</p>
+                        <p className="whitespace-pre-line text-slate-700 font-medium">{info.value}</p>
                       )}
                     </div>
                   </div>

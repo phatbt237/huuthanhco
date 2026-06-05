@@ -97,7 +97,7 @@ const developmentDefaultSiteSettings: SettingsMap = {
   "company.transactionOfficeEn": "30 Street No. 7, Hiep Binh Ward, Ho Chi Minh City, Vietnam",
   "company.address": "30 Đường số 7, Phường Hiệp Bình, TP.HCM",
   "company.addressEn": "30 Street No. 7, Hiep Binh Ward, Ho Chi Minh City, Vietnam",
-  "company.workingHours": "Thứ 2 - Thứ 7: 8:00 - 17:30",
+  "company.workingHours": "Thứ 2 - Thứ 6: 8:00 - 17:30\nThứ 7: 8:00 - 12:00",
   "company.mapEmbedUrl":
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.5822036142495!2d106.70857257535017!3d10.84325045795699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528738fc69e57%3A0xd012cb589c0da30b!2zMzAgxJAuIFPhu5EgNywgSGnhu4dwIELDrG5oLCBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1779174939773!5m2!1svi!2s",
   "hero.images":

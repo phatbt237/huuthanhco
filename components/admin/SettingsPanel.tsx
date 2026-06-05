@@ -27,7 +27,7 @@ const editableSettings = [
   { key: "company.transactionOfficeEn", label: "Văn phòng giao dịch tiếng Anh", type: "text" },
   { key: "company.address", label: "Địa chỉ chính", type: "text" },
   { key: "company.addressEn", label: "Địa chỉ chính tiếng Anh", type: "text" },
-  { key: "company.workingHours", label: "Giờ làm việc", type: "text" },
+  { key: "company.workingHours", label: "Giờ làm việc", type: "textarea" },
   { key: "company.mapEmbedUrl", label: "Google Map embed URL", type: "text" },
   { key: "hero.eyebrow", label: "Hero eyebrow", type: "text" },
   { key: "hero.eyebrowEn", label: "Hero eyebrow tiếng Anh", type: "text" },
