@@ -30,8 +30,11 @@ const editableSettings = [
   { key: "company.workingHours", label: "Giờ làm việc", type: "text" },
   { key: "company.mapEmbedUrl", label: "Google Map embed URL", type: "text" },
   { key: "hero.eyebrow", label: "Hero eyebrow", type: "text" },
+  { key: "hero.eyebrowEn", label: "Hero eyebrow tiếng Anh", type: "text" },
   { key: "hero.title", label: "Hero title", type: "text" },
+  { key: "hero.titleEn", label: "Hero title tiếng Anh", type: "text" },
   { key: "hero.description", label: "Hero mô tả", type: "textarea" },
+  { key: "hero.descriptionEn", label: "Hero mô tả tiếng Anh", type: "textarea" },
 ] as const;
 
 export default function SettingsPanel({ token, role }: { token: string; role: AdminRole }) {

@@ -19,13 +19,28 @@ const fallbackHeroImages = [
 const INTERVAL = 5000;
 
 export default function HeroSection({ initialSettings }: { initialSettings?: SettingsMap }) {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const settings = useSiteSettings(undefined, initialSettings);
   const heroImages = settingLines(settings, "hero.images");
   const slides = heroImages.length ? heroImages : legacyContentFallbackEnabled ? fallbackHeroImages : [];
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const activeSlide = slides[current];
+  const heroEyebrow =
+    lang === "en"
+      ? getSetting(settings, "hero.eyebrowEn") || "Huu Thanh Construction Joint Stock Company"
+      : getSetting(settings, "hero.eyebrow") || (legacyContentFallbackEnabled ? "Công Ty Cổ phần Xây Dựng Hữu Thành" : "");
+  const heroTitle =
+    lang === "en"
+      ? getSetting(settings, "hero.titleEn") || "Professional Construction Contractor"
+      : getSetting(settings, "hero.title") || (legacyContentFallbackEnabled ? "Đơn vị thi công công trình chuyên nghiệp" : "");
+  const heroDescription =
+    lang === "en"
+      ? getSetting(settings, "hero.descriptionEn") || "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam"
+      : getSetting(settings, "hero.description") ||
+        (legacyContentFallbackEnabled
+          ? "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam"
+          : "");
 
   useEffect(() => {
     if (slides.length < 2) return;
@@ -105,7 +120,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
         <div className="max-w-2xl pt-16 md:pt-20 lg:pt-24">
         <motion.div initial={false} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, delay: 0.15 }}>
           <span className="mb-5 inline-block rounded-full border border-orange-300/45 bg-slate-950/18 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.26em] text-orange-200 shadow-sm backdrop-blur-sm">
-            {getSetting(settings, "hero.eyebrow") || (legacyContentFallbackEnabled ? t("Công Ty Cổ phần Xây Dựng Hữu Thành", "Huu Thanh Construction Co., Ltd.") : "")}
+            {heroEyebrow}
           </span>
         </motion.div>
 
@@ -115,7 +130,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.25 }}
         >
-          {getSetting(settings, "hero.title") || (legacyContentFallbackEnabled ? t("Đơn vị thi công công trình chuyên nghiệp", "Professional Construction Contractor") : "")}
+          {heroTitle}
         </motion.h1>
 
         <motion.p
@@ -124,12 +139,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.4 }}
         >
-          {getSetting(settings, "hero.description") ||
-            (legacyContentFallbackEnabled ?
-            t(
-              "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
-              "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam"
-            ) : "")}
+          {heroDescription}
         </motion.p>
 
         <motion.div

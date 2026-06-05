@@ -103,8 +103,11 @@ const developmentDefaultSiteSettings: SettingsMap = {
   "hero.images":
     "/images/hero/Flash-4_132827290261925965.jpg\n/images/hero/Flash-5_132827290406613154.jpg\n/images/hero/Flash-6_132827290576435207.jpg\n/images/hero/Flash-7_132827290711634447.jpg\n/images/hero/Flash-8_132827290841017153.jpg",
   "hero.eyebrow": "Công Ty Cổ phần Xây Dựng Hữu Thành",
+  "hero.eyebrowEn": "Huu Thanh Construction Joint Stock Company",
   "hero.title": "Đơn vị thi công công trình chuyên nghiệp",
+  "hero.titleEn": "Professional Construction Contractor",
   "hero.description": "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
+  "hero.descriptionEn": "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam",
   "services.items": JSON.stringify(services, null, 2),
   "equipment.items": JSON.stringify(equipment, null, 2),
   "partners.images":
