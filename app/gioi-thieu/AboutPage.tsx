@@ -2,12 +2,12 @@
 
 import { motion } from "framer-motion";
 import SectionTitle from "@/components/SectionTitle";
-import { Eye, Target, Heart, Award } from "lucide-react";
+import { Award, Eye, ShieldCheck, Target, Users } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import CompanyProfileFlipbook from "./CompanyProfileFlipbook";
 
 export default function AboutPage() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
 
   const timeline = [
     { year: "2024", title: t("Khẳng định năng lực nhà thầu chuyên nghiệp", "Affirming professional contractor capability"), desc: t("Tiếp tục mở rộng năng lực thi công công trình cảng biển, thủy lợi, đường thủy và hạ tầng kỹ thuật.", "Continued strengthening construction capability across seaports, hydraulic works, waterways and infrastructure.") },
@@ -18,10 +18,11 @@ export default function AboutPage() {
   ];
 
   const values = [
+    { icon: ShieldCheck, title: t("An toàn", "Safety"), desc: t("An toàn lao động là ưu tiên hàng đầu trong mọi hoạt động thi công.", "Worker safety is the top priority in every construction activity.") },
     { icon: Award, title: t("Chất lượng", "Quality"), desc: t("Mọi công trình đều được thi công đúng kỹ thuật, đảm bảo chất lượng theo tiêu chuẩn Việt Nam và quốc tế.", "Every project is built to precise technical standards, meeting both Vietnamese and international quality requirements.") },
     { icon: Target, title: t("Tiến độ", "On Schedule"), desc: t("Cam kết hoàn thành đúng tiến độ, không để chậm trễ ảnh hưởng đến kế hoạch của chủ đầu tư.", "Committed to on-time delivery so delays never affect the investor's plans.") },
-    { icon: Heart, title: t("An toàn", "Safety"), desc: t("An toàn lao động là ưu tiên hàng đầu trong mọi hoạt động thi công.", "Worker safety is the top priority in every construction activity.") },
     { icon: Eye, title: t("Minh bạch", "Transparency"), desc: t("Báo cáo tiến độ và tài chính minh bạch, xây dựng niềm tin với đối tác và khách hàng.", "Transparent progress and financial reporting to build trust with partners and clients.") },
+    { icon: Users, title: t("Cộng đồng", "Community"), desc: t("Thi công có trách nhiệm với địa phương, hạn chế ảnh hưởng môi trường và đồng hành cùng các hoạt động xã hội nơi dự án đi qua.", "Building responsibly with local communities, reducing environmental impact and supporting social initiatives wherever our projects operate.") },
   ];
 
   return (
@@ -70,10 +71,17 @@ export default function AboutPage() {
               <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-500">
                 {t("Tổng quan công ty", "Company Overview")}
               </span>
-              <h2 className="mt-4 max-w-2xl text-3xl font-extrabold leading-tight text-slate-800 md:text-5xl">
-                {t(
-                  "Công ty Cổ phần Xây dựng Hữu Thành",
-                  "Huu Thanh Construction Joint Stock Company"
+              <h2 className="mt-4 max-w-3xl text-3xl font-extrabold leading-[1.12] text-slate-800 sm:text-4xl lg:text-5xl">
+                {lang === "en" ? (
+                  <>
+                    <span className="block">Huu Thanh Construction</span>
+                    <span className="block">Joint Stock Company</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="block">Công ty Cổ phần</span>
+                    <span className="block">Xây dựng Hữu Thành</span>
+                  </>
                 )}
               </h2>
               <div className="mt-8 space-y-6 text-[17px] leading-8 text-slate-600">
@@ -202,7 +210,7 @@ export default function AboutPage() {
             title={t("Những giá trị chúng tôi theo đuổi", "Values We Pursue")}
             center
           />
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {values.map((v, i) => (
               <motion.div
                 key={v.title}
