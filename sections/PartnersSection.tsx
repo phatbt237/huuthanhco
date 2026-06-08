@@ -1,32 +1,12 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { legacyContentFallbackEnabled, settingLines, type SettingsMap } from "@/lib/siteApi";
 import { useSiteSettings } from "@/lib/useSiteSettings";
 
 function CountUp({ to, suffix }: { to: number; suffix: string }) {
-  const [val, setVal] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-
-  useEffect(() => {
-    if (!inView) return;
-    const duration = 1800;
-    const frameMs = 1000 / 60;
-    const totalFrames = duration / frameMs;
-    let frame = 0;
-    const timer = setInterval(() => {
-      frame++;
-      const eased = 1 - Math.pow(1 - frame / totalFrames, 3);
-      setVal(Math.min(Math.round(to * eased), to));
-      if (frame >= totalFrames) clearInterval(timer);
-    }, frameMs);
-    return () => clearInterval(timer);
-  }, [inView, to]);
-
-  return <span ref={ref}>{val}{suffix}</span>;
+  return <span>{to}{suffix}</span>;
 }
 
 const partnerImages = [

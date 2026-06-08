@@ -4,13 +4,21 @@ import { useEffect, useState } from "react";
 import { defaultSiteSettings, getSettingsMap, type SettingsMap } from "@/lib/siteApi";
 
 export function useSiteSettings(prefix?: string, initialSettings?: SettingsMap) {
-  const baseSettings = initialSettings ?? defaultSiteSettings;
-  const [settings, setSettings] = useState<SettingsMap>(baseSettings);
+  const [settings, setSettings] = useState<SettingsMap>(
+    () => initialSettings ?? defaultSiteSettings,
+  );
 
   useEffect(() => {
-    setSettings(baseSettings);
-    void getSettingsMap(prefix).then(setSettings).catch(() => setSettings(baseSettings));
-  }, [baseSettings, prefix]);
+    if (initialSettings) {
+      setSettings(initialSettings);
+      return;
+    }
+
+    setSettings(defaultSiteSettings);
+    void getSettingsMap(prefix)
+      .then(setSettings)
+      .catch(() => setSettings(defaultSiteSettings));
+  }, [initialSettings, prefix]);
 
   return settings;
 }

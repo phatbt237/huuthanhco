@@ -22,7 +22,7 @@ export default function ProjectDetailPage({
   slug?: string;
 }) {
   const { lang, t } = useLanguage();
-  const cmsContent = useCmsContent();
+  const cmsContent = useCmsContent(undefined, !project);
   const allProjects = mergeById(projects, cmsContent.projects);
   const activeProject =
     project ?? allProjects.find((item) => getProjectSlug(item) === slug || item.id === slug);

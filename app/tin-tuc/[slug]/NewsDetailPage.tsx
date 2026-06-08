@@ -22,7 +22,7 @@ export default function NewsDetailPage({
   slug?: string;
 }) {
   const { lang, t } = useLanguage();
-  const cmsContent = useCmsContent();
+  const cmsContent = useCmsContent(undefined, !item);
   const allNews = mergeById(legacyContentFallbackEnabled ? news : [], cmsContent.news);
   const activeItem = item ?? allNews.find((newsItem) => getNewsSlug(newsItem) === slug || newsItem.id === slug);
 

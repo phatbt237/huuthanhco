@@ -18,6 +18,16 @@ const fallbackHeroImages = [
 
 const INTERVAL = 5000;
 
+function localizedSetting(
+  settings: SettingsMap,
+  lang: "vi" | "en",
+  keys: { vi: string; en: string },
+  fallback: { vi: string; en: string },
+) {
+  const value = getSetting(settings, lang === "en" ? keys.en : keys.vi).trim();
+  return value || fallback[lang];
+}
+
 export default function HeroSection({ initialSettings }: { initialSettings?: SettingsMap }) {
   const { lang, t } = useLanguage();
   const settings = useSiteSettings(undefined, initialSettings);
@@ -26,21 +36,35 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const activeSlide = slides[current];
-  const heroEyebrow =
-    lang === "en"
-      ? getSetting(settings, "hero.eyebrowEn") || "Huu Thanh Construction Joint Stock Company"
-      : getSetting(settings, "hero.eyebrow") || (legacyContentFallbackEnabled ? "Công Ty Cổ phần Xây Dựng Hữu Thành" : "");
-  const heroTitle =
-    lang === "en"
-      ? getSetting(settings, "hero.titleEn") || "Professional Construction Contractor"
-      : getSetting(settings, "hero.title") || (legacyContentFallbackEnabled ? "Đơn vị thi công công trình chuyên nghiệp" : "");
-  const heroDescription =
-    lang === "en"
-      ? getSetting(settings, "hero.descriptionEn") || "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam"
-      : getSetting(settings, "hero.description") ||
-        (legacyContentFallbackEnabled
-          ? "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam"
-          : "");
+  const heroEyebrow = localizedSetting(
+    settings,
+    lang,
+    { vi: "hero.eyebrow", en: "hero.eyebrowEn" },
+    {
+      vi: legacyContentFallbackEnabled ? "Công Ty Cổ phần Xây Dựng Hữu Thành" : "",
+      en: "Huu Thanh Construction Joint Stock Company",
+    },
+  );
+  const heroTitle = localizedSetting(
+    settings,
+    lang,
+    { vi: "hero.title", en: "hero.titleEn" },
+    {
+      vi: legacyContentFallbackEnabled ? "Đơn vị thi công công trình chuyên nghiệp" : "",
+      en: "Professional Construction Contractor",
+    },
+  );
+  const heroDescription = localizedSetting(
+    settings,
+    lang,
+    { vi: "hero.description", en: "hero.descriptionEn" },
+    {
+      vi: legacyContentFallbackEnabled
+        ? "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam"
+        : "",
+      en: "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam",
+    },
+  );
 
   useEffect(() => {
     if (slides.length < 2) return;

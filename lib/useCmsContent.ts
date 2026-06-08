@@ -3,12 +3,19 @@
 import { useEffect, useState } from "react";
 import { emptyContent, fetchCmsContent, hasCmsContent, loadCmsContent, type CmsContent } from "@/lib/cmsContent";
 
-export function useCmsContent(initialContent?: CmsContent) {
+export function useCmsContent(initialContent?: CmsContent, enabled = true) {
   const [content, setContent] = useState<CmsContent>(initialContent ?? emptyContent);
 
   useEffect(() => {
+    if (!enabled) return;
+
+    if (initialContent) {
+      setContent(initialContent);
+      return;
+    }
+
     let cancelled = false;
-    const baseContent = initialContent ?? emptyContent;
+    const baseContent = emptyContent;
 
     const refresh = () => {
       const localContent = loadCmsContent();
@@ -34,7 +41,7 @@ export function useCmsContent(initialContent?: CmsContent) {
       window.removeEventListener("storage", refresh);
       window.removeEventListener("huu-thanh-cms-content-updated", refresh);
     };
-  }, [initialContent]);
+  }, [enabled, initialContent]);
 
   return content;
 }

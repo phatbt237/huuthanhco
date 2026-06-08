@@ -9,11 +9,12 @@ import PartnersSection from "@/sections/PartnersSection";
 import CtaSection from "@/sections/CtaSection";
 import { fetchPublicCmsContent } from "@/lib/cmsContent";
 import { getPublicSettingsMap } from "@/lib/siteApi";
+import { SITE_URL } from "@/lib/siteMetadata";
 
 export const metadata: Metadata = {
   title: "Công ty Cổ phần Xây dựng Hữu Thành | Trang chủ",
   alternates: {
-    canonical: "https://huuthanh.vn",
+    canonical: SITE_URL,
   },
 };
 

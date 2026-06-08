@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import SiteChrome from "@/components/SiteChrome";
+import { absoluteSiteUrl, SITE_URL } from "@/lib/siteMetadata";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://huuthanh.vn"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Công ty Cổ phần Xây dựng Hữu Thành | Thi công công trình chuyên nghiệp",
     template: "%s | Hữu Thành Construction",
@@ -14,15 +15,23 @@ export const metadata: Metadata = {
   keywords: ["xây dựng", "thi công", "thủy công", "cảng biển", "kè sông", "hạ tầng", "Hữu Thành"],
   openGraph: {
     type: "website",
+    url: SITE_URL,
     locale: "vi_VN",
     siteName: "Hữu Thành Construction",
     title: "Công ty Cổ phần Xây dựng Hữu Thành",
     description: "Đơn vị thi công công trình thủy công, cảng biển và hạ tầng giao thông uy tín tại Việt Nam.",
+    images: [
+      {
+        url: absoluteSiteUrl("/images/hero/Flash-4_132827290261925965.jpg"),
+        alt: "Công ty Cổ phần Xây dựng Hữu Thành",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Công ty Cổ phần Xây dựng Hữu Thành",
     description: "Đơn vị thi công công trình chuyên nghiệp tại Việt Nam.",
+    images: [absoluteSiteUrl("/images/hero/Flash-4_132827290261925965.jpg")],
   },
   robots: {
     index: true,
@@ -40,8 +49,8 @@ const jsonLd = {
   "@type": "Organization",
   name: "Công ty Cổ phần Xây dựng Hữu Thành",
   alternateName: "Hữu Thành Construction",
-  url: "https://huuthanh.vn",
-  logo: "https://huuthanh.vn/images/huu-thanh-logo.png",
+  url: SITE_URL,
+  logo: absoluteSiteUrl("/images/huu-thanh-logo.png"),
   taxID: "0309349692",
   description: "Đơn vị thi công công trình thủy công, cảng biển và hạ tầng giao thông uy tín tại Việt Nam.",
   address: {

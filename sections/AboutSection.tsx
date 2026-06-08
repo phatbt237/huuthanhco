@@ -1,33 +1,15 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import SectionTitle from "@/components/SectionTitle";
 import { CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import groundbreakingImage from "@/public/images/gioi-thieu/le-khoi-cong-cang-dong-nai.jpg";
 
 function CountUp({ to, suffix }: { to: number; suffix: string }) {
-  const [val, setVal] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-
-  useEffect(() => {
-    if (!inView) return;
-    const duration = 1800;
-    const frameMs = 1000 / 60;
-    const totalFrames = duration / frameMs;
-    let frame = 0;
-    const timer = setInterval(() => {
-      frame++;
-      const eased = 1 - Math.pow(1 - frame / totalFrames, 3);
-      setVal(Math.min(Math.round(to * eased), to));
-      if (frame >= totalFrames) clearInterval(timer);
-    }, frameMs);
-    return () => clearInterval(timer);
-  }, [inView, to]);
-
-  return <span ref={ref}>{val}{suffix}</span>;
+  return <span>{to}{suffix}</span>;
 }
 
 export default function AboutSection() {
@@ -60,11 +42,13 @@ export default function AboutSection() {
             className="relative"
           >
             <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-100">
-              <img
-                src="/images/gioi-thieu/le-khoi-cong-cang-dong-nai.jpg"
+              <Image
+                src={groundbreakingImage}
                 alt={t("Lễ khởi công công trình Hữu Thành", "Huu Thanh project groundbreaking ceremony")}
-                className="h-full w-full object-contain"
-                loading="lazy"
+                className="object-contain"
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                placeholder="blur"
+                fill
               />
             </div>
             <div
@@ -84,7 +68,7 @@ export default function AboutSection() {
               title={t("Xây dựng nền tảng vững chắc cho tương lai", "Building a solid foundation for the future")}
               subtitle={t(
                 "Công ty Cổ phần Xây dựng Hữu Thành được thành lập năm 2009, chuyên thi công các công trình thủy công, cảng biển, kè sông và hạ tầng giao thông tại khu vực miền Nam Việt Nam.",
-                "Huu Thanh Construction Co., Ltd. was established in 2009, specializing in hydraulic engineering, port construction, riverbank reinforcement and transportation infrastructure in Southern Vietnam."
+                "Huu Thanh Construction Joint Stock Company was established in 2009, specializing in hydraulic engineering, port construction, riverbank reinforcement and transportation infrastructure in Southern Vietnam."
               )}
             />
 

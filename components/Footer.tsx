@@ -60,7 +60,7 @@ export default function Footer() {
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               {t(
                 "Công ty Cổ phần Xây dựng Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển và hạ tầng uy tín tại Việt Nam.",
-                "Huu Thanh Construction Co., Ltd. — A trusted contractor for hydraulic works, port construction and infrastructure in Vietnam."
+                "Huu Thanh Construction Joint Stock Company — A trusted contractor for hydraulic works, port construction and infrastructure in Vietnam."
               )}
             </p>
             <div className="flex gap-3">
