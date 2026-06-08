@@ -350,10 +350,14 @@ export async function getSettingsMap(prefix?: string) {
 
 export async function getPublicSettingsMap(prefix?: string) {
   const query = prefix ? `?prefix=${encodeURIComponent(prefix)}` : "";
-  const settings = await publicRequestJson<SettingsMap>(`/api/settings${query}`, {
-    next: { tags: ["site-settings"] },
-  });
-  return { ...defaultSiteSettings, ...settings };
+  try {
+    const settings = await publicRequestJson<SettingsMap>(`/api/settings${query}`, {
+      next: { tags: ["site-settings"] },
+    });
+    return { ...defaultSiteSettings, ...settings };
+  } catch {
+    return { ...defaultSiteSettings };
+  }
 }
 
 export async function getSettingsFull(token?: string) {

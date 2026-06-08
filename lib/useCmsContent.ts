@@ -9,7 +9,7 @@ export function useCmsContent(initialContent?: CmsContent, enabled = true) {
   useEffect(() => {
     if (!enabled) return;
 
-    if (initialContent) {
+    if (initialContent && hasCmsContent(initialContent)) {
       setContent(initialContent);
       return;
     }

@@ -67,12 +67,12 @@ export async function fetchPublicCmsContent(): Promise<CmsContent> {
       signal: controller.signal,
     });
     if (!response.ok) {
-      if (!legacyContentFallbackEnabled) throw new Error(`CMS API lỗi ${response.status}`);
+      if (!legacyContentFallbackEnabled) return emptyContent;
       return loadCmsContent();
     }
     return normalizeCmsContent(await response.json());
   } catch (error) {
-    if (!legacyContentFallbackEnabled) throw error;
+    if (!legacyContentFallbackEnabled) return emptyContent;
     return loadCmsContent();
   } finally {
     clearTimeout(timeout);

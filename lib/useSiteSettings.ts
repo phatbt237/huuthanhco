@@ -9,7 +9,7 @@ export function useSiteSettings(prefix?: string, initialSettings?: SettingsMap) 
   );
 
   useEffect(() => {
-    if (initialSettings) {
+    if (initialSettings && Object.keys(initialSettings).length > 0) {
       setSettings(initialSettings);
       return;
     }
