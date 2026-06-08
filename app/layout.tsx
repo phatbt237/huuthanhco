@@ -13,6 +13,14 @@ export const metadata: Metadata = {
   description:
     "Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển, kè sông và hạ tầng giao thông uy tín tại Việt Nam. Hơn 15 năm kinh nghiệm, 200+ dự án hoàn thành.",
   keywords: ["xây dựng", "thi công", "thủy công", "cảng biển", "kè sông", "hạ tầng", "Hữu Thành"],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "180x180" }],
+  },
   openGraph: {
     type: "website",
     url: SITE_URL,
