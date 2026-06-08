@@ -4,6 +4,8 @@ import Providers from "@/components/Providers";
 import SiteChrome from "@/components/SiteChrome";
 import { absoluteSiteUrl, SITE_URL } from "@/lib/siteMetadata";
 
+const iconVersion = "20260608-2";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -15,11 +17,11 @@ export const metadata: Metadata = {
   keywords: ["xây dựng", "thi công", "thủy công", "cảng biển", "kè sông", "hạ tầng", "Hữu Thành"],
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+      { url: `/favicon.ico?v=${iconVersion}`, sizes: "any" },
+      { url: `/icon.png?v=${iconVersion}`, type: "image/png", sizes: "512x512" },
     ],
-    shortcut: "/favicon.ico",
-    apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "180x180" }],
+    shortcut: `/favicon.ico?v=${iconVersion}`,
+    apple: [{ url: `/apple-touch-icon.png?v=${iconVersion}`, type: "image/png", sizes: "180x180" }],
   },
   openGraph: {
     type: "website",
