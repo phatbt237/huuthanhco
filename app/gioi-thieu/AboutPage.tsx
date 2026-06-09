@@ -59,7 +59,7 @@ export default function AboutPage() {
       </section>
 
       {/* Company overview */}
-      <section className="py-20 bg-white">
+      <section className="bg-slate-50/70 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-[0.95fr_1.05fr]">
             <motion.div
@@ -68,19 +68,20 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-500">
+              <span className="inline-flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.18em] text-[#f05a32]">
+                <span className="h-5 w-1 rounded-full bg-[#f05a32]" aria-hidden="true" />
                 {t("Tổng quan công ty", "Company Overview")}
               </span>
-              <h2 className="mt-4 max-w-3xl text-3xl font-extrabold leading-[1.12] text-slate-800 sm:text-4xl lg:text-5xl">
+              <h2 className="mt-5 max-w-3xl text-3xl font-extrabold leading-[1.12] sm:text-4xl lg:text-5xl">
                 {lang === "en" ? (
                   <>
-                    <span className="block">Huu Thanh Construction</span>
-                    <span className="block">Joint Stock Company</span>
+                    <span className="block text-[#17324d]">Huu Thanh Construction</span>
+                    <span className="block text-[#f05a32]">Joint Stock Company</span>
                   </>
                 ) : (
                   <>
-                    <span className="block">Công ty Cổ phần</span>
-                    <span className="block">Xây dựng Hữu Thành</span>
+                    <span className="block text-[#17324d]">Công ty Cổ phần</span>
+                    <span className="block text-[#f05a32]">Xây dựng Hữu Thành</span>
                   </>
                 )}
               </h2>
