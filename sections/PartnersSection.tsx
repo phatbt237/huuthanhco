@@ -54,8 +54,8 @@ export default function PartnersSection({ initialSettings }: { initialSettings?:
           </h2>
           <p className="text-slate-500 text-base max-w-xl mx-auto">
             {t(
-              "Hơn 15 năm hợp tác với các chủ đầu tư và tổ chức uy tín trong và ngoài nước.",
-              "Over 15 years of collaboration with reputable investors and organizations at home and abroad."
+              "Hơn 17 năm hợp tác với các chủ đầu tư và tổ chức uy tín trong và ngoài nước.",
+              "Over 17 years of collaboration with reputable investors and organizations at home and abroad."
             )}
           </p>
         </motion.div>

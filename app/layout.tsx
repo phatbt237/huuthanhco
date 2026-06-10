@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | Hữu Thành Construction",
   },
   description:
-    "Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển, kè sông và hạ tầng giao thông uy tín tại Việt Nam. Hơn 15 năm kinh nghiệm, 200+ dự án hoàn thành.",
+    "Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển, kè sông và hạ tầng giao thông uy tín tại Việt Nam. Hơn 17 năm kinh nghiệm, 200+ dự án hoàn thành.",
   keywords: ["xây dựng", "thi công", "thủy công", "cảng biển", "kè sông", "hạ tầng", "Hữu Thành"],
   icons: {
     icon: [

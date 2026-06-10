@@ -60,9 +60,9 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
     { vi: "hero.description", en: "hero.descriptionEn" },
     {
       vi: legacyContentFallbackEnabled
-        ? "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam"
+        ? "Hơn 17 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam"
         : "",
-      en: "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam",
+      en: "Over 17 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam",
     },
   );
 
@@ -194,7 +194,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
           transition={{ duration: 0.8, delay: 1 }}
         >
           {[
-            { value: "15+", label: t("Năm kinh nghiệm", "Years Experience") },
+            { value: "17+", label: t("Năm kinh nghiệm", "Years Experience") },
             { value: "200+", label: t("Dự án hoàn thành", "Projects Completed") },
             { value: "50+", label: t("Thiết bị công trình", "Equipment Units") },
           ].map((stat) => (

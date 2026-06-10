@@ -35,8 +35,8 @@ export default function CtaSection() {
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mx-auto mb-10">
             {t(
-              "Với kinh nghiệm 15 năm và hệ thống thiết bị hiện đại, Hữu Thành sẵn sàng đồng hành cùng bạn trong mọi dự án.",
-              "With 15 years of experience and modern equipment, Huu Thanh is ready to partner with you on any project."
+              "Với kinh nghiệm 17 năm và hệ thống thiết bị hiện đại, Hữu Thành sẵn sàng đồng hành cùng bạn trong mọi dự án.",
+              "With 17 years of experience and modern equipment, Huu Thanh is ready to partner with you on any project."
             )}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

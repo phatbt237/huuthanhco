@@ -106,8 +106,8 @@ const developmentDefaultSiteSettings: SettingsMap = {
   "hero.eyebrowEn": "Huu Thanh Construction Joint Stock Company",
   "hero.title": "Đơn vị thi công công trình chuyên nghiệp",
   "hero.titleEn": "Professional Construction Contractor",
-  "hero.description": "Hơn 15 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
-  "hero.descriptionEn": "Over 15 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam",
+  "hero.description": "Hơn 17 năm kinh nghiệm trong lĩnh vực xây dựng thủy công, cảng biển và hạ tầng giao thông tại Việt Nam",
+  "hero.descriptionEn": "Over 17 years of experience in hydraulic engineering, port construction and transportation infrastructure in Vietnam",
   "services.items": JSON.stringify(services, null, 2),
   "equipment.items": JSON.stringify(equipment, null, 2),
   "partners.images":

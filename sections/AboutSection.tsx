@@ -55,7 +55,7 @@ export default function AboutSection() {
               className="absolute -bottom-6 -right-6 rounded-2xl p-6 text-white shadow-2xl"
               style={{ backgroundColor: "#0D1B2A" }}
             >
-              <div className="text-4xl font-bold text-orange-400">15+</div>
+              <div className="text-4xl font-bold text-orange-400">17+</div>
               <div className="text-sm text-white/70 mt-1">{t("Năm kinh nghiệm", "Years Experience")}</div>
             </div>
             <div className="absolute -top-4 -left-4 w-24 h-24 bg-orange-500 rounded-2xl -z-10" />

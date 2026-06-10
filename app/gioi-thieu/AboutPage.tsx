@@ -50,8 +50,8 @@ export default function AboutPage() {
             </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">
               {t(
-                "Hơn 15 năm xây dựng niềm tin, gắn kết với từng công trình trên khắp Việt Nam.",
-                "Over 15 years of building trust, committed to every project across Vietnam."
+                "Hơn 17 năm xây dựng niềm tin, gắn kết với từng công trình trên khắp Việt Nam.",
+                "Over 17 years of building trust, committed to every project across Vietnam."
               )}
             </p>
           </motion.div>
@@ -72,16 +72,16 @@ export default function AboutPage() {
                 <span className="h-5 w-1 rounded-full bg-[#f05a32]" aria-hidden="true" />
                 {t("Tổng quan công ty", "Company Overview")}
               </span>
-              <h2 className="mt-5 max-w-3xl text-3xl font-extrabold leading-[1.12] sm:text-4xl lg:text-5xl">
+              <h2 className="mt-5 max-w-3xl text-3xl font-extrabold leading-[1.12] text-[#d71920] sm:text-4xl lg:text-5xl">
                 {lang === "en" ? (
                   <>
-                    <span className="block text-[#17324d]">Huu Thanh Construction</span>
-                    <span className="block text-[#f05a32]">Joint Stock Company</span>
+                    <span className="block">Huu Thanh Construction</span>
+                    <span className="block">Joint Stock Company</span>
                   </>
                 ) : (
                   <>
-                    <span className="block text-[#17324d]">Công ty Cổ phần</span>
-                    <span className="block text-[#f05a32]">Xây dựng Hữu Thành</span>
+                    <span className="block">Công ty Cổ phần</span>
+                    <span className="block">Xây dựng Hữu Thành</span>
                   </>
                 )}
               </h2>
