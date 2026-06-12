@@ -3,6 +3,7 @@ import HeroSection from "@/sections/HeroSection";
 import AboutSection from "@/sections/AboutSection";
 import ServicesSection from "@/sections/ServicesSection";
 import ProjectsSection from "@/sections/ProjectsSection";
+import ProjectGalleryStrip from "@/sections/ProjectGalleryStrip";
 import EquipmentSection from "@/sections/EquipmentSection";
 import NewsSection from "@/sections/NewsSection";
 import PartnersSection from "@/sections/PartnersSection";
@@ -32,6 +33,7 @@ export default async function HomePage() {
       <AboutSection />
       <ServicesSection initialSettings={settings} />
       <ProjectsSection initialContent={cmsContent} />
+      <ProjectGalleryStrip initialContent={cmsContent} />
       <EquipmentSection initialSettings={settings} />
       <NewsSection initialContent={cmsContent} />
       <PartnersSection initialSettings={settings} />
