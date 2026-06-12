@@ -1,10 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import SectionTitle from "@/components/SectionTitle";
 import { Award, Eye, ShieldCheck, Target, Users } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import CompanyProfileFlipbook from "./CompanyProfileFlipbook";
+import GroundbreakingCarousel from "./GroundbreakingCarousel";
 
 export default function AboutPage() {
   const { lang, t } = useLanguage();
@@ -112,20 +114,25 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="overflow-hidden bg-white shadow-2xl ring-1 ring-slate-100"
             >
-              <img
-                src="/images/gioi-thieu/le-khoi-cong-cang-dong-nai.jpg"
-                alt={t("Lễ khởi công công trình Hữu Thành", "Huu Thanh project groundbreaking ceremony")}
-                className="h-auto w-full object-contain"
-              />
+              <GroundbreakingCarousel />
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* History intro */}
-      <section className="bg-slate-50 py-20">
+      <section className="relative isolate overflow-hidden bg-slate-950 py-24">
+        <Image
+          src="/images/hero/Flash-7_132827290711634447.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="-z-20 object-cover object-center"
+        />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(5,18,33,0.96)_0%,rgba(8,27,48,0.90)_46%,rgba(8,27,48,0.58)_100%)]" />
+        <div className="absolute inset-y-0 right-0 -z-10 w-1/3 bg-[linear-gradient(135deg,transparent_0%,rgba(249,115,22,0.14)_100%)]" />
+
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 sm:px-6 lg:grid-cols-[0.75fr_1.25fr] lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -136,7 +143,7 @@ export default function AboutPage() {
             <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-500">
               {t("Lịch sử hình thành và phát triển", "History and Development")}
             </span>
-            <h2 className="mt-4 text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
+            <h2 className="mt-4 text-3xl font-extrabold leading-tight text-white md:text-4xl">
               {t("Uy Tín và Chất Lượng là mục tiêu chiến lược", "Prestige and Quality as strategic goals")}
             </h2>
           </motion.div>
@@ -145,7 +152,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, delay: 0.1 }}
-            className="space-y-6 text-[17px] leading-8 text-slate-600"
+            className="space-y-6 text-[17px] leading-8 text-slate-200"
           >
             <p>
               {t(
