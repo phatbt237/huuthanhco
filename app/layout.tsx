@@ -1,16 +1,10 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import SiteChrome from "@/components/SiteChrome";
 import { absoluteSiteUrl, SITE_URL } from "@/lib/siteMetadata";
 
 const iconVersion = "20260608-2";
-const manrope = Manrope({
-  subsets: ["latin", "vietnamese"],
-  display: "swap",
-  variable: "--font-manrope",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -92,7 +86,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className={`${manrope.variable} h-full`} data-scroll-behavior="smooth">
+    <html lang="vi" className="h-full" data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"

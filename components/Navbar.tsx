@@ -155,8 +155,8 @@ export default function Navbar() {
               className="w-10 h-10 object-contain rounded"
             />
             <div>
-              <div className="text-white font-bold text-lg leading-tight">Hữu Thành</div>
-              <div className="text-orange-400 text-xs tracking-widest uppercase">Construction</div>
+              <div className="text-red-500 font-bold text-lg leading-tight">Hữu Thành</div>
+              <div className="text-red-500 text-xs tracking-widest uppercase">Construction</div>
             </div>
           </Link>
 
