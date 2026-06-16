@@ -40,7 +40,7 @@ export default function NewsSection({ initialContent }: { initialContent?: CmsCo
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15, duration: 0.5 }}
-              className="group bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               <Link href={getNewsDetailHref(item)} className="block">
                 <div className="relative h-52 overflow-hidden">
