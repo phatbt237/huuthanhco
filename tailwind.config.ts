@@ -4,6 +4,12 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        // Playfair Display for premium headings
+        playfair: 'var(--font-playfair)',
+        // Inter for body and UI elements
+        sans: 'var(--font-inter)',
+      },
       colors: {
         // Primary: Orange brand color
         orange: {

@@ -88,12 +88,12 @@ export type CardVariants = VariantProps<typeof cardVariants>;
 export const textVariants = cva('', {
   variants: {
     variant: {
-      h1: 'text-5xl font-bold leading-tight',
-      h2: 'text-4xl font-bold leading-snug',
-      h3: 'text-3xl font-bold leading-snug',
-      h4: 'text-2xl font-bold leading-snug',
-      h5: 'text-xl font-semibold leading-snug',
-      h6: 'text-lg font-semibold leading-snug',
+      h1: 'font-playfair text-5xl font-bold leading-tight',
+      h2: 'font-playfair text-4xl font-bold leading-snug',
+      h3: 'font-playfair text-3xl font-bold leading-snug',
+      h4: 'font-playfair text-2xl font-bold leading-snug',
+      h5: 'font-playfair text-xl font-semibold leading-snug',
+      h6: 'font-playfair text-lg font-semibold leading-snug',
       body: 'text-base leading-relaxed',
       'body-sm': 'text-sm leading-relaxed',
       caption: 'text-xs uppercase tracking-wider',

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { playfairDisplay, inter } from "@/lib/fonts";
 import Providers from "@/components/Providers";
 import SiteChrome from "@/components/SiteChrome";
 import { absoluteSiteUrl, SITE_URL } from "@/lib/siteMetadata";
@@ -86,7 +87,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className="h-full" data-scroll-behavior="smooth">
+    <html
+      lang="vi"
+      className={`h-full ${playfairDisplay.variable} ${inter.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <head>
         <script
           type="application/ld+json"
