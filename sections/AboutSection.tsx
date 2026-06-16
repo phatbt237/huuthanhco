@@ -28,6 +28,38 @@ export default function AboutSection() {
   return (
     <section className="py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Large stats */}
+        <div className="mb-24 grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="font-playfair text-5xl md:text-6xl font-bold text-orange-500 mb-3">200+</div>
+            <p className="text-slate-600 dark:text-slate-300 text-lg">{t("Dự án hoàn thành", "Projects Completed")}</p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <div className="font-playfair text-5xl md:text-6xl font-bold text-orange-500 mb-3">50+</div>
+            <p className="text-slate-600 dark:text-slate-300 text-lg">{t("Thiết bị công trình", "Equipment Units")}</p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="font-playfair text-5xl md:text-6xl font-bold text-orange-500 mb-3">300+</div>
+            <p className="text-slate-600 dark:text-slate-300 text-lg">{t("Cán bộ nhân viên", "Staff Members")}</p>
+          </motion.div>
+        </div>
+
+        {/* Overview grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
           {/* Image */}

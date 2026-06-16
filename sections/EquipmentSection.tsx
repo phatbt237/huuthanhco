@@ -25,6 +25,8 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
   const prev = () => setPage((p) => (p - 1 + totalPages) % totalPages);
   const next = () => setPage((p) => (p + 1) % totalPages);
 
+  const featured = equipmentItems.slice(0, 4);
+
   return (
     <section className="py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

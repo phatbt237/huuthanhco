@@ -51,33 +51,31 @@ export default function ServicesSection({ initialSettings }: { initialSettings?:
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="group relative overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 hover:shadow-xl"
+              className="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 bg-white dark:bg-slate-800"
             >
               <Link href={serviceLinks[i] ?? "/du-an"} className="block">
                 {/* Image */}
-                <div className="relative h-60 overflow-hidden">
+                <div className="relative h-56 overflow-hidden bg-slate-200 dark:bg-slate-700">
                   <img
                     src={service.image}
                     alt={lang === "vi" ? service.name : service.nameEn}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 </div>
 
-                {/* Text overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <div className="flex items-end justify-between gap-3">
-                    <h3 className="font-bold text-white text-base leading-snug line-clamp-2 flex-1">
-                      {lang === "vi" ? service.name : service.nameEn}
-                    </h3>
-                    <div className="shrink-0 w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                      <ArrowRight size={14} className="text-white" />
-                    </div>
-                  </div>
-                  <p className="text-white/70 text-xs mt-2 line-clamp-2">
+                {/* Text content */}
+                <div className="p-6">
+                  <h3 className="font-playfair font-bold text-slate-900 dark:text-white text-lg mb-3 line-clamp-2 group-hover:text-orange-500 transition-colors">
+                    {lang === "vi" ? service.name : service.nameEn}
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-2 mb-4">
                     {lang === "vi" ? service.description : service.descriptionEn}
                   </p>
+                  <div className="flex items-center gap-2 text-orange-500 font-semibold text-sm group-hover:gap-3 transition-all duration-300">
+                    {t("Tìm hiểu thêm", "Learn More")}
+                    <ArrowRight size={16} />
+                  </div>
                 </div>
               </Link>
             </motion.div>
