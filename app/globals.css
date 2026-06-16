@@ -3,10 +3,21 @@
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -14,13 +25,25 @@ body {
   color: var(--foreground);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+/* Focus visible styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid theme('colors.orange.500');
+  outline-offset: 2px;
 }
 
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid theme('colors.orange.500');
+  outline-offset: 2px;
+}
+
+/* Marquee animation */
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
@@ -29,6 +52,7 @@ body {
   animation-play-state: paused;
 }
 
+/* Text truncation utilities */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
