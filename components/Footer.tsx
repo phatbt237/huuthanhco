@@ -68,10 +68,10 @@ export default function Footer() {
                 href={facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200"
-                aria-label="Facebook Hữu Thành"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                aria-label={t("Facebook Hữu Thành", "Huu Thanh Facebook")}
               >
-                <span className="text-sm font-black leading-none">f</span>
+                <span className="text-sm font-black leading-none" aria-hidden="true">f</span>
               </a>
             </div>
           </div>

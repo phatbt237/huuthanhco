@@ -118,20 +118,28 @@ export default function Navbar() {
       className={`flex items-center border border-white/20 rounded overflow-hidden font-bold text-xs ${
         small ? "h-8" : "h-10"
       }`}
+      role="group"
+      aria-label={t("Chọn ngôn ngữ", "Select language")}
     >
       <button
+        type="button"
         onClick={() => setLang("vi")}
-        className={`h-full px-3 transition-all duration-200 ${
+        className={`h-full px-3 transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-orange-500 ${
           lang === "vi" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"
         }`}
+        aria-pressed={lang === "vi"}
+        aria-label="Tiếng Việt"
       >
         VI
       </button>
       <button
+        type="button"
         onClick={() => setLang("en")}
-        className={`h-full px-3 transition-all duration-200 ${
+        className={`h-full px-3 transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-orange-500 ${
           lang === "en" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"
         }`}
+        aria-pressed={lang === "en"}
+        aria-label="English"
       >
         EN
       </button>
@@ -163,7 +171,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Nav — hiển thị trực tiếp trên header */}
-          <nav className="hidden lg:flex items-center gap-0.5">
+          <nav className="hidden lg:flex items-center gap-0.5" aria-label={t("Điều hướng chính", "Main navigation")}>
             {desktopLinks.map((link) =>
               link.children ? (
                 <div
@@ -172,13 +180,24 @@ export default function Navbar() {
                   onMouseEnter={() => setOpenDropdown(link.href)}
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
-                  <Link
-                    href={link.href}
-                    className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded transition-colors ${
+                  <button
+                    onClick={() => setOpenDropdown(openDropdown === link.href ? null : link.href)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setOpenDropdown(openDropdown === link.href ? null : link.href);
+                      } else if (e.key === "Escape") {
+                        setOpenDropdown(null);
+                      }
+                    }}
+                    className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
                       pathname.startsWith(link.href) && link.href !== "/"
                         ? "text-orange-400"
                         : "text-white/80 hover:text-white"
                     }`}
+                    aria-haspopup="menu"
+                    aria-expanded={openDropdown === link.href}
+                    aria-label={link.label}
                   >
                     {link.label}
                     <ChevronDown
@@ -186,8 +205,9 @@ export default function Navbar() {
                       className={`transition-transform duration-200 ${
                         openDropdown === link.href ? "rotate-180" : ""
                       }`}
+                      aria-hidden="true"
                     />
-                  </Link>
+                  </button>
 
                   <AnimatePresence>
                     {openDropdown === link.href && (
@@ -202,12 +222,14 @@ export default function Navbar() {
                           border: "1px solid rgba(255,255,255,0.1)",
                           boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
                         }}
+                        role="menu"
                       >
                         {link.children.map((child) => (
                           <Link
                             key={child.href}
                             href={child.href}
-                            className="block px-5 py-3 text-sm text-white/70 hover:text-orange-400 hover:bg-white/5 transition-colors"
+                            className="block px-5 py-3 text-sm text-white/70 hover:text-orange-400 hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-orange-500"
+                            role="menuitem"
                           >
                             {child.label}
                           </Link>
@@ -237,7 +259,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setSearchOpen((open) => !open)}
-              className="flex h-10 w-10 items-center justify-center rounded border border-white/20 text-white/75 transition-colors duration-200 hover:border-orange-400/60 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded border border-white/20 text-white/75 transition-colors duration-200 hover:border-orange-400/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
               aria-label={t("Tìm kiếm", "Search")}
             >
               <Search size={19} />
@@ -245,7 +267,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setTheme(isDark ? "light" : "dark")}
-              className="flex h-10 w-10 items-center justify-center rounded border border-white/20 text-white/75 transition-colors duration-200 hover:border-orange-400/60 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded border border-white/20 text-white/75 transition-colors duration-200 hover:border-orange-400/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
               aria-label={t(isDark ? "Chế độ sáng" : "Chế độ tối", isDark ? "Light mode" : "Dark mode")}
             >
               {isDark ? <Sun size={19} /> : <Moon size={19} />}
@@ -253,7 +275,7 @@ export default function Navbar() {
             <LangToggle />
             <Link
               href="/lien-he"
-              className="h-10 flex items-center bg-orange-500 hover:bg-orange-600 text-white px-5 rounded text-sm font-semibold transition-colors duration-200"
+              className="h-10 flex items-center bg-orange-500 hover:bg-orange-600 text-white px-5 rounded text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
             >
               {t("Liên hệ ngay", "Contact Us")}
             </Link>
@@ -263,7 +285,7 @@ export default function Navbar() {
           <div className="lg:hidden flex items-center gap-2">
             <button
               type="button"
-              className="p-2 text-white"
+              className="p-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded"
               onClick={() => setSearchOpen((open) => !open)}
               aria-label={t("Tìm kiếm", "Search")}
             >
@@ -271,7 +293,7 @@ export default function Navbar() {
             </button>
             <button
               type="button"
-              className="p-2 text-white"
+              className="p-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded"
               onClick={() => setTheme(isDark ? "light" : "dark")}
               aria-label={t(isDark ? "Chế độ sáng" : "Chế độ tối", isDark ? "Light mode" : "Dark mode")}
             >
@@ -279,9 +301,12 @@ export default function Navbar() {
             </button>
             <LangToggle small />
             <button
-              className="text-white p-2"
+              type="button"
+              className="text-white p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
+              aria-label={t("Mở menu", "Open menu")}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -299,6 +324,9 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
             className="lg:hidden overflow-hidden"
             style={{ backgroundColor: "#0D1B2A" }}
+            id="mobile-menu"
+            role="navigation"
+            aria-label={t("Điều hướng di động", "Mobile navigation")}
           >
             <nav className="px-4 py-4 flex flex-col gap-1">
               {navLinks.map((link, i) => (
@@ -391,20 +419,22 @@ export default function Navbar() {
                 event.preventDefault();
                 submitSearch();
               }}
+              role="search"
             >
               <input
                 ref={searchInputRef}
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder={t("Tìm kiếm dự án, thiết bị, tin tức ...", "Search projects, equipment, news ...")}
-                className="h-14 min-w-0 flex-1 bg-transparent px-5 text-base text-slate-900 outline-none placeholder:text-slate-500"
+                className="h-14 min-w-0 flex-1 bg-transparent px-5 text-base text-slate-900 outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors"
+                aria-label={t("Tìm kiếm", "Search")}
               />
               <button
                 type="submit"
-                className="flex h-14 w-14 shrink-0 items-center justify-center text-slate-600 transition-colors hover:text-orange-500"
-                aria-label={t("Tìm kiếm", "Search")}
+                className="flex h-14 w-14 shrink-0 items-center justify-center text-slate-600 transition-colors hover:text-orange-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                aria-label={t("Gửi tìm kiếm", "Submit search")}
               >
-                <Search size={22} />
+                <Search size={22} aria-hidden="true" />
               </button>
             </form>
           </motion.div>
