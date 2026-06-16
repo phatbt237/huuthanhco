@@ -4,13 +4,10 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import SectionTitle from "@/components/SectionTitle";
+import CountUp from "@/components/CountUp";
 import { CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import groundbreakingImage from "@/public/images/gioi-thieu/le-khoi-cong-cang-dong-nai.jpg";
-
-function CountUp({ to, suffix }: { to: number; suffix: string }) {
-  return <span>{to}{suffix}</span>;
-}
 
 export default function AboutSection() {
   const { t } = useLanguage();
@@ -29,7 +26,7 @@ export default function AboutSection() {
   ];
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -88,21 +85,21 @@ export default function AboutSection() {
               ))}
             </div>
 
-            {/* Stats */}
-            <div className="mt-10 grid grid-cols-3">
+            {/* Stats with Counter Animation */}
+            <div className="mt-12 grid grid-cols-3 gap-2">
               {stats.map((stat, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="flex flex-col items-center justify-center py-6 px-4 text-center"
+                  transition={{ delay: i * 0.15, duration: 0.6 }}
+                  className="flex flex-col items-center justify-center py-6 px-4 text-center rounded-xl bg-orange-50/50 hover:bg-orange-50 transition-colors duration-300"
                 >
                   <div className="text-4xl font-black text-orange-500 leading-none">
-                    <CountUp to={stat.value} suffix={stat.suffix} />
+                    <CountUp to={stat.value} suffix={stat.suffix} duration={2000} />
                   </div>
-                  <div className="text-xs text-slate-500 mt-2 leading-snug">{stat.label}</div>
+                  <div className="text-xs text-slate-500 mt-3 leading-snug font-medium">{stat.label}</div>
                 </motion.div>
               ))}
             </div>

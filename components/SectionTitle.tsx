@@ -32,7 +32,7 @@ export default function SectionTitle({
       )}
       <h2
         className={`text-3xl md:text-4xl font-bold leading-tight mb-4 ${
-          light ? "text-white" : "text-slate-900"
+          light ? "text-white" : "text-slate-900 dark:text-white"
         }`}
       >
         {title}
@@ -41,7 +41,7 @@ export default function SectionTitle({
         <p
           className={`text-base leading-relaxed max-w-2xl ${
             center ? "mx-auto" : ""
-          } ${light ? "text-white/60" : "text-slate-500"}`}
+          } ${light ? "text-white/60" : "text-slate-500 dark:text-slate-400"}`}
         >
           {subtitle}
         </p>

@@ -28,7 +28,7 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
 
 
   return (
-    <section className="py-24 bg-slate-50">
+    <section className="py-24 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -65,29 +65,34 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
                   key={project.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08, duration: 0.4 }}
-                  className="group relative rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300"
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="group relative rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-2xl transition-all duration-300 h-full flex flex-col"
                 >
-                  <Link href={getProjectDetailHref(project)} className="block">
-                    <div className="relative h-56 overflow-hidden">
+                  <Link href={getProjectDetailHref(project)} className="block flex-1 flex flex-col">
+                    <div className="relative h-60 overflow-hidden flex-shrink-0">
                       <img
                         src={mediaFileUrl(project.image)}
                         alt={lang === "vi" ? project.name : project.nameEn}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         loading="lazy"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <span className="absolute top-4 left-4 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
                         {lang === "vi" ? project.category : project.categoryEn}
                       </span>
+                      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
+                        <button className="w-full py-2 bg-white text-slate-900 rounded-lg font-semibold text-sm hover:bg-orange-500 hover:text-white transition-all duration-200 flex items-center justify-center gap-2">
+                          {t("Xem chi tiết", "View Details")} <ArrowRight size={14} />
+                        </button>
+                      </div>
                     </div>
-                    <div className="p-5">
+                    <div className="p-5 flex flex-col flex-1">
                       <h3 className="font-bold text-slate-900 text-sm leading-snug mb-3 line-clamp-2 group-hover:text-orange-500 transition-colors duration-200">
                         {lang === "vi" ? project.name : project.nameEn}
                       </h3>
-                      <div className="flex items-center gap-4 text-xs text-slate-400">
-                        <span className="flex items-center gap-1.5"><MapPin size={12} />{project.location}</span>
-                        <span className="flex items-center gap-1.5"><Calendar size={12} />{project.year}</span>
+                      <div className="flex items-center gap-3 text-xs text-slate-500 mt-auto">
+                        <span className="flex items-center gap-1.5 flex-1"><MapPin size={12} className="shrink-0" /><span className="truncate">{project.location}</span></span>
+                        <span className="flex items-center gap-1.5 shrink-0"><Calendar size={12} />{project.year}</span>
                       </div>
                     </div>
                   </Link>

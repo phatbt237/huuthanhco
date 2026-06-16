@@ -4,11 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Search } from "lucide-react";
+import { Menu, X, ChevronDown, Search, Sun, Moon } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Navbar() {
   const { lang, setLang, t } = useLanguage();
+  const { isDark, setTheme, theme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -240,6 +242,14 @@ export default function Navbar() {
             >
               <Search size={19} />
             </button>
+            <button
+              type="button"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              className="flex h-10 w-10 items-center justify-center rounded border border-white/20 text-white/75 transition-colors duration-200 hover:border-orange-400/60 hover:text-white"
+              aria-label={t(isDark ? "Chế độ sáng" : "Chế độ tối", isDark ? "Light mode" : "Dark mode")}
+            >
+              {isDark ? <Sun size={19} /> : <Moon size={19} />}
+            </button>
             <LangToggle />
             <Link
               href="/lien-he"
@@ -258,6 +268,14 @@ export default function Navbar() {
               aria-label={t("Tìm kiếm", "Search")}
             >
               <Search size={22} />
+            </button>
+            <button
+              type="button"
+              className="p-2 text-white"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              aria-label={t(isDark ? "Chế độ sáng" : "Chế độ tối", isDark ? "Light mode" : "Dark mode")}
+            >
+              {isDark ? <Sun size={22} /> : <Moon size={22} />}
             </button>
             <LangToggle small />
             <button
