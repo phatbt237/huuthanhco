@@ -31,8 +31,7 @@ export default function AboutPage() {
     <>
       {/* Hero */}
       <section
-        className="relative py-32 flex items-center"
-        style={{ backgroundColor: "#0D1B2A" }}
+        className="relative py-32 flex items-center bg-navy-900 dark:bg-navy-950 transition-colors duration-300"
       >
         <div
           className="absolute inset-0 bg-cover bg-center opacity-20"
@@ -47,10 +46,10 @@ export default function AboutPage() {
             <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">
               {t("Về chúng tôi", "About Us")}
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4 leading-tight">
+            <h1 className="font-playfair text-4xl md:text-5xl font-bold text-white mt-4 leading-tight">
               {t("Giới thiệu công ty", "About the Company")}
             </h1>
-            <p className="text-white/60 text-lg mt-4 max-w-2xl">
+            <p className="text-white/60 text-base md:text-lg mt-4 max-w-2xl leading-relaxed">
               {t(
                 "Hơn 17 năm xây dựng niềm tin, gắn kết với từng công trình trên khắp Việt Nam.",
                 "Over 17 years of building trust, committed to every project across Vietnam."
@@ -61,20 +60,20 @@ export default function AboutPage() {
       </section>
 
       {/* Company overview */}
-      <section className="bg-slate-50/70 py-20">
+      <section className="bg-slate-50 dark:bg-slate-900 py-24 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-[0.95fr_1.05fr]">
             <motion.div
               initial={{ opacity: 0, x: -28 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <span className="inline-flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.18em] text-[#f05a32]">
-                <span className="h-5 w-1 rounded-full bg-[#f05a32]" aria-hidden="true" />
+              <span className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-orange-500">
+                <span className="h-5 w-1 rounded-full bg-orange-500" aria-hidden="true" />
                 {t("Tổng quan công ty", "Company Overview")}
               </span>
-              <h2 className="mt-5 max-w-3xl text-3xl font-extrabold leading-[1.12] text-[#d71920] sm:text-4xl lg:text-5xl">
+              <h2 className="font-playfair mt-6 max-w-3xl text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-slate-900 dark:text-white">
                 {lang === "en" ? (
                   <>
                     <span className="block">Huu Thanh Construction</span>
@@ -87,7 +86,7 @@ export default function AboutPage() {
                   </>
                 )}
               </h2>
-              <div className="mt-8 space-y-6 text-[17px] leading-8 text-slate-600">
+              <div className="mt-8 space-y-6 text-base leading-relaxed text-slate-600 dark:text-slate-300">
                 <p>
                   {t(
                     "Công ty Cổ phần Xây dựng Hữu Thành là một trong những doanh nghiệp hàng đầu về xây dựng các công trình giao thông hàng hải, cảng biển; cảng thủy nội địa; thủy lợi; đê, kè và các công trình cơ sở hạ tầng của Việt Nam, được thành lập năm 2009.",
@@ -122,7 +121,7 @@ export default function AboutPage() {
       </section>
 
       {/* History intro */}
-      <section className="relative isolate overflow-hidden bg-slate-950 py-24">
+      <section className="relative isolate overflow-hidden bg-navy-900 dark:bg-navy-950 py-24 transition-colors duration-300">
         <Image
           src="/images/hero/Flash-7_132827290711634447.jpg"
           alt=""
@@ -131,7 +130,7 @@ export default function AboutPage() {
           className="-z-20 object-cover object-center"
         />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(5,18,33,0.96)_0%,rgba(8,27,48,0.90)_46%,rgba(8,27,48,0.58)_100%)]" />
-        <div className="absolute inset-y-0 right-0 -z-10 w-1/3 bg-[linear-gradient(135deg,transparent_0%,rgba(249,115,22,0.14)_100%)]" />
+        <div className="absolute inset-y-0 right-0 -z-10 w-1/3 bg-[linear-gradient(135deg,transparent_0%,rgba(255,107,53,0.1)_100%)]" />
 
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 sm:px-6 lg:grid-cols-[0.75fr_1.25fr] lg:px-8">
           <motion.div
@@ -140,10 +139,10 @@ export default function AboutPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
           >
-            <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-500">
+            <span className="text-xs font-bold uppercase tracking-widest text-orange-400">
               {t("Lịch sử hình thành và phát triển", "History and Development")}
             </span>
-            <h2 className="mt-4 text-3xl font-extrabold leading-tight text-white md:text-4xl">
+            <h2 className="font-playfair mt-4 text-3xl md:text-4xl font-bold leading-tight text-white">
               {t("Uy Tín và Chất Lượng là mục tiêu chiến lược", "Prestige and Quality as strategic goals")}
             </h2>
           </motion.div>
@@ -152,7 +151,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, delay: 0.1 }}
-            className="space-y-6 text-[17px] leading-8 text-slate-200"
+            className="space-y-6 text-base leading-relaxed text-slate-200 dark:text-slate-300"
           >
             <p>
               {t(
@@ -171,7 +170,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
             <motion.div
@@ -179,13 +178,13 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-slate-50 rounded-2xl p-8"
+              className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mb-5">
                 <Eye className="text-white" size={22} />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">{t("Tầm nhìn", "Vision")}</h2>
-              <p className="text-slate-600 leading-relaxed">
+              <h2 className="font-playfair text-2xl font-bold text-slate-900 dark:text-white mb-4">{t("Tầm nhìn", "Vision")}</h2>
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-base">
                 {t(
                   "Trở thành nhà thầu xây dựng thủy công hàng đầu khu vực Đông Nam Á vào năm 2030, được tin tưởng bởi các chủ đầu tư trong và ngoài nước nhờ chất lượng, tiến độ và công nghệ thi công tiên tiến.",
                   "To become the leading hydraulic construction contractor in Southeast Asia by 2030, trusted by domestic and international investors for quality, schedule adherence, and advanced construction technology."
@@ -197,13 +196,13 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-slate-50 rounded-2xl p-8"
+              className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mb-5">
                 <Target className="text-white" size={22} />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">{t("Sứ mệnh", "Mission")}</h2>
-              <p className="text-slate-600 leading-relaxed">
+              <h2 className="font-playfair text-2xl font-bold text-slate-900 dark:text-white mb-4">{t("Sứ mệnh", "Mission")}</h2>
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-base">
                 {t(
                   "Cung cấp các giải pháp xây dựng tối ưu, góp phần phát triển hạ tầng bền vững cho đất nước. Mang lại giá trị thực cho khách hàng, cơ hội phát triển cho nhân viên và đóng góp tích cực cho cộng đồng xã hội.",
                   "To deliver optimal construction solutions that contribute to sustainable infrastructure development. Creating real value for clients, growth opportunities for employees, and positive contributions to society."
@@ -226,13 +225,13 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="text-center p-6 rounded-2xl border border-slate-100 hover:border-orange-200 hover:shadow-md transition-all duration-300"
+                className="text-center p-6 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-orange-300 dark:hover:border-orange-500 hover:shadow-md dark:hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-14 h-14 bg-orange-50 dark:bg-orange-900/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <v.icon className="text-orange-500" size={24} />
                 </div>
-                <h3 className="font-bold text-slate-900 text-lg mb-2">{v.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{v.desc}</p>
+                <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-2">{v.title}</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{v.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -242,7 +241,7 @@ export default function AboutPage() {
       <CompanyProfileFlipbook />
 
       {/* Timeline */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-24 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             label={t("Lịch sử", "History")}
@@ -250,7 +249,7 @@ export default function AboutPage() {
             center
           />
           <div className="mt-14 relative">
-            <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-0.5 bg-slate-200 hidden md:block" />
+            <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-0.5 bg-slate-300 dark:bg-slate-700 hidden md:block" />
 
             <div className="space-y-8">
               {timeline.map((item, i) => (
@@ -263,18 +262,18 @@ export default function AboutPage() {
                   className={`flex items-center ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
                 >
                   <div className={`flex-1 flex items-center ${i % 2 === 0 ? "" : "md:flex-row-reverse"}`}>
-                    <div className={`flex-1 bg-white rounded-2xl p-6 shadow-sm
+                    <div className={`flex-1 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm
                       border-l-4 border-orange-500
-                      md:border-l-0 md:border md:border-slate-100
+                      md:border-l-0 md:border md:border-slate-200 dark:md:border-slate-700
                       ${i % 2 === 0 ? "md:text-right" : ""}`}
                     >
                       <span className="text-orange-500 font-bold text-xl">{item.year}</span>
-                      <h3 className="font-bold text-slate-900 text-lg mt-1 mb-2">{item.title}</h3>
-                      <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+                      <h3 className="font-playfair font-bold text-slate-900 dark:text-white text-lg mt-1 mb-2">{item.title}</h3>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
                     </div>
-                    <div className="hidden md:block w-10 h-0.5 bg-slate-300 shrink-0" />
+                    <div className="hidden md:block w-10 h-0.5 bg-slate-300 dark:bg-slate-700 shrink-0" />
                   </div>
-                  <div className="hidden md:block w-4 h-4 rounded-full bg-orange-500 shrink-0 relative z-10 ring-4 ring-slate-50 shadow-md" />
+                  <div className="hidden md:block w-4 h-4 rounded-full bg-orange-500 shrink-0 relative z-10 ring-4 ring-slate-50 dark:ring-slate-950 shadow-md" />
                   <div className="flex-1 hidden md:block" />
                 </motion.div>
               ))}
