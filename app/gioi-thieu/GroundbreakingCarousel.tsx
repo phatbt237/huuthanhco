@@ -8,24 +8,29 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const slides = [
   {
-    src: "/images/gioi-thieu/le-khoi-cong-cang-dong-nai.jpg",
-    altVi: "Lễ khởi công cầu cảng 30.000DWT tại Cảng Gò Dầu",
-    altEn: "Groundbreaking ceremony for the 30,000DWT wharf at Go Dau Port",
+    src: "/images/gioi-thieu/khoi-cong-cang-dong-xuyen.jpg",
+    altVi: "Lễ khởi công hạng mục Cảng khu công nghiệp Đông Xuyên",
+    altEn: "Groundbreaking ceremony at Dong Xuyen Industrial Port",
   },
   {
-    src: "/images/hero/Flash-4_132827290261925965.jpg",
-    altVi: "Công trình cảng và bồn chứa do Hữu Thành thi công",
-    altEn: "Port and storage tank project constructed by Huu Thanh",
+    src: "/images/gioi-thieu/khoi-cong-cang-go-dau-b5.jpg",
+    altVi: "Lễ khởi công thi công cầu cảng 30.000DWT tại Cảng Gò Dầu B",
+    altEn: "Groundbreaking ceremony for the 30,000DWT wharf at Go Dau B Port",
   },
   {
-    src: "/images/hero/Flash-5_132827290406613154.jpg",
-    altVi: "Hệ thống cầu cảng chuyên dụng tại công trình Hữu Thành",
-    altEn: "Specialized wharf system at a Huu Thanh project",
+    src: "/images/gioi-thieu/khoi-cong-cang-long-binh.jpg",
+    altVi: "Lễ động thổ nâng cấp cầu cảng Long Bình",
+    altEn: "Groundbreaking ceremony for Long Binh wharf upgrade",
   },
   {
-    src: "/images/hero/Flash-6_132827290576435207.jpg",
-    altVi: "Công trình hạ tầng cảng và bồn chứa LNG",
-    altEn: "Port infrastructure and LNG storage tank project",
+    src: "/images/gioi-thieu/khoi-cong-ha-luu-vung-tau-gd3.jpg",
+    altVi: "Lễ khởi công dự án nối dài cầu cảng giai đoạn III tại Cảng Hạ Lưu Vũng Tàu",
+    altEn: "Groundbreaking ceremony for the phase III wharf extension at Vung Tau downstream port",
+  },
+  {
+    src: "/images/gioi-thieu/khoi-cong-ha-luu-vung-tau-gd3-hop-long.jpg",
+    altVi: "Lễ hợp long dự án nối dài cầu cảng giai đoạn III tại Cảng Hạ Lưu Vũng Tàu",
+    altEn: "Closure ceremony for the phase III wharf extension at Vung Tau downstream port",
   },
 ];
 
