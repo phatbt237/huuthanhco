@@ -9,7 +9,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Navbar() {
   const { lang, setLang, t } = useLanguage();
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpenItems, setMobileOpenItems] = useState<Set<string>>(new Set());
@@ -18,10 +17,8 @@ export default function Navbar() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const isHome = pathname === "/";
 
   const navLinks = [
-    { href: "/", label: t("Trang chủ", "Home") },
     {
       href: "/gioi-thieu",
       label: t("Giới thiệu", "About"),
@@ -29,42 +26,45 @@ export default function Navbar() {
         { label: t("Tổng quan", "Overview"), href: "/gioi-thieu" },
         { label: t("Tầm nhìn & Sứ mệnh", "Vision & Mission"), href: "/gioi-thieu#tam-nhin-su-menh" },
         { label: t("Giá trị cốt lõi", "Core Values"), href: "/gioi-thieu#gia-tri-cot-loi" },
-        { label: t("Hành trình phát triển", "Our Journey"), href: "/gioi-thieu#hanh-trinh" },
+        { label: t("Hồ sơ năng lực", "Company Profile"), href: "/gioi-thieu#ho-so-nang-luc" },
       ],
     },
     {
-      href: "/du-an",
-      label: t("Dự án", "Projects"),
+      href: "/#linh-vuc-hoat-dong",
+      label: t("Lĩnh vực hoạt động", "Operations"),
       children: [
-        { label: t("Tất cả dự án", "All Projects"), href: "/du-an" },
-        { label: t("Cầu đường", "Roads & Bridges"), href: "/du-an?loai=cau-duong" },
         { label: t("Cảng biển", "Ports & Harbors"), href: "/du-an?loai=cang-bien" },
-        { label: t("Thủy lợi", "Hydraulics"), href: "/du-an?loai=thuy-loi" },
-        { label: t("Nạo vét", "Dredging"), href: "/du-an?loai=nao-vet" },
+        { label: t("Hạ tầng kỹ thuật", "Technical Infrastructure"), href: "/du-an?loai=ha-tang" },
+        { label: t("Thiết bị thi công", "Construction Equipment"), href: "/thiet-bi" },
+      ],
+    },
+    { href: "/du-an", label: t("Dự án", "Projects") },
+    {
+      href: "/tin-tuc",
+      label: t("Tin tức", "News"),
+      children: [
+        { label: t("Tất cả tin tức", "All News"), href: "/tin-tuc" },
+        { label: t("Tuyển dụng", "Careers"), href: "/tuyen-dung" },
       ],
     },
     {
-      href: "/thiet-bi",
-      label: t("Thiết bị", "Equipment"),
+      href: "/gioi-thieu#ho-so-nang-luc",
+      label: t("Cổ đông", "Shareholders"),
       children: [
-        { label: t("Tất cả thiết bị", "All Equipment"), href: "/thiet-bi" },
-        { label: t("Phương tiện thủy", "Marine Vessels"), href: "/thiet-bi?loai=phuong-tien-thuy" },
-        { label: t("Máy móc thi công", "Construction Machinery"), href: "/thiet-bi?loai=may-moc" },
-        { label: t("Thiết bị đo lường", "Survey Equipment"), href: "/thiet-bi?loai=do-luong" },
+        { label: t("Hồ sơ năng lực", "Company Profile"), href: "/gioi-thieu#ho-so-nang-luc" },
+        { label: t("Liên hệ doanh nghiệp", "Corporate Contact"), href: "/lien-he" },
       ],
     },
-    { href: "/tin-tuc", label: t("Tin tức", "News") },
-    { href: "/tuyen-dung", label: t("Tuyển dụng", "Careers") },
+    {
+      href: "/tuyen-dung",
+      label: t("Tuyển dụng", "Careers"),
+      children: [
+        { label: t("Cơ hội nghề nghiệp", "Opportunities"), href: "/tuyen-dung" },
+        { label: t("Liên hệ tuyển dụng", "Recruitment Contact"), href: "/lien-he" },
+      ],
+    },
     { href: "/lien-he", label: t("Liên hệ", "Contact") },
   ];
-
-  const desktopLinks = navLinks.filter((l) => l.href !== "/lien-he");
-
-  useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -112,191 +112,155 @@ export default function Navbar() {
   };
 
   const LangToggle = ({ small }: { small?: boolean }) => (
-    <div
-      className={`flex items-center border border-white/20 rounded overflow-hidden font-bold text-xs ${
-        small ? "h-8" : "h-10"
-      }`}
-    >
+    <div className={`flex items-center gap-2 font-semibold text-slate-800 ${small ? "text-sm" : "text-base"}`}>
       <button
-        onClick={() => setLang("vi")}
-        className={`h-full px-3 transition-all duration-200 ${
-          lang === "vi" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"
-        }`}
+        type="button"
+        onClick={() => setLang(lang === "vi" ? "en" : "vi")}
+        className={`flex items-center gap-2 transition-colors hover:text-orange-500 ${small ? "h-9 px-2" : "h-11 px-1"}`}
+        aria-label={t("Đổi ngôn ngữ", "Change language")}
       >
-        VI
-      </button>
-      <button
-        onClick={() => setLang("en")}
-        className={`h-full px-3 transition-all duration-200 ${
-          lang === "en" ? "bg-orange-500 text-white" : "text-white/60 hover:text-white"
-        }`}
-      >
-        EN
+        <span className="flex h-4 w-6 items-center justify-center rounded-[1px] bg-red-600 text-[9px] leading-none text-yellow-300">
+          ★
+        </span>
+        <span>{lang.toUpperCase()}</span>
+        <ChevronDown size={small ? 14 : 16} strokeWidth={2.4} />
       </button>
     </div>
   );
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-      style={{
-        backgroundColor: isScrolled || !isHome ? "#0D1B2A" : "transparent",
-        boxShadow: isScrolled || !isHome ? "0 2px 20px rgba(0,0,0,0.3)" : "none",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200 bg-white shadow-[0_1px_10px_rgba(15,23,42,0.08)]">
+      <div className="mx-auto flex h-20 max-w-[1640px] items-center px-4 sm:px-6 lg:h-[86px] lg:px-8">
+        <Link
+          href="/"
+          className="flex h-full w-[108px] shrink-0 items-center justify-center rounded-b-2xl bg-white sm:w-[120px] xl:w-[132px]"
+          aria-label="Hữu Thành Corp."
+        >
+          <img
+            src="/images/huu-thanh-corp-logo-3d.png"
+            alt="Hữu Thành Corp."
+            className="block h-[70px] w-auto object-contain sm:h-[76px] lg:h-[82px]"
+          />
+        </Link>
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 shrink-0">
-            <img
-              src="/images/huu-thanh-logo.png"
-              alt="Logo Hữu Thành"
-              className="w-10 h-10 object-contain rounded"
-            />
-            <div>
-              <div className="text-red-500 font-bold text-lg leading-tight">Hữu Thành</div>
-              <div className="text-red-500 text-xs tracking-widest uppercase">Construction</div>
-            </div>
-          </Link>
-
-          {/* Desktop Nav — hiển thị trực tiếp trên header */}
-          <nav className="hidden lg:flex items-center gap-0.5">
-            {desktopLinks.map((link) =>
-              link.children ? (
-                <div
-                  key={link.href}
-                  className="relative"
-                  onMouseEnter={() => setOpenDropdown(link.href)}
-                  onMouseLeave={() => setOpenDropdown(null)}
-                >
-                  <Link
-                    href={link.href}
-                    className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded transition-colors ${
-                      pathname.startsWith(link.href) && link.href !== "/"
-                        ? "text-orange-400"
-                        : "text-white/80 hover:text-white"
-                    }`}
-                  >
-                    {link.label}
-                    <ChevronDown
-                      size={13}
-                      className={`transition-transform duration-200 ${
-                        openDropdown === link.href ? "rotate-180" : ""
-                      }`}
-                    />
-                  </Link>
-
-                  <AnimatePresence>
-                    {openDropdown === link.href && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.97 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                        transition={{ duration: 0.18 }}
-                        className="absolute top-full left-0 mt-1 w-52 rounded-xl overflow-hidden"
-                        style={{
-                          backgroundColor: "#0D1B2A",
-                          border: "1px solid rgba(255,255,255,0.1)",
-                          boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
-                        }}
-                      >
-                        {link.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className="block px-5 py-3 text-sm text-white/70 hover:text-orange-400 hover:bg-white/5 transition-colors"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
+        <nav className="ml-auto hidden h-full items-center gap-1 xl:flex">
+          {navLinks.map((link) =>
+            link.children ? (
+              <div
+                key={link.href}
+                className="relative flex h-full items-center"
+                onMouseEnter={() => setOpenDropdown(link.href)}
+                onMouseLeave={() => setOpenDropdown(null)}
+              >
                 <Link
-                  key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 text-sm font-medium rounded transition-colors ${
-                    pathname === link.href
-                      ? "text-orange-400"
-                      : "text-white/80 hover:text-white"
+                  className={`flex h-full items-center gap-2 px-3 text-[15px] font-semibold uppercase tracking-normal transition-colors xl:px-4 xl:text-base ${
+                    pathname.startsWith(link.href.split("#")[0]) && link.href !== "/"
+                      ? "text-orange-500"
+                      : "text-slate-700 hover:text-orange-500"
                   }`}
                 >
                   {link.label}
+                  <ChevronDown
+                    size={16}
+                    strokeWidth={2.4}
+                    className={`transition-transform duration-200 ${openDropdown === link.href ? "rotate-180" : ""}`}
+                  />
                 </Link>
-              )
-            )}
-          </nav>
 
-          {/* Desktop right */}
-          <div className="hidden lg:flex items-center gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={() => setSearchOpen((open) => !open)}
-              className="flex h-10 w-10 items-center justify-center rounded border border-white/20 text-white/75 transition-colors duration-200 hover:border-orange-400/60 hover:text-white"
-              aria-label={t("Tìm kiếm", "Search")}
-            >
-              <Search size={19} />
-            </button>
-            <LangToggle />
-            <Link
-              href="/lien-he"
-              className="h-10 flex items-center bg-orange-500 hover:bg-orange-600 text-white px-5 rounded text-sm font-semibold transition-colors duration-200"
-            >
-              {t("Liên hệ ngay", "Contact Us")}
-            </Link>
-          </div>
+                <AnimatePresence>
+                  {openDropdown === link.href && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                      transition={{ duration: 0.16 }}
+                      className="absolute left-0 top-full w-64 overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200"
+                    >
+                      {link.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="block border-b border-slate-100 px-5 py-3 text-sm font-semibold uppercase text-slate-600 transition-colors last:border-b-0 hover:bg-slate-50 hover:text-orange-500"
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`flex h-full items-center px-3 text-[15px] font-semibold uppercase tracking-normal transition-colors xl:px-4 xl:text-base ${
+                  pathname === link.href
+                    ? "text-orange-500"
+                    : "text-slate-700 hover:text-orange-500"
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          )}
 
-          {/* Mobile right */}
-          <div className="lg:hidden flex items-center gap-2">
-            <button
-              type="button"
-              className="p-2 text-white"
-              onClick={() => setSearchOpen((open) => !open)}
-              aria-label={t("Tìm kiếm", "Search")}
-            >
-              <Search size={22} />
-            </button>
-            <LangToggle small />
-            <button
-              className="text-white p-2"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setSearchOpen((open) => !open)}
+            className="ml-2 flex h-11 w-11 items-center justify-center text-slate-800 transition-colors hover:text-orange-500"
+            aria-label={t("Tìm kiếm", "Search")}
+          >
+            <Search size={24} strokeWidth={3} />
+          </button>
+          <LangToggle />
+        </nav>
+
+        <div className="ml-auto flex items-center gap-2 xl:hidden">
+          <button
+            type="button"
+            className="p-2 text-slate-800 transition-colors hover:text-orange-500"
+            onClick={() => setSearchOpen((open) => !open)}
+            aria-label={t("Tìm kiếm", "Search")}
+          >
+            <Search size={22} strokeWidth={2.6} />
+          </button>
+          <LangToggle small />
+          <button
+            type="button"
+            className="p-2 text-slate-800 transition-colors hover:text-orange-500"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={25} /> : <Menu size={25} />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile slide-down */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden overflow-hidden"
-            style={{ backgroundColor: "#0D1B2A" }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden border-t border-slate-200 bg-white xl:hidden"
           >
-            <nav className="px-4 py-4 flex flex-col gap-1">
+            <nav className="flex flex-col gap-1 px-4 py-4">
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{ delay: i * 0.035 }}
                 >
                   {link.children ? (
                     <>
-                      <div className="flex items-center rounded text-white/80 transition-colors hover:bg-white/5 hover:text-white">
+                      <div className="flex items-center text-slate-700 transition-colors hover:bg-slate-50 hover:text-orange-500">
                         <Link
                           href={link.href}
                           onClick={() => setMobileMenuOpen(false)}
-                          className="flex-1 py-3 pl-4 pr-2 text-sm font-medium"
+                          className="flex-1 py-3 pl-4 pr-2 text-sm font-semibold uppercase"
                         >
                           {link.label}
                         </Link>
@@ -307,7 +271,7 @@ export default function Navbar() {
                           aria-label={t("Mở menu con", "Open submenu")}
                         >
                           <ChevronDown
-                            size={14}
+                            size={15}
                             className={`transition-transform duration-200 ${
                               mobileOpenItems.has(link.href) ? "rotate-180" : ""
                             }`}
@@ -328,7 +292,7 @@ export default function Navbar() {
                                 key={child.href}
                                 href={child.href}
                                 onClick={() => setMobileMenuOpen(false)}
-                                className="block rounded py-2.5 pl-8 pr-4 text-sm text-white/60 transition-colors hover:bg-white/5 hover:text-orange-400"
+                                className="block py-2.5 pl-8 pr-4 text-sm font-medium uppercase text-slate-500 transition-colors hover:bg-slate-50 hover:text-orange-500"
                               >
                                 {child.label}
                               </Link>
@@ -341,10 +305,10 @@ export default function Navbar() {
                     <Link
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`block py-3 px-4 rounded text-sm font-medium transition-colors ${
+                      className={`block px-4 py-3 text-sm font-semibold uppercase transition-colors ${
                         pathname === link.href
-                          ? "text-orange-400 bg-white/5"
-                          : "text-white/80 hover:text-white hover:bg-white/5"
+                          ? "bg-slate-50 text-orange-500"
+                          : "text-slate-700 hover:bg-slate-50 hover:text-orange-500"
                       }`}
                     >
                       {link.label}
@@ -383,10 +347,10 @@ export default function Navbar() {
               />
               <button
                 type="submit"
-                className="flex h-14 w-14 shrink-0 items-center justify-center text-slate-600 transition-colors hover:text-orange-500"
+                className="flex h-14 w-14 shrink-0 items-center justify-center text-slate-700 transition-colors hover:text-orange-500"
                 aria-label={t("Tìm kiếm", "Search")}
               >
-                <Search size={22} />
+                <Search size={22} strokeWidth={2.6} />
               </button>
             </form>
           </motion.div>

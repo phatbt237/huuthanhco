@@ -51,13 +51,6 @@ export default function AboutSection() {
                 fill
               />
             </div>
-            <div
-              className="absolute -bottom-6 -right-6 rounded-2xl p-6 text-white shadow-2xl"
-              style={{ backgroundColor: "#0D1B2A" }}
-            >
-              <div className="text-4xl font-bold text-orange-400">17+</div>
-              <div className="text-sm text-white/70 mt-1">{t("Năm kinh nghiệm", "Years Experience")}</div>
-            </div>
             <div className="absolute -top-4 -left-4 w-24 h-24 bg-orange-500 rounded-2xl -z-10" />
           </motion.div>
 
@@ -109,7 +102,7 @@ export default function AboutSection() {
 
             <Link
               href="/gioi-thieu"
-              className="inline-flex items-center gap-2 mt-8 bg-slate-900 hover:bg-orange-500 text-white px-6 py-3 rounded font-semibold text-sm transition-colors duration-200"
+              className="mt-8 inline-flex items-center gap-2 rounded bg-sky-600 px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-orange-500"
             >
               {t("Tìm hiểu thêm", "Learn More")}
             </Link>

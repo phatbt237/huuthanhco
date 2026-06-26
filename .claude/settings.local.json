@@ -11,7 +11,16 @@
       "Bash(cat .env.local)",
       "Bash(cat .env)",
       "Bash(xargs grep -l \"upload\\\\|image.*form\\\\|file.*input\")",
-      "PowerShell(Set-Location \"D:\\\\HuuThanhCo-FE\\\\huuthanhco\"; Get-ChildItem -Path \".\" -Directory | Where-Object {$_.Name -like \"public\" -or $_.Name -like \"static\"}; if\\(Test-Path \"public\"\\) { Get-ChildItem -Path \"public\" -Recurse })"
+      "PowerShell(Set-Location \"D:\\\\HuuThanhCo-FE\\\\huuthanhco\"; Get-ChildItem -Path \".\" -Directory | Where-Object {$_.Name -like \"public\" -or $_.Name -like \"static\"}; if\\(Test-Path \"public\"\\) { Get-ChildItem -Path \"public\" -Recurse })",
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(git commit *)",
+      "Bash(gh pr *)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(pkill -f \"npm run dev\")",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(git reset *)",
+      "Bash(git branch *)"
     ]
   }
 }

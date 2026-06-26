@@ -14,10 +14,7 @@ import { normalizeSearchText } from "@/lib/utils";
 
 const categoryMapVi: Record<string, string> = {
   "cang-bien": "Cảng biển",
-  "thuy-loi": "Thủy lợi",
-  "nao-vet": "Nạo vét",
   "ha-tang": "Hạ tầng",
-  "dich-vu": "Dịch vụ",
 };
 
 export default function ProjectsPage({ initialContent }: { initialContent?: CmsContent }) {
@@ -36,13 +33,10 @@ export default function ProjectsPage({ initialContent }: { initialContent?: CmsC
     setActiveCategory(category);
   }, [loaiParam]);
 
-  const allCategoryKeys = Array.from(new Set(projectItems.map((p) => p.category)));
   const categories = [
     { key: "all", label: t("Tất cả", "All") },
-    ...allCategoryKeys.map((key) => {
-      const proj = projectItems.find((p) => p.category === key)!;
-      return { key, label: lang === "vi" ? proj.category : proj.categoryEn };
-    }),
+    { key: "Cảng biển", label: t("Cảng biển", "Seaport") },
+    { key: "Hạ tầng", label: t("Hạ tầng", "Infrastructure") },
   ];
 
   const filtered = projectItems.filter((p) => {
@@ -139,9 +133,11 @@ export default function ProjectsPage({ initialContent }: { initialContent?: CmsC
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                      {lang === "vi" ? project.category : project.categoryEn}
-                    </span>
+                    {/*
+                      <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                        {lang === "vi" ? project.category : project.categoryEn}
+                      </span>
+                    */}
                   </div>
                   <div className="p-6">
                     <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-orange-500 transition-colors">

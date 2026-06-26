@@ -17,6 +17,14 @@ const fallbackHeroImages = [
 ];
 
 const INTERVAL = 5000;
+const LEGACY_HERO_TITLES = {
+  vi: "Đơn vị thi công công trình chuyên nghiệp",
+  en: "Professional Construction Contractor",
+} as const;
+const CURRENT_HERO_TITLES = {
+  vi: "Kiến tạo những công trình bền vững",
+  en: "Building Sustainable Structures",
+} as const;
 
 function localizedSetting(
   settings: SettingsMap,
@@ -36,24 +44,19 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const activeSlide = slides[current];
-  const heroEyebrow = localizedSetting(
-    settings,
-    lang,
-    { vi: "hero.eyebrow", en: "hero.eyebrowEn" },
-    {
-      vi: legacyContentFallbackEnabled ? "Công Ty Cổ phần Xây Dựng Hữu Thành" : "",
-      en: "Huu Thanh Construction Joint Stock Company",
-    },
-  );
-  const heroTitle = localizedSetting(
+  const configuredHeroTitle = localizedSetting(
     settings,
     lang,
     { vi: "hero.title", en: "hero.titleEn" },
     {
-      vi: legacyContentFallbackEnabled ? "Đơn vị thi công công trình chuyên nghiệp" : "",
-      en: "Professional Construction Contractor",
+      vi: legacyContentFallbackEnabled ? CURRENT_HERO_TITLES.vi : "",
+      en: CURRENT_HERO_TITLES.en,
     },
   );
+  const heroTitle =
+    configuredHeroTitle === LEGACY_HERO_TITLES[lang]
+      ? CURRENT_HERO_TITLES[lang]
+      : configuredHeroTitle;
   const heroDescription = localizedSetting(
     settings,
     lang,
@@ -141,15 +144,9 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
 
       {/* Content */}
       <div className="relative z-20 mx-auto w-full max-w-7xl px-6 text-left text-white sm:px-8 lg:px-12">
-        <div className="max-w-2xl pt-16 md:pt-20 lg:pt-24">
-        <motion.div initial={false} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, delay: 0.15 }}>
-          <span className="mb-5 inline-block rounded-full border border-orange-300/45 bg-slate-950/18 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.26em] text-orange-200 shadow-sm backdrop-blur-sm">
-            {heroEyebrow}
-          </span>
-        </motion.div>
-
+        <div className="w-full min-w-0 max-w-[calc(100vw-3rem)] pt-16 sm:max-w-2xl md:pt-20 lg:pt-24">
         <motion.h1
-          className="mb-5 max-w-xl text-3xl font-extrabold uppercase leading-tight drop-shadow-[0_3px_10px_rgba(0,0,0,0.55)] sm:text-4xl md:text-5xl lg:text-[54px]"
+          className="mb-5 max-w-[16ch] break-words text-[30px] font-extrabold uppercase leading-[1.12] text-[#42b7e8] drop-shadow-[0_3px_10px_rgba(0,0,0,0.72)] [overflow-wrap:anywhere] sm:text-4xl md:text-[44px] lg:text-5xl xl:text-[54px]"
           initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.25 }}
@@ -158,7 +155,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
         </motion.h1>
 
         <motion.p
-          className="mb-8 max-w-xl text-base font-medium leading-8 text-white/86 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] md:text-lg"
+          className="mb-8 w-full max-w-[calc(100vw-3rem)] break-words text-base font-medium leading-8 text-white/86 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:max-w-xl md:text-lg"
           initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.4 }}
@@ -176,19 +173,13 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
             href="/du-an"
             className="group flex items-center gap-2 rounded bg-orange-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-950/20 transition-all duration-200 hover:bg-orange-600 hover:shadow-orange-500/30"
           >
-            {t("Xem dự án", "View Projects")}
+            {t("Dự án", "Projects")}
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link
-            href="/lien-he"
-            className="flex items-center gap-2 rounded border border-white/35 bg-slate-950/18 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white hover:bg-white/10"
-          >
-            {t("Liên hệ ngay", "Contact Us")}
           </Link>
         </motion.div>
 
         <motion.div
-          className="mt-12 grid max-w-md grid-cols-3 gap-5"
+          className="mt-12 grid w-full max-w-[calc(100vw-3rem)] grid-cols-3 gap-2 sm:max-w-md sm:gap-5"
           initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1 }}
@@ -198,7 +189,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
             { value: "200+", label: t("Dự án hoàn thành", "Projects Completed") },
             { value: "50+", label: t("Thiết bị công trình", "Equipment Units") },
           ].map((stat) => (
-            <div key={stat.label} className="border-l border-white/25 pl-4">
+            <div key={stat.label} className="min-w-0 border-l border-white/25 pl-3 sm:pl-4">
               <div className="text-2xl font-bold text-orange-300 md:text-3xl">{stat.value}</div>
               <div className="mt-1 text-[11px] text-white/70">{stat.label}</div>
             </div>

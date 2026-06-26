@@ -14,37 +14,49 @@ export default function ServicesSection({ initialSettings }: { initialSettings?:
   const { lang, t } = useLanguage();
   const settings = useSiteSettings("services", initialSettings);
   const serviceItems = settingJson<Service[]>(settings, "services.items", services);
-  const serviceLinks = [
-    "/du-an?loai=cang-bien",
-    "/du-an?loai=cang-bien",
-    "/du-an?loai=thuy-loi",
-    "/du-an?loai=nao-vet",
-    "/du-an?loai=ha-tang",
-    "/thiet-bi",
+  const activityItems = [
+    {
+      ...serviceItems.find((service) => service.id === "1") ?? services[0],
+      name: "Các công trình giao thông hàng hải",
+      nameEn: "Marine Transportation Works",
+      description: "Thi công cảng biển, cảng nội địa, cầu cảng và các công trình phục vụ giao thông hàng hải.",
+      descriptionEn: "Construction of seaports, inland ports, wharves and marine transportation facilities.",
+      href: "/du-an?loai=cang-bien",
+    },
+    {
+      ...serviceItems.find((service) => service.id === "5") ?? services[4],
+      name: "Các công trình hạ tầng kỹ thuật",
+      nameEn: "Technical Infrastructure Works",
+      description: "Thi công hạ tầng giao thông, thủy lợi, kè bảo vệ bờ và các công trình kỹ thuật chuyên dụng.",
+      descriptionEn: "Construction of transportation, irrigation, shoreline protection and specialized technical infrastructure.",
+      href: "/du-an?loai=ha-tang",
+    },
+    {
+      ...serviceItems.find((service) => service.id === "6") ?? services[5],
+      name: "Dịch vụ kinh doanh, mua bán và cho thuê",
+      nameEn: "Trading, Sales and Leasing Services",
+      description: "Kinh doanh, mua bán và cho thuê máy móc, thiết bị thi công phục vụ các công trình xây dựng.",
+      descriptionEn: "Trading, sales and leasing of construction machinery and equipment for construction projects.",
+      image: "/images/dich-vu-kinh-doanh-mua-ban-cho-thue.png",
+      href: "/thiet-bi",
+    },
   ];
 
   return (
-    <section className="py-24 bg-slate-50">
+    <section id="linh-vuc-hoat-dong" className="scroll-mt-24 bg-slate-50 py-24 lg:scroll-mt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+        <div className="mb-14">
           <SectionTitle
-            label={t("Dịch vụ", "Services")}
-            title={t("Lĩnh vực dịch vụ", "Our Service Areas")}
+            title={t("Lĩnh vực hoạt động", "Areas of Operation")}
             subtitle={t(
-              "Hữu Thành cung cấp đa dạng dịch vụ xây dựng và thi công chuyên nghiệp.",
-              "Huu Thanh provides a wide range of professional construction and engineering services."
+              "Hữu Thành tập trung năng lực vào ba lĩnh vực hoạt động chủ lực.",
+              "Huu Thanh focuses its expertise on three core areas of operation."
             )}
           />
-          <Link
-            href="/du-an"
-            className="flex items-center gap-2 text-orange-500 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
-          >
-            {t("Xem dự án", "View Projects")} <ArrowRight size={16} />
-          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {serviceItems.map((service, i) => (
+          {activityItems.map((service, i) => (
             <motion.div
               key={service.id}
               initial={{ opacity: 0, y: 30 }}
@@ -53,7 +65,7 @@ export default function ServicesSection({ initialSettings }: { initialSettings?:
               transition={{ delay: i * 0.08, duration: 0.5 }}
               className="group relative overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 hover:shadow-xl"
             >
-              <Link href={serviceLinks[i] ?? "/du-an"} className="block">
+              <Link href={service.href} className="block">
                 {/* Image */}
                 <div className="relative h-60 overflow-hidden">
                   <img

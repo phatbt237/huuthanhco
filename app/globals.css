@@ -7,13 +7,21 @@
 
 html {
   scroll-behavior: smooth;
+  font-family: Arial, "Helvetica Neue", sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: Arial, "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 @keyframes marquee {
