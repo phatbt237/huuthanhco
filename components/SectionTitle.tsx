@@ -26,7 +26,7 @@ export default function SectionTitle({
       className={center ? "text-center" : ""}
     >
       {label && (
-        <span className="inline-block text-orange-500 text-xs font-bold uppercase tracking-widest mb-3 border-l-2 border-orange-500 pl-3">
+        <span className="inline-block text-sky-600 text-xs font-bold uppercase tracking-widest mb-3 border-l-2 border-sky-600 pl-3">
           {label}
         </span>
       )}

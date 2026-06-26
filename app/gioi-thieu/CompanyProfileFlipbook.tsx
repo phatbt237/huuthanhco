@@ -102,7 +102,7 @@ export default function CompanyProfileFlipbook() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-6 md:mb-10 md:flex-row md:items-end md:justify-between">
           <div>
-            <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-500">
+            <span className="text-xs font-bold uppercase tracking-[0.28em] text-sky-600">
               {t("Hồ sơ năng lực", "Company Profile")}
             </span>
             <h2 className="mt-4 max-w-3xl text-3xl font-extrabold leading-tight text-slate-900 md:text-5xl">
@@ -115,7 +115,7 @@ export default function CompanyProfileFlipbook() {
               href={PDF_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded bg-orange-500 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-orange-600"
+              className="inline-flex items-center justify-center gap-2 rounded bg-sky-600 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-sky-700"
             >
               <ExternalLink size={18} />
               {t("Xem PDF gốc", "View PDF")}
@@ -123,7 +123,7 @@ export default function CompanyProfileFlipbook() {
             <a
               href={PDF_URL}
               download
-              className="inline-flex items-center justify-center gap-2 rounded border border-slate-300 px-5 py-3 text-sm font-bold text-slate-800 transition-colors hover:border-orange-500 hover:text-orange-600"
+              className="inline-flex items-center justify-center gap-2 rounded border border-slate-300 px-5 py-3 text-sm font-bold text-slate-800 transition-colors hover:border-sky-600 hover:text-sky-700"
             >
               <Download size={18} />
               {t("Tải hồ sơ", "Download")}
@@ -146,7 +146,7 @@ export default function CompanyProfileFlipbook() {
             onClick={goBack}
             disabled={!canGoBack}
             aria-label={t("Trang trước", "Previous page")}
-            className="absolute left-3 top-1/2 z-20 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow-lg ring-1 ring-slate-200 transition hover:bg-orange-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 md:flex"
+            className="absolute left-3 top-1/2 z-20 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow-lg ring-1 ring-slate-200 transition hover:bg-sky-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 md:flex"
           >
             <ChevronLeft size={30} />
           </button>
@@ -156,7 +156,7 @@ export default function CompanyProfileFlipbook() {
             onClick={goNext}
             disabled={!canGoNext}
             aria-label={t("Trang sau", "Next page")}
-            className="absolute right-3 top-1/2 z-20 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow-lg ring-1 ring-slate-200 transition hover:bg-orange-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 md:flex"
+            className="absolute right-3 top-1/2 z-20 hidden h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow-lg ring-1 ring-slate-200 transition hover:bg-sky-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 md:flex"
           >
             <ChevronRight size={30} />
           </button>
@@ -236,7 +236,7 @@ export default function CompanyProfileFlipbook() {
                 setPageIndex(nextPage);
               }}
               aria-label={t("Chọn trang hồ sơ năng lực", "Select company profile page")}
-              className="h-2 w-full max-w-md cursor-pointer accent-orange-500"
+              className="h-2 w-full max-w-md cursor-pointer accent-sky-600"
             />
           </div>
         </motion.div>

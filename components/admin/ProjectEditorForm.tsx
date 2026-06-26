@@ -6,10 +6,8 @@ import { FormHeader, Input, SaveButton, SelectField, Textarea } from "./AdminCms
 import GalleryWithThumbnail from "./GalleryWithThumbnail";
 
 const projectCategories = [
-  { value: "Cảng biển", valueEn: "Seaport" },
-  { value: "Thủy lợi", valueEn: "Hydraulics" },
-  { value: "Nạo vét", valueEn: "Dredging" },
-  { value: "Hạ tầng", valueEn: "Infrastructure" },
+  { value: "Công trình giao thông hàng hải", valueEn: "Marine Transportation Works" },
+  { value: "Công trình hạ tầng kỹ thuật", valueEn: "Technical Infrastructure Works" },
   { value: "Dịch vụ", valueEn: "Services" },
 ];
 

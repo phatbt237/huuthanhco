@@ -13,8 +13,13 @@ import { projects } from "@/data/projects";
 import { normalizeSearchText } from "@/lib/utils";
 
 const categoryMapVi: Record<string, string> = {
-  "cang-bien": "Cảng biển",
-  "ha-tang": "Hạ tầng",
+  "giao-thong-hang-hai": "Công trình giao thông hàng hải",
+  "ha-tang-ky-thuat": "Công trình hạ tầng kỹ thuật",
+  "cang-bien": "Công trình giao thông hàng hải",
+  "nao-vet": "Công trình giao thông hàng hải",
+  "ha-tang": "Công trình hạ tầng kỹ thuật",
+  "thuy-loi": "Công trình hạ tầng kỹ thuật",
+  "cau-duong": "Công trình hạ tầng kỹ thuật",
 };
 
 export default function ProjectsPage({ initialContent }: { initialContent?: CmsContent }) {
@@ -35,8 +40,8 @@ export default function ProjectsPage({ initialContent }: { initialContent?: CmsC
 
   const categories = [
     { key: "all", label: t("Tất cả", "All") },
-    { key: "Cảng biển", label: t("Cảng biển", "Seaport") },
-    { key: "Hạ tầng", label: t("Hạ tầng", "Infrastructure") },
+    { key: "Công trình giao thông hàng hải", label: t("Công trình giao thông hàng hải", "Marine Transportation Works") },
+    { key: "Công trình hạ tầng kỹ thuật", label: t("Công trình hạ tầng kỹ thuật", "Technical Infrastructure Works") },
   ];
 
   const filtered = projectItems.filter((p) => {
@@ -87,7 +92,7 @@ export default function ProjectsPage({ initialContent }: { initialContent?: CmsC
                 <select
                   value={activeCategory}
                   onChange={(event) => setActiveCategory(event.target.value)}
-                  className="h-14 w-full border border-slate-200 bg-white px-5 text-base font-semibold text-slate-700 outline-none transition-colors focus:border-orange-400"
+                  className="h-14 w-full border border-slate-200 bg-white px-5 text-base font-semibold text-slate-700 outline-none transition-colors focus:border-sky-500"
                 >
                   {categories.map((cat) => (
                     <option key={cat.key} value={cat.key}>
@@ -103,9 +108,9 @@ export default function ProjectsPage({ initialContent }: { initialContent?: CmsC
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder={t("Tìm kiếm", "Search")}
-                  className="h-14 w-full border border-slate-200 bg-white px-5 pr-16 text-base text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-orange-400"
+                  className="h-14 w-full border border-slate-200 bg-white px-5 pr-16 text-base text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-sky-500"
                 />
-                <span className="absolute right-0 top-0 flex h-14 w-16 items-center justify-center bg-orange-500 text-white">
+                <span className="absolute right-0 top-0 flex h-14 w-16 items-center justify-center bg-sky-600 text-white">
                   <Search size={22} />
                 </span>
               </label>
@@ -134,13 +139,13 @@ export default function ProjectsPage({ initialContent }: { initialContent?: CmsC
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     {/*
-                      <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                      <span className="absolute top-3 left-3 bg-sky-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                         {lang === "vi" ? project.category : project.categoryEn}
                       </span>
                     */}
                   </div>
                   <div className="p-6">
-                    <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-orange-500 transition-colors">
+                    <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-sky-600 transition-colors">
                       {lang === "vi" ? project.name : project.nameEn}
                     </h2>
                     <p className="text-slate-500 text-sm mb-4 line-clamp-2">

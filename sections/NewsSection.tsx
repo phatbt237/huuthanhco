@@ -26,7 +26,7 @@ export default function NewsSection({ initialContent }: { initialContent?: CmsCo
           />
           <Link
             href="/tin-tuc"
-            className="flex items-center gap-2 text-orange-500 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
+            className="flex items-center gap-2 text-sky-600 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
           >
             {t("Xem tất cả", "View All")} <ArrowRight size={16} />
           </Link>
@@ -50,7 +50,7 @@ export default function NewsSection({ initialContent }: { initialContent?: CmsCo
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
-                  <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                  <span className="absolute top-3 left-3 bg-sky-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                     {lang === "vi" ? item.category : item.categoryEn}
                   </span>
                 </div>
@@ -59,13 +59,13 @@ export default function NewsSection({ initialContent }: { initialContent?: CmsCo
                     <Calendar size={12} />
                     {formatDate(item.date)}
                   </div>
-                  <h3 className="font-bold text-slate-900 text-base leading-snug line-clamp-2 group-hover:text-orange-500 transition-colors duration-200">
+                  <h3 className="font-bold text-slate-900 text-base leading-snug line-clamp-2 group-hover:text-sky-600 transition-colors duration-200">
                     {lang === "vi" ? item.title : item.titleEn}
                   </h3>
                   <p className="text-slate-500 text-sm mt-3 line-clamp-2">
                     {lang === "vi" ? item.excerpt : item.excerptEn}
                   </p>
-                  <span className="inline-flex items-center gap-1 mt-4 text-orange-500 text-sm font-semibold transition-all duration-200 group-hover:gap-2">
+                  <span className="inline-flex items-center gap-1 mt-4 text-sky-600 text-sm font-semibold transition-all duration-200 group-hover:gap-2">
                     {t("Đọc thêm", "Read More")} <ArrowRight size={14} />
                   </span>
                 </div>

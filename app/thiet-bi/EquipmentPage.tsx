@@ -27,7 +27,7 @@ export default function EquipmentPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
               {t("Phương tiện & Máy móc", "Vehicles & Machinery")}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
@@ -67,7 +67,7 @@ export default function EquipmentPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
                 <div className="p-6">
-                  <h2 className="font-bold text-slate-900 text-xl mb-2 group-hover:text-orange-500 transition-colors">
+                  <h2 className="font-bold text-slate-900 text-xl mb-2 group-hover:text-sky-600 transition-colors">
                     {lang === "vi" ? item.name : item.nameEn}
                   </h2>
                   <p className="text-slate-500 text-sm leading-relaxed mb-5">
@@ -79,7 +79,7 @@ export default function EquipmentPage() {
                     </p>
                     {(lang === "vi" ? item.specs : item.specsEn).map((spec) => (
                       <div key={spec} className="flex items-center gap-2 text-sm text-slate-600">
-                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-sky-600 shrink-0" />
                         {spec}
                       </div>
                     ))}

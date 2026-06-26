@@ -13,7 +13,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
   return (
     <>
       <Navbar />
-      <main className="flex-1 pt-20 lg:pt-[86px]">{children}</main>
+      <main className="flex-1 pt-20 lg:pt-24">{children}</main>
       <Footer />
     </>
   );

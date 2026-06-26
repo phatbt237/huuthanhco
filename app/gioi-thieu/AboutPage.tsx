@@ -44,7 +44,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
               {t("Về chúng tôi", "About Us")}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-white mt-4 leading-tight">
@@ -70,20 +70,23 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <span className="inline-flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.18em] text-[#f05a32]">
-                <span className="h-5 w-1 rounded-full bg-[#f05a32]" aria-hidden="true" />
+              <span className="inline-flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.18em] text-[#003b8f]">
+                <span className="h-5 w-1 rounded-full bg-[#003b8f]" aria-hidden="true" />
                 {t("Tổng quan công ty", "Company Overview")}
               </span>
-              <h2 className="mt-5 max-w-3xl text-3xl font-extrabold leading-[1.12] text-[#d71920] sm:text-4xl lg:text-5xl">
+              <h2 className="mt-5 max-w-3xl text-[32px] font-extrabold uppercase leading-[1.08] sm:text-[40px] lg:text-[46px]">
                 {lang === "en" ? (
                   <>
-                    <span className="block">Huu Thanh Construction</span>
-                    <span className="block">Joint Stock Company</span>
+                    <span className="block text-[#d71920]">Huu Thanh</span>
+                    <span className="block text-[#003b8f]">Construction Corporation</span>
                   </>
                 ) : (
                   <>
-                    <span className="block">Công ty Cổ phần</span>
-                    <span className="block">Xây dựng Hữu Thành</span>
+                    <span className="block text-[#003b8f]">Công ty Cổ phần</span>
+                    <span className="block whitespace-nowrap">
+                      <span className="text-[#003b8f]">Xây dựng </span>
+                      <span className="text-[#d71920]">Hữu Thành</span>
+                    </span>
                   </>
                 )}
               </h2>
@@ -140,7 +143,7 @@ export default function AboutPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
           >
-            <span className="text-xs font-bold uppercase tracking-[0.28em] text-orange-500">
+            <span className="text-xs font-bold uppercase tracking-[0.28em] text-sky-600">
               {t("Lịch sử hình thành và phát triển", "History and Development")}
             </span>
             <h2 className="mt-4 text-3xl font-extrabold leading-tight text-white md:text-4xl">
@@ -181,7 +184,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="bg-slate-50 rounded-2xl p-8"
             >
-              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mb-5">
+              <div className="w-12 h-12 bg-sky-600 rounded-xl flex items-center justify-center mb-5">
                 <Eye className="text-white" size={22} />
               </div>
               <h2 className="text-2xl font-bold text-slate-900 mb-4">{t("Tầm nhìn", "Vision")}</h2>
@@ -199,7 +202,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="bg-slate-50 rounded-2xl p-8"
             >
-              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mb-5">
+              <div className="w-12 h-12 bg-sky-600 rounded-xl flex items-center justify-center mb-5">
                 <Target className="text-white" size={22} />
               </div>
               <h2 className="text-2xl font-bold text-slate-900 mb-4">{t("Sứ mệnh", "Mission")}</h2>
@@ -226,10 +229,10 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="text-center p-6 rounded-2xl border border-slate-100 hover:border-orange-200 hover:shadow-md transition-all duration-300"
+                className="text-center p-6 rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-md transition-all duration-300"
               >
-                <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <v.icon className="text-orange-500" size={24} />
+                <div className="w-14 h-14 bg-sky-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <v.icon className="text-sky-600" size={24} />
                 </div>
                 <h3 className="font-bold text-slate-900 text-lg mb-2">{v.title}</h3>
                 <p className="text-slate-500 text-sm leading-relaxed">{v.desc}</p>
@@ -264,17 +267,17 @@ export default function AboutPage() {
                 >
                   <div className={`flex-1 flex items-center ${i % 2 === 0 ? "" : "md:flex-row-reverse"}`}>
                     <div className={`flex-1 bg-white rounded-2xl p-6 shadow-sm
-                      border-l-4 border-orange-500
+                      border-l-4 border-sky-600
                       md:border-l-0 md:border md:border-slate-100
                       ${i % 2 === 0 ? "md:text-right" : ""}`}
                     >
-                      <span className="text-orange-500 font-bold text-xl">{item.year}</span>
+                      <span className="text-sky-600 font-bold text-xl">{item.year}</span>
                       <h3 className="font-bold text-slate-900 text-lg mt-1 mb-2">{item.title}</h3>
                       <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
                     </div>
                     <div className="hidden md:block w-10 h-0.5 bg-slate-300 shrink-0" />
                   </div>
-                  <div className="hidden md:block w-4 h-4 rounded-full bg-orange-500 shrink-0 relative z-10 ring-4 ring-slate-50 shadow-md" />
+                  <div className="hidden md:block w-4 h-4 rounded-full bg-sky-600 shrink-0 relative z-10 ring-4 ring-slate-50 shadow-md" />
                   <div className="flex-1 hidden md:block" />
                 </motion.div>
               ))}

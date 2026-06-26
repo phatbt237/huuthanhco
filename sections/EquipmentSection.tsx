@@ -41,7 +41,7 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
           />
           <Link
             href="/thiet-bi"
-            className="flex items-center gap-2 text-orange-500 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
+            className="flex items-center gap-2 text-sky-600 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
           >
             {t("Xem tất cả", "View All")} <ArrowRight size={16} />
           </Link>
@@ -77,7 +77,7 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                     </div>
                     <div className="p-5">
-                      <h3 className="font-bold text-slate-900 text-base mb-2 group-hover:text-orange-500 transition-colors duration-200">
+                      <h3 className="font-bold text-slate-900 text-base mb-2 group-hover:text-sky-600 transition-colors duration-200">
                         {lang === "vi" ? item.name : item.nameEn}
                       </h3>
                       <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 mb-4">
@@ -86,7 +86,7 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
                       <div className="space-y-1">
                         {(lang === "vi" ? item.specs : item.specsEn).map((spec) => (
                           <div key={spec} className="flex items-center gap-2 text-xs text-slate-400">
-                            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-sky-600 shrink-0" />
                             {spec}
                           </div>
                         ))}
@@ -103,7 +103,7 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
         <div className="flex items-center justify-center gap-4 mt-10">
           <button
             onClick={prev}
-            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-orange-400 hover:text-orange-500 transition-all duration-200"
+            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-500 hover:text-sky-600 transition-all duration-200"
           >
             <ChevronLeft size={18} />
           </button>
@@ -115,7 +115,7 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
                 key={i}
                 onClick={() => setPage(i)}
                 className={`rounded-full transition-all duration-300 ${
-                  i === page ? "w-6 h-2.5 bg-orange-500" : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400"
+                  i === page ? "w-6 h-2.5 bg-sky-600" : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400"
                 }`}
               />
             ))}
@@ -123,7 +123,7 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
 
           <button
             onClick={next}
-            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-orange-400 hover:text-orange-500 transition-all duration-200"
+            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-500 hover:text-sky-600 transition-all duration-200"
           >
             <ChevronRight size={18} />
           </button>

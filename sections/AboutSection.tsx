@@ -51,7 +51,7 @@ export default function AboutSection() {
                 fill
               />
             </div>
-            <div className="absolute -top-4 -left-4 w-24 h-24 bg-orange-500 rounded-2xl -z-10" />
+            <div className="absolute -top-4 -left-4 w-24 h-24 bg-sky-600 rounded-2xl -z-10" />
           </motion.div>
 
           {/* Content */}
@@ -75,7 +75,7 @@ export default function AboutSection() {
                   transition={{ delay: i * 0.1, duration: 0.5 }}
                   className="flex items-center gap-3"
                 >
-                  <CheckCircle2 className="text-orange-500 shrink-0" size={20} />
+                  <CheckCircle2 className="text-sky-600 shrink-0" size={20} />
                   <span className="text-slate-600 text-sm">{item}</span>
                 </motion.div>
               ))}
@@ -92,7 +92,7 @@ export default function AboutSection() {
                   transition={{ delay: i * 0.1, duration: 0.5 }}
                   className="flex flex-col items-center justify-center py-6 px-4 text-center"
                 >
-                  <div className="text-4xl font-black text-orange-500 leading-none">
+                  <div className="text-4xl font-black text-sky-600 leading-none">
                     <CountUp to={stat.value} suffix={stat.suffix} />
                   </div>
                   <div className="text-xs text-slate-500 mt-2 leading-snug">{stat.label}</div>
@@ -102,7 +102,7 @@ export default function AboutSection() {
 
             <Link
               href="/gioi-thieu"
-              className="mt-8 inline-flex items-center gap-2 rounded bg-sky-600 px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-orange-500"
+              className="mt-8 inline-flex items-center gap-2 rounded bg-sky-600 px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-sky-600"
             >
               {t("Tìm hiểu thêm", "Learn More")}
             </Link>

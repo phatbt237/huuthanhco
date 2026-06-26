@@ -43,7 +43,7 @@ export default function NewsPage({ initialContent }: { initialContent?: CmsConte
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
               {t("Cập nhật", "Updates")}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
@@ -61,7 +61,7 @@ export default function NewsPage({ initialContent }: { initialContent?: CmsConte
 
       <nav className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-4 text-sm font-bold text-slate-500 sm:px-6 lg:px-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-slate-700 hover:text-orange-500">
+          <Link href="/" className="inline-flex items-center gap-2 text-slate-700 hover:text-sky-600">
             <Home size={16} />
             {t("Trang chủ", "Home")}
           </Link>
@@ -83,7 +83,7 @@ export default function NewsPage({ initialContent }: { initialContent?: CmsConte
                   placeholder={t("Tìm kiếm tin tức...", "Search news...")}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 text-slate-700 text-sm"
+                  className="w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm"
                 />
               </div>
 
@@ -115,10 +115,10 @@ export default function NewsPage({ initialContent }: { initialContent?: CmsConte
                           />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <span className="inline-block text-xs font-semibold text-orange-500 bg-orange-50 px-2 py-0.5 rounded mb-2">
+                          <span className="inline-block text-xs font-semibold text-sky-600 bg-sky-50 px-2 py-0.5 rounded mb-2">
                             {itemCategory}
                           </span>
-                          <h2 className="font-bold text-slate-900 text-base leading-snug line-clamp-2 group-hover:text-orange-500 transition-colors">
+                          <h2 className="font-bold text-slate-900 text-base leading-snug line-clamp-2 group-hover:text-sky-600 transition-colors">
                             {itemTitle}
                           </h2>
                           <div className="flex items-center gap-2 text-xs text-slate-400 mt-2 mb-3">
@@ -162,7 +162,7 @@ export default function NewsPage({ initialContent }: { initialContent?: CmsConte
                         />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-slate-800 line-clamp-2 group-hover:text-orange-500 transition-colors leading-snug">
+                        <p className="text-sm font-semibold text-slate-800 line-clamp-2 group-hover:text-sky-600 transition-colors leading-snug">
                           {itemTitle}
                         </p>
                         <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
@@ -183,7 +183,7 @@ export default function NewsPage({ initialContent }: { initialContent?: CmsConte
                   </p>
                   <Link
                     href="/lien-he"
-                    className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors"
+                    className="flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors"
                   >
                     {t("Liên hệ ngay", "Contact Now")} <ArrowRight size={14} />
                   </Link>

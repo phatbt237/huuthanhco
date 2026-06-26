@@ -45,7 +45,7 @@ export default function ProjectDetailPage({
         </p>
         <Link
           href="/du-an"
-          className="mt-8 inline-flex bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600"
+          className="mt-8 inline-flex bg-sky-600 px-5 py-3 text-sm font-bold text-white hover:bg-sky-700"
         >
           {t("Quay lại dự án", "Back to projects")}
         </Link>
@@ -96,11 +96,11 @@ export default function ProjectDetailPage({
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex flex-wrap items-center gap-2 text-sm text-white/60">
-            <Link href="/" className="hover:text-orange-400">
+            <Link href="/" className="hover:text-sky-500">
               {t("Trang chủ", "Home")}
             </Link>
             <span>/</span>
-            <Link href="/du-an" className="hover:text-orange-400">
+            <Link href="/du-an" className="hover:text-sky-500">
               {t("Dự án", "Projects")}
             </Link>
             <span>/</span>
@@ -113,7 +113,7 @@ export default function ProjectDetailPage({
             transition={{ duration: 0.55 }}
             className="max-w-4xl"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-orange-400/40 bg-orange-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-orange-300">
+            <span className="inline-flex items-center gap-2 rounded-full border border-sky-500/40 bg-sky-600/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-sky-300">
               {category}
             </span>
             <h1 className="mt-6 text-4xl font-black leading-tight text-white md:text-6xl">
@@ -157,7 +157,7 @@ export default function ProjectDetailPage({
                       <button
                         onClick={() => setGalleryPage((p) => p - 1)}
                         disabled={galleryPage === 0}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-orange-400 hover:text-orange-500 disabled:cursor-not-allowed disabled:opacity-30"
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-sky-500 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-30"
                       >
                         <ChevronLeft size={16} />
                       </button>
@@ -167,7 +167,7 @@ export default function ProjectDetailPage({
                       <button
                         onClick={() => setGalleryPage((p) => p + 1)}
                         disabled={galleryPage === totalPages - 1}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-orange-400 hover:text-orange-500 disabled:cursor-not-allowed disabled:opacity-30"
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-sky-500 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-30"
                       >
                         <ChevronRight size={16} />
                       </button>
@@ -247,7 +247,7 @@ export default function ProjectDetailPage({
             )}
 
             <div className="mt-10">
-              <span className="text-xs font-black uppercase tracking-[0.24em] text-orange-500">
+              <span className="text-xs font-black uppercase tracking-[0.24em] text-sky-600">
                 {t("Tổng quan dự án", "Project Overview")}
               </span>
               <h2 className="mt-3 text-3xl font-black text-slate-950">
@@ -273,7 +273,7 @@ export default function ProjectDetailPage({
               <div className="mt-6 divide-y divide-slate-200">
                 {infoRows.map((row) => (
                   <div key={row.label} className="flex gap-4 py-5 first:pt-0 last:pb-0">
-                    <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white">
+                    <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-white">
                       <row.icon size={18} />
                     </div>
                     <div>
@@ -291,7 +291,7 @@ export default function ProjectDetailPage({
 
             <Link
               href="/du-an"
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 py-4 text-sm font-black text-slate-700 transition-colors hover:border-orange-400 hover:text-orange-500"
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 py-4 text-sm font-black text-slate-700 transition-colors hover:border-sky-500 hover:text-sky-600"
             >
               <ArrowLeft size={16} />
               {t("Quay lại danh sách dự án", "Back to Projects")}
@@ -305,14 +305,14 @@ export default function ProjectDetailPage({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
               <div>
-                <span className="text-xs font-black uppercase tracking-[0.24em] text-orange-500">
+                <span className="text-xs font-black uppercase tracking-[0.24em] text-sky-600">
                   {t("Dự án liên quan", "Related Projects")}
                 </span>
                 <h2 className="mt-3 text-3xl font-black text-slate-950">
                   {t("Công trình cùng lĩnh vực", "Works in the Same Sector")}
                 </h2>
               </div>
-              <Link href="/du-an" className="text-sm font-black text-orange-500 hover:text-orange-600">
+              <Link href="/du-an" className="text-sm font-black text-sky-600 hover:text-sky-700">
                 {t("Xem tất cả", "View All")}
               </Link>
             </div>
@@ -333,10 +333,10 @@ export default function ProjectDetailPage({
                     />
                   </div>
                   <div className="p-5">
-                    <div className="mb-3 text-xs font-black uppercase tracking-[0.18em] text-orange-500">
+                    <div className="mb-3 text-xs font-black uppercase tracking-[0.18em] text-sky-600">
                       {lang === "vi" ? item.category : item.categoryEn}
                     </div>
-                    <h3 className="line-clamp-2 text-base font-black leading-6 text-slate-950 group-hover:text-orange-500">
+                    <h3 className="line-clamp-2 text-base font-black leading-6 text-slate-950 group-hover:text-sky-600">
                       {lang === "vi" ? item.name : item.nameEn}
                     </h3>
                     <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-500">

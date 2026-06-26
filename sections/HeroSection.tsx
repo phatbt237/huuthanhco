@@ -146,7 +146,11 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
       <div className="relative z-20 mx-auto w-full max-w-7xl px-6 text-left text-white sm:px-8 lg:px-12">
         <div className="w-full min-w-0 max-w-[calc(100vw-3rem)] pt-16 sm:max-w-2xl md:pt-20 lg:pt-24">
         <motion.h1
-          className="mb-5 max-w-[16ch] break-words text-[30px] font-extrabold uppercase leading-[1.12] text-[#42b7e8] drop-shadow-[0_3px_10px_rgba(0,0,0,0.72)] [overflow-wrap:anywhere] sm:text-4xl md:text-[44px] lg:text-5xl xl:text-[54px]"
+          className="mb-5 max-w-[16ch] break-words text-[30px] font-extrabold uppercase leading-[1.12] text-white [overflow-wrap:anywhere] sm:text-4xl md:text-[44px] lg:text-5xl xl:text-[54px]"
+          style={{
+            WebkitTextStroke: "1.35px #8fb3d6",
+            textShadow: "0 1px 0 #3f6f9b, 0 4px 14px rgba(15, 23, 42, 0.66)",
+          }}
           initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.25 }}
@@ -171,7 +175,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
         >
           <Link
             href="/du-an"
-            className="group flex items-center gap-2 rounded bg-orange-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-950/20 transition-all duration-200 hover:bg-orange-600 hover:shadow-orange-500/30"
+            className="group flex items-center gap-2 rounded bg-sky-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-950/20 transition-all duration-200 hover:bg-sky-700 hover:shadow-sky-600/30"
           >
             {t("Dự án", "Projects")}
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -190,7 +194,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
             { value: "50+", label: t("Thiết bị công trình", "Equipment Units") },
           ].map((stat) => (
             <div key={stat.label} className="min-w-0 border-l border-white/25 pl-3 sm:pl-4">
-              <div className="text-2xl font-bold text-orange-300 md:text-3xl">{stat.value}</div>
+              <div className="text-2xl font-bold text-sky-300 md:text-3xl">{stat.value}</div>
               <div className="mt-1 text-[11px] text-white/70">{stat.label}</div>
             </div>
           ))}
@@ -206,7 +210,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
             onClick={() => goTo(i)}
             className={`transition-all duration-300 rounded-full ${
               i === current
-                ? "w-6 h-2 bg-orange-400"
+                ? "w-6 h-2 bg-sky-500"
                 : "w-2 h-2 bg-white/40 hover:bg-white/70"
             }`}
             aria-label={`Slide ${i + 1}`}

@@ -34,7 +34,7 @@ export default function ProjectGalleryStrip({ initialContent }: { initialContent
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block text-orange-500 text-xs font-bold uppercase tracking-widest mb-3">
+            <span className="inline-block text-sky-600 text-xs font-bold uppercase tracking-widest mb-3">
               {t("Thư viện công trình", "Project Showcase")}
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
@@ -66,7 +66,7 @@ export default function ProjectGalleryStrip({ initialContent }: { initialContent
 
                   {/* Content Overlay */}
                   <div className="absolute inset-0 p-4 flex flex-col justify-between translate-y-6 group-hover:translate-y-0 transition-transform duration-300">
-                    <span className="inline-block w-fit bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    <span className="inline-block w-fit bg-sky-600 text-white text-xs font-bold px-3 py-1 rounded-full">
                       {lang === "vi" ? project.category : project.categoryEn}
                     </span>
                     <div className="text-white">
@@ -92,7 +92,7 @@ export default function ProjectGalleryStrip({ initialContent }: { initialContent
         >
           <Link
             href="/du-an"
-            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200"
           >
             {t("Xem toàn bộ dự án", "View All Projects")}
           </Link>

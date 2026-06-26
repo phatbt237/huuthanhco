@@ -8,19 +8,19 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const slides = [
   {
-    src: "/images/gioi-thieu/khoi-cong-cang-dong-xuyen.jpg",
-    altVi: "Lễ khởi công hạng mục Cảng khu công nghiệp Đông Xuyên",
-    altEn: "Groundbreaking ceremony at Dong Xuyen Industrial Port",
+    src: "/images/gioi-thieu/anh-khoi-cong.jpg",
+    altVi: "Tập thể Hữu Thành tại lễ khởi công công trình Bến tàu 30.000DWT",
+    altEn: "Huu Thanh team at the groundbreaking ceremony for the 30,000DWT wharf project",
   },
   {
-    src: "/images/gioi-thieu/khoi-cong-cang-go-dau-b5.jpg",
-    altVi: "Lễ khởi công thi công cầu cảng 30.000DWT tại Cảng Gò Dầu B",
-    altEn: "Groundbreaking ceremony for the 30,000DWT wharf at Go Dau B Port",
+    src: "/images/gioi-thieu/le-khanh-thanh-ptsc-dung-quat.png",
+    altVi: "Lễ khánh thành Bến số 3 Cảng PTSC Dung Quất",
+    altEn: "Inauguration ceremony of Berth No. 3 at PTSC Dung Quat Port",
   },
   {
-    src: "/images/gioi-thieu/khoi-cong-cang-long-binh.jpg",
-    altVi: "Lễ động thổ nâng cấp cầu cảng Long Bình",
-    altEn: "Groundbreaking ceremony for Long Binh wharf upgrade",
+    src: "/images/gioi-thieu/khai-truong-cau-cang-sowatco-long-binh.png",
+    altVi: "Lễ khai trương cầu cảng số 1 Cảng Sowatco Long Bình",
+    altEn: "Opening ceremony of Berth No. 1 at Sowatco Long Binh Port",
   },
   {
     src: "/images/gioi-thieu/khoi-cong-ha-luu-vung-tau-gd3.jpg",
@@ -28,9 +28,24 @@ const slides = [
     altEn: "Groundbreaking ceremony for the phase III wharf extension at Vung Tau downstream port",
   },
   {
-    src: "/images/gioi-thieu/khoi-cong-ha-luu-vung-tau-gd3-hop-long.jpg",
-    altVi: "Lễ hợp long dự án nối dài cầu cảng giai đoạn III tại Cảng Hạ Lưu Vũng Tàu",
-    altEn: "Closure ceremony for the phase III wharf extension at Vung Tau downstream port",
+    src: "/images/gioi-thieu/khoi-cong-99.jpg",
+    altVi: "Lễ khởi công xây dựng kho cảng Mái Dầm và nhà máy pha chế xăng",
+    altEn: "Groundbreaking ceremony for Mai Dam storage port and fuel blending plant",
+  },
+  {
+    src: "/images/gioi-thieu/anh-tat-nien.jpg",
+    altVi: "Tập thể Hữu Thành tại tiệc tất niên",
+    altEn: "Huu Thanh team at the year-end party",
+  },
+  {
+    src: "/images/gioi-thieu/anh-tat-nien-1.jpg",
+    altVi: "Đội ngũ Hữu Thành tại tiệc tất niên",
+    altEn: "Huu Thanh staff at the year-end party",
+  },
+  {
+    src: "/images/gioi-thieu/anh-tat-nien-2.jpg",
+    altVi: "Hoạt động khen thưởng tại tiệc tất niên Hữu Thành",
+    altEn: "Award activity at Huu Thanh's year-end party",
   },
 ];
 
@@ -107,7 +122,7 @@ export default function GroundbreakingCarousel() {
       <button
         type="button"
         onClick={() => move(-1)}
-        className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/40 bg-slate-950/35 text-white opacity-100 backdrop-blur-sm transition hover:bg-slate-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+        className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/40 bg-slate-950/35 text-white opacity-100 backdrop-blur-sm transition hover:bg-slate-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
         aria-label={t("Ảnh trước", "Previous image")}
       >
         <ChevronLeft size={22} aria-hidden="true" />
@@ -116,7 +131,7 @@ export default function GroundbreakingCarousel() {
       <button
         type="button"
         onClick={() => move(1)}
-        className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/40 bg-slate-950/35 text-white opacity-100 backdrop-blur-sm transition hover:bg-slate-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+        className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/40 bg-slate-950/35 text-white opacity-100 backdrop-blur-sm transition hover:bg-slate-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
         aria-label={t("Ảnh tiếp theo", "Next image")}
       >
         <ChevronRight size={22} aria-hidden="true" />
@@ -131,8 +146,8 @@ export default function GroundbreakingCarousel() {
             key={slide.src}
             type="button"
             onClick={() => goTo(index)}
-            className={`h-2.5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 ${
-              index === current ? "w-7 bg-orange-500" : "w-2.5 bg-white/75 hover:bg-white"
+            className={`h-2.5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
+              index === current ? "w-7 bg-sky-600" : "w-2.5 bg-white/75 hover:bg-white"
             }`}
             aria-label={t(`Xem ảnh ${index + 1}`, `View image ${index + 1}`)}
             aria-current={index === current ? "true" : undefined}

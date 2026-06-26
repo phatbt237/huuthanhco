@@ -43,7 +43,7 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
           />
           <Link
             href="/du-an"
-            className="flex items-center gap-2 text-orange-500 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
+            className="flex items-center gap-2 text-sky-600 font-semibold text-sm hover:gap-3 transition-all duration-200 shrink-0"
           >
             {t("Xem tất cả", "View All")} <ArrowRight size={16} />
           </Link>
@@ -77,12 +77,12 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                      <span className="absolute top-3 left-3 bg-sky-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                         {lang === "vi" ? project.category : project.categoryEn}
                       </span>
                     </div>
                     <div className="p-5">
-                      <h3 className="font-bold text-slate-900 text-sm leading-snug mb-3 line-clamp-2 group-hover:text-orange-500 transition-colors duration-200">
+                      <h3 className="font-bold text-slate-900 text-sm leading-snug mb-3 line-clamp-2 group-hover:text-sky-600 transition-colors duration-200">
                         {lang === "vi" ? project.name : project.nameEn}
                       </h3>
                       <div className="flex items-center gap-4 text-xs text-slate-400">
@@ -102,7 +102,7 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
           <button
             onClick={prev}
             disabled={false}
-            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-orange-400 hover:text-orange-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-500 hover:text-sky-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
           >
             <ChevronLeft size={18} />
           </button>
@@ -114,7 +114,7 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
                 key={i}
                 onClick={() => setPage(i)}
                 className={`rounded-full transition-all duration-300 ${
-                  i === page ? "w-6 h-2.5 bg-orange-500" : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400"
+                  i === page ? "w-6 h-2.5 bg-sky-600" : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400"
                 }`}
               />
             ))}
@@ -123,7 +123,7 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
           <button
             onClick={next}
             disabled={false}
-            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-orange-400 hover:text-orange-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-500 hover:text-sky-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
           >
             <ChevronRight size={18} />
           </button>

@@ -46,16 +46,12 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
+            <div className="mb-6 flex items-center">
               <img
-                src="/images/huu-thanh-logo.png"
-                alt="Logo Hữu Thành"
-                className="w-12 h-12 object-contain rounded"
+                src="/images/huu-thanh-corp-logo-3d.png"
+                alt="Hữu Thành Corp."
+                className="h-20 w-20 shrink-0 rounded bg-white p-1.5 object-contain shadow-sm"
               />
-              <div>
-                <div className="text-white font-bold text-xl leading-tight">Hữu Thành</div>
-                <div className="text-orange-400 text-xs tracking-widest uppercase">Construction</div>
-              </div>
             </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               {t(
@@ -68,7 +64,7 @@ export default function Footer() {
                 href={facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-sky-600 flex items-center justify-center transition-colors duration-200"
                 aria-label="Facebook Hữu Thành"
               >
                 <span className="text-sm font-black leading-none">f</span>
@@ -86,9 +82,9 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-white/60 hover:text-orange-400 text-sm transition-colors duration-200 flex items-center gap-2"
+                    className="text-white/60 hover:text-sky-500 text-sm transition-colors duration-200 flex items-center gap-2"
                   >
-                    <span className="w-1 h-1 rounded-full bg-orange-500 inline-block" />
+                    <span className="w-1 h-1 rounded-full bg-sky-600 inline-block" />
                     {link.label}
                   </Link>
                 </li>
@@ -104,7 +100,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {services.map((item) => (
                 <li key={item} className="text-white/60 text-sm flex items-center gap-2">
-                  <span className="w-1 h-1 rounded-full bg-orange-500 inline-block" />
+                  <span className="w-1 h-1 rounded-full bg-sky-600 inline-block" />
                   {item}
                 </li>
               ))}
@@ -118,28 +114,28 @@ export default function Footer() {
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <Building2 size={16} className="text-orange-400 mt-0.5 shrink-0" />
+                <Building2 size={16} className="text-sky-500 mt-0.5 shrink-0" />
                 <span className="text-white/60 text-sm">
                   <span className="block font-semibold text-white/75">{t("Trụ sở", "Head Office")}</span>
                   {headOffice}
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin size={16} className="text-orange-400 mt-0.5 shrink-0" />
+                <MapPin size={16} className="text-sky-500 mt-0.5 shrink-0" />
                 <span className="text-white/60 text-sm">
                   <span className="block font-semibold text-white/75">{t("Văn phòng giao dịch", "Transaction Office")}</span>
                   {transactionOffice}
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone size={16} className="text-orange-400 shrink-0" />
-                <a href={`tel:${String(getSetting(settings, "company.phone")).replace(/\D/g, "")}`} className="text-white/60 hover:text-orange-400 text-sm transition-colors">
+                <Phone size={16} className="text-sky-500 shrink-0" />
+                <a href={`tel:${String(getSetting(settings, "company.phone")).replace(/\D/g, "")}`} className="text-white/60 hover:text-sky-500 text-sm transition-colors">
                   {getSetting(settings, "company.phone")}
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail size={16} className="text-orange-400 shrink-0" />
-                <a href={`mailto:${getSetting(settings, "company.email")}`} className="text-white/60 hover:text-orange-400 text-sm transition-colors">
+                <Mail size={16} className="text-sky-500 shrink-0" />
+                <a href={`mailto:${getSetting(settings, "company.email")}`} className="text-white/60 hover:text-sky-500 text-sm transition-colors">
                   {getSetting(settings, "company.email")}
                 </a>
               </li>

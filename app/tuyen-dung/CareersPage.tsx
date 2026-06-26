@@ -92,7 +92,7 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
               {t("Gia nhập đội ngũ", "Join Our Team")}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
@@ -118,7 +118,7 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="border border-slate-200 rounded-2xl overflow-hidden hover:border-orange-200 transition-colors duration-200"
+                className="border border-slate-200 rounded-2xl overflow-hidden hover:border-sky-200 transition-colors duration-200"
               >
                 {/* Header */}
                 <button
@@ -131,14 +131,14 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                     </h2>
                     <div className="flex flex-wrap gap-4 text-sm text-slate-500">
                       <span className="flex items-center gap-1.5">
-                        <MapPin size={14} className="text-orange-400" /> {job.location}
+                        <MapPin size={14} className="text-sky-500" /> {job.location}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <Briefcase size={14} className="text-orange-400" />
+                        <Briefcase size={14} className="text-sky-500" />
                         {lang === "vi" ? job.type : job.typeEn}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <DollarSign size={14} className="text-orange-400" /> {job.salary}
+                        <DollarSign size={14} className="text-sky-500" /> {job.salary}
                       </span>
                     </div>
                   </div>
@@ -168,7 +168,7 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                         <ul className="space-y-2 mb-6">
                           {(lang === "vi" ? job.requirements : job.requirementsEn).map((req) => (
                             <li key={req} className="flex items-start gap-2 text-sm text-slate-600">
-                              <CheckCircle2 size={15} className="text-orange-500 shrink-0 mt-0.5" />
+                              <CheckCircle2 size={15} className="text-sky-600 shrink-0 mt-0.5" />
                               {req}
                             </li>
                           ))}
@@ -182,10 +182,10 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                             <div className="space-y-3">
                               {applicationError && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{applicationError}</div>}
                               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                <input required value={applicationForm.fullName} onChange={(e) => setApplicationForm({ ...applicationForm, fullName: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Họ và tên", "Full name")} />
-                                <input required value={applicationForm.phone} onChange={(e) => setApplicationForm({ ...applicationForm, phone: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Số điện thoại", "Phone")} />
+                                <input required value={applicationForm.fullName} onChange={(e) => setApplicationForm({ ...applicationForm, fullName: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-500" placeholder={t("Họ và tên", "Full name")} />
+                                <input required value={applicationForm.phone} onChange={(e) => setApplicationForm({ ...applicationForm, phone: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-500" placeholder={t("Số điện thoại", "Phone")} />
                               </div>
-                              <input type="email" value={applicationForm.email} onChange={(e) => setApplicationForm({ ...applicationForm, email: e.target.value })} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder="Email" />
+                              <input type="email" value={applicationForm.email} onChange={(e) => setApplicationForm({ ...applicationForm, email: e.target.value })} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-500" placeholder="Email" />
                               <label className="block rounded-lg border border-dashed border-slate-300 bg-white px-3 py-3 text-sm text-slate-600">
                                 <span className="mb-2 block font-semibold text-slate-800">{t("Tải file CV", "Upload CV file")}</span>
                                 <input
@@ -209,11 +209,11 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                                   </div>
                                 )}
                               </label>
-                              <textarea value={applicationForm.message} onChange={(e) => setApplicationForm({ ...applicationForm, message: e.target.value })} rows={3} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-orange-400" placeholder={t("Lời nhắn", "Message")} />
+                              <textarea value={applicationForm.message} onChange={(e) => setApplicationForm({ ...applicationForm, message: e.target.value })} rows={3} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-500" placeholder={t("Lời nhắn", "Message")} />
                               <button
                                 disabled={isSubmitting || !applicationForm.fullName || !applicationForm.phone}
                                 onClick={() => void handleApply(job)}
-                                className="px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 bg-orange-500 hover:bg-orange-600 text-white disabled:cursor-not-allowed disabled:opacity-60"
+                                className="px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 bg-sky-600 hover:bg-sky-700 text-white disabled:cursor-not-allowed disabled:opacity-60"
                               >
                                 {isSubmitting ? t("Đang gửi...", "Sending...") : t("Ứng tuyển ngay", "Apply Now")}
                               </button>
@@ -235,7 +235,7 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                 "Không tìm thấy vị trí phù hợp? Gửi CV của bạn đến",
                 "Didn't find a suitable position? Send your CV to"
               )}{" "}
-              <a href="mailto:huuthanhco09@gmail.com" className="text-orange-500 font-semibold">
+              <a href="mailto:huuthanhco09@gmail.com" className="text-sky-600 font-semibold">
                 huuthanhco09@gmail.com
               </a>{" "}
               {t("— chúng tôi luôn chào đón nhân tài.", "— we always welcome talented candidates.")}

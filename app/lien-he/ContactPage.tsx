@@ -90,7 +90,7 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-orange-400 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
               {t("Liên hệ", "Contact")}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
@@ -122,15 +122,15 @@ export default function ContactPage() {
               <div className="space-y-6 mb-10">
                 {contactInfo.map((info) => (
                   <div key={info.title} className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center shrink-0">
-                      <info.icon className="text-orange-500" size={20} />
+                    <div className="w-12 h-12 bg-sky-50 rounded-xl flex items-center justify-center shrink-0">
+                      <info.icon className="text-sky-600" size={20} />
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
                         {info.title}
                       </p>
                       {info.href ? (
-                        <a href={info.href} className="text-slate-700 font-medium hover:text-orange-500 transition-colors">
+                        <a href={info.href} className="text-slate-700 font-medium hover:text-sky-600 transition-colors">
                           {info.value}
                         </a>
                       ) : (
@@ -186,27 +186,27 @@ export default function ContactPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                        {t("Họ và tên", "Full Name")} <span className="text-orange-500">*</span>
+                        {t("Họ và tên", "Full Name")} <span className="text-sky-600">*</span>
                       </label>
                       <input
                         required
                         type="text"
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 text-slate-700 text-sm"
+                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm"
                         placeholder={t("Nguyễn Văn A", "John Smith")}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                        {t("Số điện thoại", "Phone Number")} <span className="text-orange-500">*</span>
+                        {t("Số điện thoại", "Phone Number")} <span className="text-sky-600">*</span>
                       </label>
                       <input
                         required
                         type="tel"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 text-slate-700 text-sm"
+                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm"
                         placeholder={getSetting(settings, "company.phone")}
                       />
                     </div>
@@ -217,27 +217,27 @@ export default function ContactPage() {
                       type="email"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 text-slate-700 text-sm"
+                      className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm"
                       placeholder="email@example.com"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                      {t("Nội dung", "Message")} <span className="text-orange-500">*</span>
+                      {t("Nội dung", "Message")} <span className="text-sky-600">*</span>
                     </label>
                     <textarea
                       required
                       rows={5}
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 text-slate-700 text-sm resize-none"
+                      className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm resize-none"
                       placeholder={t("Mô tả dự án bạn cần tư vấn...", "Describe the project you need consultation for...")}
                     />
                   </div>
                   <button
                     disabled={isSubmitting}
                     type="submit"
-                    className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-xl font-semibold text-sm transition-colors duration-200 shadow-md hover:shadow-orange-500/30 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white px-8 py-3.5 rounded-xl font-semibold text-sm transition-colors duration-200 shadow-md hover:shadow-sky-600/30 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <Send size={16} />
                     {isSubmitting ? t("Đang gửi...", "Sending...") : t("Gửi yêu cầu", "Send Request")}

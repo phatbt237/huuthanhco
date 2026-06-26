@@ -23,7 +23,7 @@ export default function SearchPage() {
           style={{ backgroundImage: "url('/images/hero/Flash-5_132827290406613154.jpg')" }}
         />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <span className="text-xs font-bold uppercase tracking-[0.25em] text-orange-400">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-sky-500">
             {t("Tìm kiếm", "Search")}
           </span>
           <h1 className="mt-4 text-4xl font-bold text-white md:text-5xl">
@@ -44,7 +44,7 @@ export default function SearchPage() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           {query && (
             <div className="mb-8 flex items-center gap-3 text-sm font-semibold text-slate-500">
-              <Search size={18} className="text-orange-500" />
+              <Search size={18} className="text-sky-600" />
               {t(`Tìm thấy ${results.length} kết quả liên quan`, `${results.length} related results found`)}
             </div>
           )}
@@ -60,19 +60,19 @@ export default function SearchPage() {
                 >
                   <Link
                     href={item.href}
-                    className="group block border border-slate-200 p-6 transition-all hover:border-orange-300 hover:bg-orange-50/40 hover:shadow-md"
+                    className="group block border border-slate-200 p-6 transition-all hover:border-sky-300 hover:bg-sky-50/40 hover:shadow-md"
                   >
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <span className="inline-block bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-slate-500">
                           {item.category}
                         </span>
-                        <h2 className="mt-3 text-xl font-bold text-slate-950 transition-colors group-hover:text-orange-500">
+                        <h2 className="mt-3 text-xl font-bold text-slate-950 transition-colors group-hover:text-sky-600">
                           {item.title}
                         </h2>
                         <p className="mt-2 leading-7 text-slate-600">{item.excerpt}</p>
                       </div>
-                      <ArrowRight className="shrink-0 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-orange-500" />
+                      <ArrowRight className="shrink-0 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-sky-600" />
                     </div>
                   </Link>
                 </motion.div>
@@ -80,7 +80,7 @@ export default function SearchPage() {
             </div>
           ) : (
             <div className="border border-slate-200 p-10 text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center bg-orange-50 text-orange-500">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center bg-sky-50 text-sky-600">
                 <Search size={24} />
               </div>
               <h2 className="text-xl font-bold text-slate-950">

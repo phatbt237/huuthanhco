@@ -44,7 +44,7 @@ export default function NewsDetailPage({
         </p>
         <Link
           href="/tin-tuc"
-          className="mt-8 inline-flex bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600"
+          className="mt-8 inline-flex bg-sky-600 px-5 py-3 text-sm font-bold text-white hover:bg-sky-700"
         >
           {t("Quay lại tin tức", "Back to news")}
         </Link>
@@ -82,7 +82,7 @@ export default function NewsDetailPage({
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/82 to-slate-950/40" />
         </div>
         <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <span className="inline-flex bg-orange-500 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-white">
+          <span className="inline-flex bg-sky-600 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-white">
             {category}
           </span>
           <h1 className="mt-5 text-4xl font-black leading-tight text-white md:text-5xl">{title}</h1>
@@ -95,12 +95,12 @@ export default function NewsDetailPage({
 
       <nav className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-4 text-sm font-bold text-slate-500 sm:px-6 lg:px-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-slate-700 hover:text-orange-500">
+          <Link href="/" className="inline-flex items-center gap-2 text-slate-700 hover:text-sky-600">
             <Home size={16} />
             {t("Trang chủ", "Home")}
           </Link>
           <span className="text-slate-300">/</span>
-          <Link href="/tin-tuc" className="text-slate-700 hover:text-orange-500">
+          <Link href="/tin-tuc" className="text-slate-700 hover:text-sky-600">
             {t("Tin tức", "News")}
           </Link>
           <span className="text-slate-300">/</span>
@@ -132,7 +132,7 @@ export default function NewsDetailPage({
                       <button
                         onClick={() => setGalleryPage((p) => p - 1)}
                         disabled={galleryPage === 0}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-orange-400 hover:text-orange-500 disabled:cursor-not-allowed disabled:opacity-30"
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-sky-500 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-30"
                       >
                         <ChevronLeft size={16} />
                       </button>
@@ -142,7 +142,7 @@ export default function NewsDetailPage({
                       <button
                         onClick={() => setGalleryPage((p) => p + 1)}
                         disabled={galleryPage === totalPages - 1}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-orange-400 hover:text-orange-500 disabled:cursor-not-allowed disabled:opacity-30"
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-sky-500 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-30"
                       >
                         <ChevronRight size={16} />
                       </button>
@@ -245,7 +245,7 @@ export default function NewsDetailPage({
                       loading="lazy"
                     />
                     <div>
-                      <p className="line-clamp-2 text-sm font-bold leading-5 text-slate-800 group-hover:text-orange-500">
+                      <p className="line-clamp-2 text-sm font-bold leading-5 text-slate-800 group-hover:text-sky-600">
                         {(lang === "vi" ? newsItem.title : newsItem.titleEn) || newsItem.title || newsItem.titleEn}
                       </p>
                       <p className="mt-1 text-xs text-slate-400">{formatDate(newsItem.date)}</p>

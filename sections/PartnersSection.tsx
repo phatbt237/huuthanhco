@@ -46,7 +46,7 @@ export default function PartnersSection({ initialSettings }: { initialSettings?:
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-block text-orange-500 text-xs font-bold uppercase tracking-widest mb-3 border-l-2 border-orange-500 pl-3">
+          <span className="inline-block text-sky-600 text-xs font-bold uppercase tracking-widest mb-3 border-l-2 border-sky-600 pl-3">
             {t("Đối tác", "Partners")}
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
@@ -70,7 +70,7 @@ export default function PartnersSection({ initialSettings }: { initialSettings?:
           {track.map((src, i) => (
             <div
               key={i}
-              className="shrink-0 w-64 h-36 rounded-2xl bg-white flex items-center justify-center p-5 shadow-sm hover:shadow-md border border-slate-100 hover:border-orange-200 transition-all duration-300 group cursor-pointer"
+              className="shrink-0 w-64 h-36 rounded-2xl bg-white flex items-center justify-center p-5 shadow-sm hover:shadow-md border border-slate-100 hover:border-sky-200 transition-all duration-300 group cursor-pointer"
             >
               <img
                 src={src}
@@ -96,7 +96,7 @@ export default function PartnersSection({ initialSettings }: { initialSettings?:
               className="flex flex-col items-center justify-center py-8 px-4 text-center"
               style={{  }}
             >
-              <div className="text-4xl font-black text-orange-500 leading-none">
+              <div className="text-4xl font-black text-sky-600 leading-none">
                 <CountUp to={stat.value} suffix={stat.suffix} />
               </div>
               <div className="text-xs text-slate-500 mt-2 leading-snug">{stat.label}</div>

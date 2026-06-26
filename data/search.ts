@@ -30,11 +30,8 @@ type RawSearchItem = {
 };
 
 const projectSlugMap: Record<string, string> = {
-  "Cầu đường": "cau-duong",
-  "Cảng biển": "cang-bien",
-  "Thủy lợi": "thuy-loi",
-  "Nạo vét": "nao-vet",
-  "Hạ tầng": "ha-tang",
+  "Công trình giao thông hàng hải": "giao-thong-hang-hai",
+  "Công trình hạ tầng kỹ thuật": "ha-tang-ky-thuat",
 };
 
 const baseRawSearchItems: RawSearchItem[] = [
@@ -66,8 +63,8 @@ const baseRawSearchItems: RawSearchItem[] = [
     category: "Trang",
     categoryEn: "Page",
     href: "/du-an",
-    excerpt: "Danh sách dự án thi công cảng biển, hạ tầng, thủy lợi và nạo vét.",
-    excerptEn: "Project portfolio covering seaports, infrastructure, hydraulics and dredging.",
+    excerpt: "Danh sách dự án thuộc công trình giao thông hàng hải và công trình hạ tầng kỹ thuật.",
+    excerptEn: "Project portfolio covering marine transportation works and technical infrastructure works.",
     keywords: "du an cong trinh cau duong cang bien thuy loi nao vet ha tang",
     keywordsEn: "projects construction roads bridges seaport infrastructure hydraulic dredging",
   },

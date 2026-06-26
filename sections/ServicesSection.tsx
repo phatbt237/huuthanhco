@@ -21,7 +21,7 @@ export default function ServicesSection({ initialSettings }: { initialSettings?:
       nameEn: "Marine Transportation Works",
       description: "Thi công cảng biển, cảng nội địa, cầu cảng và các công trình phục vụ giao thông hàng hải.",
       descriptionEn: "Construction of seaports, inland ports, wharves and marine transportation facilities.",
-      href: "/du-an?loai=cang-bien",
+      href: "/du-an?loai=giao-thong-hang-hai",
     },
     {
       ...serviceItems.find((service) => service.id === "5") ?? services[4],
@@ -29,7 +29,7 @@ export default function ServicesSection({ initialSettings }: { initialSettings?:
       nameEn: "Technical Infrastructure Works",
       description: "Thi công hạ tầng giao thông, thủy lợi, kè bảo vệ bờ và các công trình kỹ thuật chuyên dụng.",
       descriptionEn: "Construction of transportation, irrigation, shoreline protection and specialized technical infrastructure.",
-      href: "/du-an?loai=ha-tang",
+      href: "/du-an?loai=ha-tang-ky-thuat",
     },
     {
       ...serviceItems.find((service) => service.id === "6") ?? services[5],
@@ -83,7 +83,7 @@ export default function ServicesSection({ initialSettings }: { initialSettings?:
                     <h3 className="font-bold text-white text-base leading-snug line-clamp-2 flex-1">
                       {lang === "vi" ? service.name : service.nameEn}
                     </h3>
-                    <div className="shrink-0 w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                    <div className="shrink-0 w-8 h-8 rounded-full bg-sky-600 flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
                       <ArrowRight size={14} className="text-white" />
                     </div>
                   </div>
