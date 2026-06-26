@@ -66,10 +66,10 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08, duration: 0.4 }}
-                  className="group relative rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300"
+                  className="group relative flex h-full overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl"
                 >
-                  <Link href={getProjectDetailHref(project)} className="block">
-                    <div className="relative h-56 overflow-hidden">
+                  <Link href={getProjectDetailHref(project)} className="flex h-full w-full flex-col">
+                    <div className="relative h-56 shrink-0 overflow-hidden">
                       <img
                         src={mediaFileUrl(project.image)}
                         alt={lang === "vi" ? project.name : project.nameEn}
@@ -81,13 +81,19 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
                         {lang === "vi" ? project.category : project.categoryEn}
                       </span>
                     </div>
-                    <div className="p-5">
-                      <h3 className="font-bold text-slate-900 text-sm leading-snug mb-3 line-clamp-2 group-hover:text-sky-600 transition-colors duration-200">
+                    <div className="flex flex-1 flex-col p-5">
+                      <h3 className="mb-4 min-h-[4.15rem] text-sm font-bold leading-snug text-slate-900 line-clamp-3 transition-colors duration-200 group-hover:text-sky-600">
                         {lang === "vi" ? project.name : project.nameEn}
                       </h3>
-                      <div className="flex items-center gap-4 text-xs text-slate-400">
-                        <span className="flex items-center gap-1.5"><MapPin size={12} />{project.location}</span>
-                        <span className="flex items-center gap-1.5"><Calendar size={12} />{project.year}</span>
+                      <div className="mt-auto flex min-w-0 items-center gap-4 text-xs font-semibold text-slate-400">
+                        <span className="flex min-w-0 items-center gap-1.5">
+                          <MapPin size={12} className="shrink-0" />
+                          <span className="truncate">{project.location}</span>
+                        </span>
+                        <span className="flex shrink-0 items-center gap-1.5">
+                          <Calendar size={12} className="shrink-0" />
+                          {project.year}
+                        </span>
                       </div>
                     </div>
                   </Link>

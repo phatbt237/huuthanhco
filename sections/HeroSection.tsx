@@ -146,10 +146,10 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
       <div className="relative z-20 mx-auto w-full max-w-7xl px-6 text-left text-white sm:px-8 lg:px-12">
         <div className="w-full min-w-0 max-w-[calc(100vw-3rem)] pt-16 sm:max-w-2xl md:pt-20 lg:pt-24">
         <motion.h1
-          className="mb-5 max-w-[16ch] break-words text-[30px] font-extrabold uppercase leading-[1.12] text-white [overflow-wrap:anywhere] sm:text-4xl md:text-[44px] lg:text-5xl xl:text-[54px]"
+          className="mb-5 max-w-[16ch] break-words text-[30px] font-extrabold uppercase leading-[1.12] text-[#0284c7] [overflow-wrap:anywhere] sm:text-4xl md:text-[44px] lg:text-5xl xl:text-[54px]"
           style={{
-            WebkitTextStroke: "1.35px #8fb3d6",
-            textShadow: "0 1px 0 #3f6f9b, 0 4px 14px rgba(15, 23, 42, 0.66)",
+            WebkitTextStroke: "1.35px #ffffff",
+            textShadow: "0 2px 0 rgba(255, 255, 255, 0.72), 0 5px 14px rgba(15, 23, 42, 0.68)",
           }}
           initial={false}
           animate={{ opacity: 1, y: 0 }}
