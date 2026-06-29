@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
+import { Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import SiteChrome from "@/components/SiteChrome";
 import { absoluteSiteUrl, SITE_URL } from "@/lib/siteMetadata";
 
 const iconVersion = "20260608-2";
+const beVietnamPro = Be_Vietnam_Pro({
+  subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+  fallback: ["system-ui", "Arial", "sans-serif"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -86,7 +93,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className="h-full" data-scroll-behavior="smooth">
+    <html lang="vi" className={`${beVietnamPro.className} h-full`} data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"

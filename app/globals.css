@@ -7,13 +7,12 @@
 
 html {
   scroll-behavior: smooth;
-  font-family: Arial, "Helvetica Neue", sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, "Helvetica Neue", sans-serif;
+  font-family: inherit;
   -webkit-font-smoothing: antialiased;
 }
 
