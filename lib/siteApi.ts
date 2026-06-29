@@ -87,7 +87,7 @@ export const legacyContentFallbackEnabled = process.env.NODE_ENV !== "production
 
 const developmentDefaultSiteSettings: SettingsMap = {
   "company.name": "Công ty Cổ phần Xây dựng Hữu Thành",
-  "company.phone": "0981 80 66 76",
+  "company.phone": "028 73093068",
   "company.email": "huuthanhco09@gmail.com",
   "company.facebook": "https://www.facebook.com/HuuThanhJSC",
   "company.taxCode": "0309349692",

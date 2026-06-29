@@ -79,7 +79,7 @@ const jsonLd = {
   },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+84-981-806-676",
+    telephone: "+84-28-7309-3068",
     email: "huuthanhco09@gmail.com",
     contactType: "customer service",
     availableLanguage: "Vietnamese",

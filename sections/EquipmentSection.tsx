@@ -83,14 +83,6 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
                       <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 mb-4">
                         {lang === "vi" ? item.description : item.descriptionEn}
                       </p>
-                      <div className="space-y-1">
-                        {(lang === "vi" ? item.specs : item.specsEn).map((spec) => (
-                          <div key={spec} className="flex items-center gap-2 text-xs text-slate-400">
-                            <span className="w-1.5 h-1.5 rounded-full bg-sky-600 shrink-0" />
-                            {spec}
-                          </div>
-                        ))}
-                      </div>
                     </div>
                   </Link>
                 </motion.div>

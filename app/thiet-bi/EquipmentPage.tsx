@@ -73,17 +73,6 @@ export default function EquipmentPage() {
                   <p className="text-slate-500 text-sm leading-relaxed mb-5">
                     {lang === "vi" ? item.description : item.descriptionEn}
                   </p>
-                  <div className="space-y-2 border-t border-slate-200 pt-4">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-                      {t("Thông số kỹ thuật", "Specifications")}
-                    </p>
-                    {(lang === "vi" ? item.specs : item.specsEn).map((spec) => (
-                      <div key={spec} className="flex items-center gap-2 text-sm text-slate-600">
-                        <span className="w-1.5 h-1.5 rounded-full bg-sky-600 shrink-0" />
-                        {spec}
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </motion.div>
             ))}
