@@ -12,6 +12,16 @@ import { useCmsContent } from "@/lib/useCmsContent";
 import { getProjectDetailHref, getProjectSlug } from "@/lib/projects";
 import { mediaFileUrl } from "@/lib/siteApi";
 
+const hiddenDescriptionPlaceholders = new Set([
+  "nội dung đang được cập nhật.",
+  "noi dung dang duoc cap nhat.",
+  "content is being updated.",
+]);
+
+function isHiddenDescription(value: string) {
+  return hiddenDescriptionPlaceholders.has(value.trim().toLowerCase());
+}
+
 export default function ProjectDetailPage({
   project,
   relatedProjects,
@@ -58,11 +68,12 @@ export default function ProjectDetailPage({
       ? relatedProjects
       : allProjects.filter((item) => item.id !== activeProject.id).slice(0, 3);
   const title = (lang === "vi" ? activeProject.name : activeProject.nameEn) || activeProject.name || activeProject.nameEn;
-  const description =
+  const rawDescription =
     (lang === "vi" ? activeProject.description : activeProject.descriptionEn) ||
     activeProject.description ||
     activeProject.descriptionEn ||
-    t("Nội dung đang được cập nhật.", "Content is being updated.");
+    "";
+  const description = isHiddenDescription(rawDescription) ? "" : rawDescription;
   const category =
     (lang === "vi" ? activeProject.category : activeProject.categoryEn) ||
     activeProject.category ||
@@ -85,7 +96,7 @@ export default function ProjectDetailPage({
       value: description,
       icon: CheckCircle2,
     },
-  ];
+  ].filter((row) => row.value?.trim());
 
   return (
     <>
@@ -119,9 +130,11 @@ export default function ProjectDetailPage({
             <h1 className="mt-6 text-4xl font-black leading-tight text-white md:text-6xl">
               {title}
             </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-white/72">
-              {description}
-            </p>
+            {description && (
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-white/72">
+                {description}
+              </p>
+            )}
           </motion.div>
         </div>
       </section>
@@ -254,7 +267,7 @@ export default function ProjectDetailPage({
                 {t("Thông tin thi công", "Construction Information")}
               </h2>
               <div className="mt-6 space-y-5 text-base leading-8 text-slate-600">
-                <p>{description}</p>
+                {description && <p>{description}</p>}
                 <p>
                   {t(
                     "Hữu Thành triển khai dự án với đội ngũ kỹ thuật chuyên trách, hệ thống thiết bị phù hợp và quy trình kiểm soát an toàn, chất lượng, tiến độ theo từng giai đoạn thi công.",
