@@ -46,7 +46,7 @@ export default function NewsPage({ initialContent }: { initialContent?: CmsConte
             <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
               {t("Cập nhật", "Updates")}
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
+            <h1 className="mt-4 text-4xl font-bold uppercase tracking-wide text-white md:text-5xl">
               {t("Tin tức", "News")}
             </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">

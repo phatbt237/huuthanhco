@@ -16,8 +16,8 @@ export default function AboutSection() {
   const { t } = useLanguage();
 
   const stats = [
-    { value: 200, suffix: "+", label: t("Dự án hoàn thành", "Projects Completed") },
-    { value: 50,  suffix: "+", label: t("Thiết bị công trình", "Equipment Units") },
+    { value: 50, suffix: "+", label: t("Dự án hoàn thành", "Projects Completed") },
+    { value: 200, suffix: "+", label: t("Thiết bị công trình", "Equipment Units") },
     { value: 300, suffix: "+", label: t("Cán bộ nhân viên", "Staff Members") },
   ];
 
@@ -58,10 +58,10 @@ export default function AboutSection() {
           <div>
             <SectionTitle
               label={t("Về chúng tôi", "About Us")}
-              title={t("Xây dựng nền tảng vững chắc cho tương lai", "Building a solid foundation for the future")}
+              title={t("XÂY DỰNG NỀN TẢNG VỮNG CHẮC CHO TƯƠNG LAI", "BUILDING A SOLID FOUNDATION FOR THE FUTURE")}
               subtitle={t(
-                "Công ty Cổ phần Xây dựng Hữu Thành được thành lập năm 2009, chuyên thi công các công trình thủy công, cảng biển, kè sông và hạ tầng giao thông tại khu vực miền Nam Việt Nam.",
-                "Huu Thanh Construction Joint Stock Company was established in 2009, specializing in hydraulic engineering, port construction, riverbank reinforcement and transportation infrastructure in Southern Vietnam."
+                "Công ty Cổ phần Xây dựng Hữu Thành được thành lập năm 2009, chuyên thi công các công trình thủy công, cảng biển, kè sông và hạ tầng giao thông trải dài từ Bắc vào Nam.",
+                "Huu Thanh Construction Joint Stock Company was established in 2009, specializing in hydraulic engineering, port construction, riverbank reinforcement and transportation infrastructure projects across Vietnam from North to South."
               )}
             />
 

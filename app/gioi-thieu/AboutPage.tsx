@@ -47,7 +47,7 @@ export default function AboutPage() {
             <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
               {t("Về chúng tôi", "About Us")}
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4 leading-tight">
+            <h1 className="mt-4 text-4xl font-bold uppercase leading-tight tracking-wide text-white md:text-5xl">
               {t("Giới thiệu công ty", "About the Company")}
             </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">

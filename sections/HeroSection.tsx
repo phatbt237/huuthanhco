@@ -190,8 +190,8 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
         >
           {[
             { value: "17+", label: t("Năm kinh nghiệm", "Years Experience") },
-            { value: "200+", label: t("Dự án hoàn thành", "Projects Completed") },
-            { value: "50+", label: t("Thiết bị công trình", "Equipment Units") },
+            { value: "50+", label: t("Dự án hoàn thành", "Projects Completed") },
+            { value: "200+", label: t("Thiết bị công trình", "Equipment Units") },
           ].map((stat) => (
             <div key={stat.label} className="min-w-0 border-l border-white/25 pl-3 sm:pl-4">
               <div className="text-2xl font-bold text-sky-300 md:text-3xl">{stat.value}</div>

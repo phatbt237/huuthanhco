@@ -95,7 +95,7 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
             <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
               {t("Gia nhập đội ngũ", "Join Our Team")}
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
+            <h1 className="mt-4 text-4xl font-bold uppercase tracking-wide text-white md:text-5xl">
               {t("Tuyển dụng", "Careers")}
             </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">

@@ -30,7 +30,7 @@ export default function EquipmentPage() {
             <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
               {t("Phương tiện & Máy móc", "Vehicles & Machinery")}
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
+            <h1 className="mt-4 text-4xl font-bold uppercase tracking-wide text-white md:text-5xl">
               {t("Thiết bị thi công", "Construction Equipment")}
             </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">

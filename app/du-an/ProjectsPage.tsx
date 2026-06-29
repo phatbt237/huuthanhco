@@ -66,13 +66,13 @@ export default function ProjectsPage({ initialContent }: { initialContent?: CmsC
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
+            <h1 className="mt-4 text-4xl font-bold uppercase tracking-wide text-white md:text-5xl">
               {t("Dự án tiêu biểu", "Featured Projects")}
             </h1>
             <p className="text-white/60 text-lg mt-4 max-w-2xl">
               {t(
-                "Hơn 200 dự án hoàn thành trải dài khắp miền Nam Việt Nam.",
-                "Over 200 completed projects spanning across Southern Vietnam."
+                "Hơn 50 dự án hoàn thành trải dài từ Bắc vào Nam.",
+                "Over 50 completed projects spanning across Vietnam from North to South."
               )}
             </p>
           </motion.div>
