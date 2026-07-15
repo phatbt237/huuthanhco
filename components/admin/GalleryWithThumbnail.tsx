@@ -22,6 +22,7 @@ export default function GalleryWithThumbnail({
   onImagesChange,
   onThumbnailChange,
   onUploaded,
+  onUploadingChange,
 }: {
   label?: string;
   images: string[];
@@ -32,6 +33,7 @@ export default function GalleryWithThumbnail({
   onImagesChange: (images: string[]) => void;
   onThumbnailChange: (thumbnail: string) => void;
   onUploaded: (item: MediaRecord) => void;
+  onUploadingChange?: (uploading: boolean) => void;
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
@@ -54,6 +56,7 @@ export default function GalleryWithThumbnail({
     if (!files?.length) return;
     setUploadError("");
     setIsUploading(true);
+    onUploadingChange?.(true);
     const added: string[] = [];
     try {
       for (const file of Array.from(files)) {
@@ -66,6 +69,7 @@ export default function GalleryWithThumbnail({
       setUploadError(error instanceof Error ? error.message : "Không upload được ảnh.");
     } finally {
       setIsUploading(false);
+      onUploadingChange?.(false);
     }
   };
 

@@ -14,7 +14,7 @@ import { getNewsDetailHref } from "@/lib/news";
 export default function NewsPage({ initialContent }: { initialContent?: CmsContent }) {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent(initialContent);
-  const newsItems = mergeById(news, cmsContent.news);
+  const newsItems = mergeById(news, cmsContent.news, true).sort((a, b) => b.date.localeCompare(a.date));
   const [query, setQuery] = useState("");
 
   const filtered = newsItems.filter((n) => {

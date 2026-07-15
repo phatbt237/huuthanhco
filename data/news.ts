@@ -8,6 +8,8 @@ export interface NewsItem {
   categoryEn: string;
   thumbnail: string;
   galleryImages?: string[];
+  imageCaption?: string;
+  imageCaptionEn?: string;
   excerpt: string;
   excerptEn: string;
   content: string;
@@ -16,30 +18,33 @@ export interface NewsItem {
 
 export const news: NewsItem[] = [
   {
-    id: "1",
-    title: "Hữu Thành hoàn thành thi công cầu vượt sông Đồng Nai trước tiến độ 2 tháng",
-    titleEn: "Huu Thanh completes Dong Nai River Bridge 2 months ahead of schedule",
-    slug: "huu-thanh-hoan-thanh-cau-vuot-song-dong-nai",
-    date: "2024-11-15",
+    id: "ha-thuy-sa-lan-2026",
+    title: "Hữu Thành hạ thủy thành công sà lan chuyên dụng",
+    titleEn: "Huu Thanh successfully launches a specialized barge",
+    slug: "huu-thanh-ha-thuy-thanh-cong-sa-lan-chuyen-dung",
+    date: "2026-07-11",
     category: "Tin tức",
     categoryEn: "News",
-    thumbnail: "/images/du-an/huu-thanh-co_132828180671236856.jpg",
-    excerpt: "Công ty Hữu Thành vừa hoàn thành thi công cầu vượt sông Đồng Nai trước tiến độ 2 tháng, đảm bảo chất lượng vượt yêu cầu kỹ thuật.",
-    excerptEn: "Huu Thanh Co. has completed the Dong Nai River overpass bridge 2 months ahead of schedule, meeting and exceeding all technical quality requirements.",
-    content: `Ngày 15/11/2024, Công ty Cổ phần Xây dựng Hữu Thành đã chính thức bàn giao công trình cầu vượt sông Đồng Nai cho chủ đầu tư, sớm hơn kế hoạch ban đầu 2 tháng. Đây là kết quả của quá trình thi công liên tục, phối hợp nhịp nhàng giữa các đội kỹ thuật trên công trường.
+    thumbnail: "/images/tin-tuc/ha-thuy-sa-lan-chuyen-dung-01.jpg",
+    galleryImages: ["/images/tin-tuc/ha-thuy-sa-lan-chuyen-dung-02.jpg"],
+    imageCaption: "Hình ảnh: Sà lan chuyên dụng của Công ty Cổ phần Xây dựng Hữu Thành trong ngày hạ thủy thành công 11/7/2026 tại TP.HCM.",
+    imageCaptionEn: "Image: Huu Thanh Construction Joint Stock Company's specialized barge during its successful launch in Ho Chi Minh City on July 11, 2026.",
+    excerpt: "Ngày 11/7/2026, Công ty Cổ phần Xây dựng Hữu Thành đã hạ thủy thành công sà lan chuyên dụng tại TP.HCM. Sự kiện đánh dấu một cột mốc quan trọng trong quá trình đầu tư, hoàn thiện hệ thống thiết bị phục vụ thi công, đồng thời khẳng định năng lực tổ chức và triển khai các dự án giao thông hàng hải của doanh nghiệp.",
+    excerptEn: "On July 11, 2026, Huu Thanh Construction Joint Stock Company successfully launched a specialized barge in Ho Chi Minh City. The event marked an important milestone in the company's investment and development of construction equipment, while affirming its capability to organize and deliver maritime transport projects.",
+    content: `Sà lan chuyên dụng được hạ thủy có chiều dài 58,25 m, chiều rộng 18,25 m, chiều cao mạn 3,20 m, chiều chìm thiết kế 2,40 m, tổng dung tích 906 GT và trọng tải toàn phần 1.727,30 tấn. Với mặt boong rộng và tải trọng lớn, phương tiện đáp ứng nhu cầu tập kết thiết bị, vật tư phục vụ thi công các công trình giao thông hàng hải.
 
-Công trình có tổng chiều dài hơn 420 mét, gồm 7 nhịp chính với hệ thống dầm super-T tiền chế, được thi công trong điều kiện địa chất phức tạp ven sông. Đội ngũ kỹ sư Hữu Thành đã ứng dụng công nghệ đóng cọc ống thép D800 kết hợp với hệ thống quan trắc GPS-RTK thời gian thực để đảm bảo độ chính xác cao nhất.
+Quá trình hạ thủy được đội ngũ kỹ sư, cán bộ kỹ thuật và công nhân phối hợp triển khai chặt chẽ, tuân thủ phương án kỹ thuật và các yêu cầu an toàn. Sà lan rời triền, tiếp nước ổn định và được đưa về vị trí neo đậu an toàn, hoàn tất thành công các bước quan trọng của kế hoạch hạ thủy.
 
-Kết quả kiểm tra chất lượng độc lập do đơn vị tư vấn giám sát thực hiện cho thấy 100% các hạng mục đều đạt và vượt tiêu chuẩn TCVN về tải trọng, độ võng và khả năng chịu lực. Đây là minh chứng rõ ràng nhất cho năng lực kỹ thuật và cam kết chất lượng của Hữu Thành.
+Việc đưa Sà lan chuyên dùng mới vào khai thác giúp Hữu Thành chủ động hơn về phương tiện thiết bị phục vụ thi công các công trình, dự án cảng biển. Đây cũng là bước đầu tư quan trọng nhằm tăng cường năng lực thiết bị thi công đáp ứng các dự án quy mô lớn trong thời gian tới.
 
-Phát biểu tại lễ bàn giao, Tổng Giám đốc Công ty Hữu Thành nhấn mạnh: "Việc hoàn thành sớm công trình này không chỉ thể hiện năng lực của đội ngũ mà còn góp phần giảm thiểu gián đoạn giao thông và thúc đẩy lưu thông hàng hóa trong khu vực kinh tế trọng điểm phía Nam."`,
-    contentEn: `On November 15, 2024, Huu Thanh Construction Joint Stock Company officially handed over the Dong Nai River overpass bridge to the investor, two months ahead of the original schedule. This achievement is the result of continuous construction and seamless coordination between technical teams on site.
+Sự kiện hạ thủy thành công sà lan chuyên dùng tiếp tục khẳng định định hướng chú trọng đầu tư trang thiết bị thi công, phát triển đội ngũ thiết bị thi công thủy của Công ty Cổ phần Xây dựng Hữu Thành. Với nền tảng thiết bị ngày càng lớn mạnh cùng đội ngũ cán bộ, kỹ thuật giàu kinh nghiệm, Hữu Thành sẵn sàng đồng hành trong những công trình, dự án giao thông hàng hải lớn, trọng điểm, qua đó góp phần tạo nên các giá trị bền vững cho cộng đồng và xã hội.`,
+    contentEn: `The specialized barge has a length of 58.25 m, a width of 18.25 m, a moulded depth of 3.20 m, a design draught of 2.40 m, a gross tonnage of 906 GT, and a total deadweight of 1,727.30 tonnes. With its wide deck and large load capacity, the vessel can accommodate equipment and materials for maritime transport construction works.
 
-The project spans more than 420 meters in total length, consisting of 7 main spans with a precast super-T girder system, constructed under complex geological conditions along the riverbank. Huu Thanh's engineering team applied D800 steel pipe pile driving technology combined with a real-time GPS-RTK monitoring system to ensure the highest level of precision.
+The launch was closely coordinated by engineers, technical staff, and workers in compliance with the approved technical method and safety requirements. The barge left the slipway, entered the water stably, and was moved to a safe anchorage, successfully completing the key stages of the launch plan.
 
-Independent quality inspection results conducted by the supervising consultant showed that 100% of all items met and exceeded TCVN standards for load capacity, deflection, and structural strength. This is the clearest demonstration of Huu Thanh's technical capability and commitment to quality.
+Putting the new specialized barge into operation gives Huu Thanh greater control over the equipment used for port and maritime construction projects. It is also an important investment that strengthens the company's construction equipment capacity for larger-scale projects in the years ahead.
 
-Speaking at the handover ceremony, the General Director of Huu Thanh emphasized: "Completing this project ahead of schedule not only demonstrates the capability of our team, but also helps minimize traffic disruptions and boost cargo flow in the key southern economic zone."`,
+The successful launch further affirms Huu Thanh Construction Joint Stock Company's focus on investing in construction equipment and developing its marine construction fleet. With an increasingly robust equipment base and an experienced technical team, Huu Thanh is ready to contribute to major and nationally significant maritime transport projects, creating sustainable value for communities and society.`,
   },
   {
     id: "2",

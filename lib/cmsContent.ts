@@ -93,8 +93,12 @@ function normalizeCmsContent(data: unknown): CmsContent {
   };
 }
 
-export function mergeById<T extends { id: string; slug?: string; name?: string; title?: string }>(base: T[], custom: T[]): T[] {
-  if (!legacyContentFallbackEnabled) return custom;
+export function mergeById<T extends { id: string; slug?: string; name?: string; title?: string }>(
+  base: T[],
+  custom: T[],
+  includeBase = legacyContentFallbackEnabled,
+): T[] {
+  if (!includeBase) return custom;
   const customKeys = new Set(custom.flatMap(getContentKeys));
   return [...custom, ...base.filter((item) => !getContentKeys(item).some((key) => customKeys.has(key)))];
 }

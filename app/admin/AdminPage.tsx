@@ -76,6 +76,8 @@ const blankNews: NewsItem = {
   categoryEn: "News",
   thumbnail: "",
   galleryImages: [],
+  imageCaption: "",
+  imageCaptionEn: "",
   excerpt: "",
   excerptEn: "",
   content: "",
@@ -373,6 +375,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
   const [statusMessage, setStatusMessage] = useState("");
   const [statusKind, setStatusKind] = useState<"success" | "error">("success");
   const [mediaLibrary, setMediaLibrary] = useState<MediaRecord[]>([]);
+  const [isNewsDirty, setIsNewsDirty] = useState(false);
 
   const refreshMediaLibrary = () => {
     void listMedia(session.accessToken).then(setMediaLibrary).catch(() => setMediaLibrary([]));
@@ -408,6 +411,15 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
   const resetForm = () => {
     resetFields();
     setIsEditorOpen(false);
+    setIsNewsDirty(false);
+  };
+
+  const canLeaveEditor = () => !(
+    isEditorOpen && activeTab === "news" && isNewsDirty
+  ) || window.confirm("Bài viết có thay đổi chưa được lưu. Bạn có chắc muốn rời đi?");
+
+  const requestResetForm = () => {
+    if (canLeaveEditor()) resetForm();
   };
 
   const mutateContent = async (action: () => Promise<unknown>, successMessage: string) => {
@@ -431,6 +443,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
   };
 
   const changeTab = (tab: Tab) => {
+    if (!canLeaveEditor()) return;
     setActiveTab(tab);
     setQuery("");
     resetForm();
@@ -481,7 +494,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
       : gallery[0] ?? newsForm.thumbnail ?? "";
     const item: NewsItem = {
       ...newsForm,
-      id: newsForm.id || nextId("news"),
+      id: newsForm.id,
       slug: newsForm.slug || slugify(newsForm.title),
       titleEn: newsForm.titleEn || newsForm.title,
       categoryEn: newsForm.categoryEn || newsForm.category,
@@ -595,7 +608,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
               <div className="truncate text-[11px] text-slate-500">{session.user.email}</div>
             </div>
             <button
-              onClick={onLogout}
+              onClick={() => { if (canLeaveEditor()) onLogout(); }}
               title="Đăng xuất"
               className="flex-shrink-0 rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-700 hover:text-white"
             >
@@ -647,7 +660,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                     <h2 className="mt-0.5 text-xl font-black text-slate-900">{tabTitle(activeTab)}</h2>
                   </div>
                   <button
-                    onClick={resetForm}
+                    onClick={requestResetForm}
                     className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 px-4 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
                   >
                     ← Quay lại danh sách
@@ -657,6 +670,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                 <div className="p-6">
                   {activeTab === "news" && (
                     <NewsEditorForm
+                      key={newsForm.id || "new-news"}
                       value={newsForm}
                       media={mediaLibrary}
                       token={session.accessToken}
@@ -667,6 +681,7 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
                       onUploaded={(item) => setMediaLibrary((previous) => [item, ...previous.filter((entry) => entry.id !== item.id)])}
                       onDelete={newsForm.id && canDelete(role, "news") ? () => removeItem(newsForm.id) : undefined}
                       onSave={saveNews}
+                      onDirtyChange={setIsNewsDirty}
                     />
                   )}
 

@@ -303,10 +303,11 @@ export async function deleteJob(token: string, id: string) {
 }
 
 export async function createNews(token: string, data: NewsItem) {
+  const { id: _id, ...payload } = data;
   return requestJson<NewsItem>("/api/news", {
     method: "POST",
     headers: authHeaders(token),
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   });
 }
 
@@ -320,6 +321,21 @@ export async function updateNews(token: string, id: string, data: NewsItem) {
 
 export async function deleteNews(token: string, id: string) {
   return requestJson<void>(`/api/news/${id}`, { method: "DELETE", headers: authHeaders(token) });
+}
+
+export type VimeoNormalization = {
+  provider: "vimeo";
+  videoId: string;
+  hash?: string;
+  playerUrl: string;
+};
+
+export async function normalizeVimeo(token: string, url: string) {
+  return requestJson<VimeoNormalization>("/api/media/vimeo/normalize", {
+    method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify({ url }),
+  });
 }
 
 export async function createProject(token: string, data: Project) {
