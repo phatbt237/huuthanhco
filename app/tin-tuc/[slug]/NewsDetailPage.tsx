@@ -156,7 +156,10 @@ export default function NewsDetailPage({
             )}
 
             {hasInlineMedia ? (
-              <NewsRichContent content={content} className="news-rich-content--preview" />
+              <NewsRichContent
+                content={content}
+                className={`news-rich-content--preview ${excerpt ? "" : "news-rich-content--after-header"}`}
+              />
             ) : (
               <>
                 <button
@@ -170,7 +173,10 @@ export default function NewsDetailPage({
                 </button>
                 <p className="mb-10 text-sm italic leading-6 text-slate-500">{imageCaption}</p>
 
-                <NewsRichContent content={content} className="news-rich-content--preview" />
+                <NewsRichContent
+                  content={content}
+                  className={`news-rich-content--preview ${excerpt ? "" : "news-rich-content--after-header"}`}
+                />
 
                 {additionalImages.map((src, index) => (
                   <figure key={src} className="mb-10">
