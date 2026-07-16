@@ -129,7 +129,7 @@ export default function NewsDetailPage({
       </nav>
 
       <main className="news-article-document bg-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-20 pt-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12 lg:px-8 lg:pt-16">
+        <div className="mx-auto grid max-w-[1600px] gap-10 px-4 pb-20 pt-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-12 lg:px-8 lg:pt-16">
           <article className="min-w-0">
             <header className="border-b border-slate-200 pb-7">
               <h1 className="max-w-5xl text-left text-3xl font-bold uppercase leading-[1.24] text-[#173c7a] sm:text-4xl lg:text-[48px]">

@@ -41,6 +41,19 @@ function legacyParagraphs(content: string) {
     .map((paragraph, index) => <p key={`${index}-${paragraph.slice(0, 24)}`}>{paragraph}</p>);
 }
 
+function renderNewsImage(imageNode: Element) {
+  const src = imageNode.attribs.src ?? "";
+  if (!/^https?:\/\//i.test(src) && !src.startsWith("/")) return <></>;
+  const alt = imageNode.attribs.alt ?? "";
+  const caption = imageNode.attribs.title ?? "";
+  return (
+    <figure className="news-image">
+      <img src={mediaFileUrl(src)} alt={alt} loading="lazy" />
+      {caption && <figcaption>{caption}</figcaption>}
+    </figure>
+  );
+}
+
 export default function NewsRichContent({ content, className = "" }: { content: string; className?: string }) {
   const normalized = content.trim();
   const isHtml = /<([a-z][\w-]*)\b[^>]*>/i.test(normalized);
@@ -55,6 +68,20 @@ export default function NewsRichContent({ content, className = "" }: { content: 
               const tagName = domNode.name.toLowerCase();
               if (["script", "iframe", "object", "embed", "style"].includes(tagName)) return <></>;
 
+              if (tagName === "p") {
+                const meaningfulChildren = domNode.children.filter(
+                  (child) => child.type !== "text" || child.data.trim().length > 0,
+                );
+                const onlyChild = meaningfulChildren[0];
+                if (
+                  meaningfulChildren.length === 1 &&
+                  onlyChild instanceof Element &&
+                  onlyChild.name.toLowerCase() === "img"
+                ) {
+                  return renderNewsImage(onlyChild);
+                }
+              }
+
               if (tagName === "figure" && domNode.attribs["data-provider"] === "vimeo") {
                 const videoId = domNode.attribs["data-video-id"] ?? "";
                 const hash = domNode.attribs["data-video-hash"] ?? "";
@@ -66,16 +93,7 @@ export default function NewsRichContent({ content, className = "" }: { content: 
               }
 
               if (tagName === "img") {
-                const src = domNode.attribs.src ?? "";
-                if (!/^https?:\/\//i.test(src) && !src.startsWith("/")) return <></>;
-                const alt = domNode.attribs.alt ?? "";
-                const caption = domNode.attribs.title ?? "";
-                return (
-                  <figure className="news-image">
-                    <img src={mediaFileUrl(src)} alt={alt} loading="lazy" />
-                    {caption && <figcaption>{caption}</figcaption>}
-                  </figure>
-                );
+                return renderNewsImage(domNode);
               }
 
               if (tagName === "a") {

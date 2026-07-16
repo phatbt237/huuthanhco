@@ -96,7 +96,16 @@ textarea {
 .news-rich-content--preview .news-image,
 .news-rich-content--preview .news-video { margin-block: 2.5rem; }
 .news-rich-content--preview .news-image img { width: 100%; max-height: 720px; object-fit: cover; }
-.news-rich-content--preview figcaption { text-align: left; color: #64748b; font-size: .875rem; line-height: 1.6; }
+.news-rich-content--preview figcaption { margin-top: .5rem; text-align: left; color: #111827; font-size: .875rem; font-style: italic; line-height: 1.6; }
+.news-rich-content--preview .news-image:has(+ p > em:only-child) { margin-bottom: 0; }
+.news-rich-content--preview .news-image + p:has(> em:only-child) {
+  margin-top: .5rem;
+  margin-bottom: 2.5rem;
+  color: #111827;
+  font-size: .875rem;
+  font-style: italic;
+  line-height: 1.6;
+}
 
 @media (max-width: 640px) {
   .news-rich-content--preview p { font-size: 16px; line-height: 1.75; }
