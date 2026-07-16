@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Calendar, Check, ChevronLeft, ChevronRight, Home, Link2, X } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Home, Link2, Share2, X } from "lucide-react";
 import { mediaFileUrl } from "@/lib/siteApi";
 import { news } from "@/data/news";
 import type { NewsItem } from "@/data/news";
@@ -52,10 +52,11 @@ export default function NewsDetailPage({
     );
   }
 
-  const relatedItems =
+  const relatedItems = (
     relatedNews.length > 0
       ? relatedNews
-      : allNews.filter((newsItem) => newsItem.id !== activeItem.id).slice(0, 4);
+      : allNews.filter((newsItem) => newsItem.id !== activeItem.id)
+  ).slice(0, 3);
   const title = (lang === "vi" ? activeItem.title : activeItem.titleEn) || activeItem.title || activeItem.titleEn;
   const category =
     (lang === "vi" ? activeItem.category : activeItem.categoryEn) || activeItem.category || activeItem.categoryEn;
@@ -74,22 +75,10 @@ export default function NewsDetailPage({
     activeItem.imageCaption ||
     activeItem.imageCaptionEn ||
     title;
-  const articlePath = getNewsDetailHref(activeItem);
-  const canonicalUrl = `https://huuthanhco.vercel.app${articlePath}`;
-  const categoryNames = Array.from(
-    new Set(
-      allNews
-        .map((newsItem) =>
-          (lang === "vi" ? newsItem.category : newsItem.categoryEn) ||
-          newsItem.category ||
-          newsItem.categoryEn
-        )
-        .filter(Boolean)
-    )
-  ).slice(0, 5);
-
+  const canonicalUrl = `https://huuthanhco.vercel.app${getNewsDetailHref(activeItem)}`;
   const galleryImages = Array.from(new Set([thumbnail, ...(activeItem.galleryImages ?? [])].filter(Boolean)));
   const additionalImages = galleryImages.slice(1);
+  const hasInlineMedia = /<(?:img|figure)\b/i.test(content);
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
   const prevLightbox = () => setLightboxIndex((i) => (i !== null ? (i - 1 + galleryImages.length) % galleryImages.length : null));
@@ -102,17 +91,25 @@ export default function NewsDetailPage({
 
   return (
     <>
-      <section className="relative h-[280px] overflow-hidden bg-slate-900 sm:h-[360px] lg:h-[430px]">
-        <img
-          src="/images/hero/Flash-7_132827290711634447.jpg"
-          alt={t("Công trường xây dựng trên sông của Hữu Thành", "Huu Thanh marine construction site")}
-          className="h-full w-full object-cover"
+      <section className="relative overflow-hidden bg-[#0D1B2A] py-20 sm:py-24 lg:py-28">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-25"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80')" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
-          <span className="inline-flex border-l-4 border-sky-500 bg-slate-950/80 px-4 py-2 text-sm font-black uppercase tracking-[0.16em] text-white backdrop-blur-sm">
-            {t("Tin tức", "News")}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/92 via-slate-950/70 to-slate-950/25" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <span className="text-xs font-bold uppercase tracking-widest text-sky-500">
+            {t("Cập nhật", "Updates")}
           </span>
+          <h2 className="mt-4 text-4xl font-bold uppercase tracking-wide text-white md:text-5xl">
+            {t("Tin tức", "News")}
+          </h2>
+          <p className="mt-4 max-w-2xl text-lg text-white/60">
+            {t(
+              "Theo dõi những tin tức mới nhất về các dự án và hoạt động của Hữu Thành.",
+              "Stay updated with the latest news on Huu Thanh's projects and activities.",
+            )}
+          </p>
         </div>
       </section>
 
@@ -131,95 +128,73 @@ export default function NewsDetailPage({
         </div>
       </nav>
 
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-center gap-x-8 overflow-x-auto px-4 py-5 text-sm font-bold text-slate-400 sm:px-6">
-          {categoryNames.map((categoryName) => (
-            <span
-              key={categoryName}
-              className={`shrink-0 border-b-2 py-2 ${categoryName === category ? "border-sky-600 text-sky-700" : "border-transparent"}`}
-            >
-              {categoryName}
-            </span>
-          ))}
-        </div>
-      </section>
+      <main className="news-article-document bg-white">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-20 pt-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12 lg:px-8 lg:pt-16">
+          <article className="min-w-0">
+            <header className="border-b border-slate-200 pb-7">
+              <h1 className="max-w-5xl text-left text-3xl font-bold uppercase leading-[1.24] text-[#173c7a] sm:text-4xl lg:text-[48px]">
+                {title}
+              </h1>
+              <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-3 text-base text-slate-500">
+                <time dateTime={activeItem.date}>{formatDate(activeItem.date)}</time>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 font-medium text-slate-800 transition hover:text-[#173c7a]"
+                >
+                  <Share2 size={17} className="text-sky-500" />
+                  Facebook
+                </a>
+              </div>
+            </header>
 
-      <main className="bg-white">
-        <header className="mx-auto max-w-5xl px-4 pb-10 pt-12 sm:px-6 lg:px-8 lg:pt-16">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-sky-600">{category}</p>
-          <h1 className="mt-4 max-w-4xl text-3xl font-black leading-[1.2] text-slate-950 sm:text-4xl lg:text-5xl">
-            {title}
-          </h1>
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-7">
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-500">
-              <Calendar size={16} className="text-sky-600" />
-              {formatDate(activeItem.date)}
-            </div>
-            <div className="flex items-center gap-2">
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={t("Chia sẻ lên Facebook", "Share on Facebook")}
-                className="flex h-10 items-center gap-2 border border-slate-200 px-3 text-sm font-bold text-slate-600 transition hover:border-sky-600 hover:text-sky-700"
-              >
-                <span className="text-base font-black text-[#1877f2]">f</span>
-                Facebook
-              </a>
-              <button
-                type="button"
-                onClick={copyArticleLink}
-                aria-label={t("Sao chép liên kết bài viết", "Copy article link")}
-                className="flex h-10 w-10 items-center justify-center border border-slate-200 text-slate-500 transition hover:border-sky-600 hover:text-sky-700"
-              >
-                {copied ? <Check size={17} /> : <Link2 size={17} />}
-              </button>
-            </div>
-          </div>
-        </header>
-
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 pb-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:px-8">
-          <article className="mx-auto w-full max-w-4xl">
             {excerpt && (
-              <p className="mb-8 border-l-4 border-sky-600 pl-5 text-lg font-semibold leading-8 text-slate-700">
+              <p className="mb-10 mt-8 text-lg font-normal leading-[1.75] text-slate-800">
                 {excerpt}
               </p>
             )}
 
-            <button
-              type="button"
-              className="group relative mb-3 block aspect-[16/9] w-full cursor-zoom-in overflow-hidden bg-slate-100"
-              onClick={() => openLightbox(0)}
-              aria-label={t("Mở ảnh lớn", "Open large image")}
-            >
-              <img src={mediaFileUrl(thumbnail)} alt={title} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
-              <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
-            </button>
-            <p className="mb-10 text-center text-sm italic leading-6 text-slate-500">{imageCaption}</p>
-
-            <NewsRichContent content={content} />
-
-            {additionalImages.map((src, index) => (
-              <figure key={src} className="mb-10">
+            {hasInlineMedia ? (
+              <NewsRichContent content={content} className="news-rich-content--preview" />
+            ) : (
+              <>
                 <button
                   type="button"
-                  onClick={() => openLightbox(index + 1)}
-                  aria-label={t(`Mở ảnh ${index + 2}`, `Open image ${index + 2}`)}
-                  className="group relative block aspect-[16/9] w-full cursor-zoom-in overflow-hidden bg-slate-100"
+                  className="group relative mb-3 block aspect-[16/9] w-full cursor-zoom-in overflow-hidden bg-slate-100"
+                  onClick={() => openLightbox(0)}
+                  aria-label={t("Mở ảnh lớn", "Open large image")}
                 >
-                  <img
-                    src={mediaFileUrl(src)}
-                    alt={`${title} ${index + 2}`}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
-                    loading="lazy"
-                  />
+                  <img src={mediaFileUrl(thumbnail)} alt={title} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]" />
                   <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
                 </button>
-                <figcaption className="mt-3 text-center text-sm italic leading-6 text-slate-500">
-                  {imageCaption}
-                </figcaption>
-              </figure>
-            ))}
+                <p className="mb-10 text-sm italic leading-6 text-slate-500">{imageCaption}</p>
+
+                <NewsRichContent content={content} className="news-rich-content--preview" />
+
+                {additionalImages.map((src, index) => (
+                  <figure key={src} className="mb-10">
+                    <button
+                      type="button"
+                      onClick={() => openLightbox(index + 1)}
+                      aria-label={t(`Mở ảnh ${index + 2}`, `Open image ${index + 2}`)}
+                      className="group relative block aspect-[16/9] w-full cursor-zoom-in overflow-hidden bg-slate-100"
+                    >
+                      <img
+                        src={mediaFileUrl(src)}
+                        alt={`${title} ${index + 2}`}
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                        loading="lazy"
+                      />
+                      <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
+                    </button>
+                    <figcaption className="mt-3 text-sm italic leading-6 text-slate-500">
+                      {imageCaption}
+                    </figcaption>
+                  </figure>
+                ))}
+              </>
+            )}
 
             <div className="mt-12 flex items-center justify-between border-t border-slate-200 pt-6 text-sm">
               <span className="font-bold text-slate-500">{t("Chia sẻ bài viết", "Share article")}</span>
@@ -284,35 +259,31 @@ export default function NewsDetailPage({
             )}
           </article>
 
-          <aside className="lg:sticky lg:top-28 lg:self-start">
-            <div className="border-t-4 border-sky-600 bg-slate-50 p-6">
-              <h2 className="mb-6 text-xl font-black uppercase tracking-tight text-slate-950">
-                {t("Tin nổi bật", "Featured News")}
-              </h2>
-              <div className="divide-y divide-slate-200">
-                {relatedItems.map((newsItem, index) => (
-                  <Link key={newsItem.id} href={getNewsDetailHref(newsItem)} className="group block py-5 first:pt-0">
-                    <img
-                      src={newsItem.thumbnail || "/images/du-an/huu-thanh-co_132827983464005202.jpg"}
-                      alt={(lang === "vi" ? newsItem.title : newsItem.titleEn) || newsItem.title || newsItem.titleEn}
-                      className={`mb-3 w-full object-cover ${index === 0 ? "aspect-[16/9]" : "aspect-[2/1]"}`}
-                      loading="lazy"
-                    />
-                    <p className="line-clamp-2 text-sm font-bold leading-6 text-slate-800 group-hover:text-sky-600">
-                      {(lang === "vi" ? newsItem.title : newsItem.titleEn) || newsItem.title || newsItem.titleEn}
-                    </p>
-                    <p className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-slate-400">
-                      <Calendar size={12} /> {formatDate(newsItem.date)}
-                    </p>
+          <aside className="self-start bg-[#f6f6f6] p-5 sm:p-7 lg:sticky lg:top-24">
+            <h2 className="mb-6 text-2xl font-bold uppercase text-slate-950">
+              {t("Tin nổi bật", "Featured news")}
+            </h2>
+            <div className="space-y-8">
+              {relatedItems.map((newsItem) => {
+                const relatedTitle =
+                  (lang === "vi" ? newsItem.title : newsItem.titleEn) || newsItem.title || newsItem.titleEn;
+                return (
+                  <Link key={newsItem.id} href={getNewsDetailHref(newsItem)} className="group block">
+                    <div className="aspect-[16/9] overflow-hidden bg-slate-200">
+                      <img
+                        src={mediaFileUrl(newsItem.thumbnail || "/images/du-an/huu-thanh-co_132827983464005202.jpg")}
+                        alt={relatedTitle}
+                        className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+                        loading="lazy"
+                      />
+                    </div>
+                    <p className="mt-3 text-sm text-slate-400">{formatDate(newsItem.date)}</p>
+                    <h3 className="mt-2 text-lg font-normal leading-[1.35] text-[#173c7a] transition group-hover:text-sky-600">
+                      {relatedTitle}
+                    </h3>
                   </Link>
-                ))}
-              </div>
-              <Link
-                href="/tin-tuc"
-                className="mt-6 inline-flex items-center gap-2 text-sm font-black uppercase tracking-wide text-sky-700 hover:text-sky-900"
-              >
-                {t("Xem tất cả tin tức", "View all news")} <ChevronRight size={16} />
-              </Link>
+                );
+              })}
             </div>
           </aside>
         </div>

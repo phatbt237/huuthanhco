@@ -7,6 +7,7 @@ import type { MediaRecord } from "@/lib/siteApi";
 import { FormHeader, Input, SaveButton, Textarea } from "./AdminCmsUi";
 import GalleryWithThumbnail from "./GalleryWithThumbnail";
 import NewsRichTextEditor from "./NewsRichTextEditor";
+import NewsDocumentImporter from "./NewsDocumentImporter";
 
 type NewsEditorFormProps = {
   value: NewsItem;
@@ -40,11 +41,11 @@ export default function NewsEditorForm({
   onDirtyChange,
 }: NewsEditorFormProps) {
   const [language, setLanguage] = useState<"vi" | "en">("vi");
-  const [inlineBusy, setInlineBusy] = useState({ vi: false, en: false, gallery: false });
+  const [inlineBusy, setInlineBusy] = useState({ vi: false, en: false, gallery: false, document: false });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const initialValue = useRef(JSON.stringify(value));
   const dirty = JSON.stringify(value) !== initialValue.current;
-  const mediaBusy = inlineBusy.vi || inlineBusy.en || inlineBusy.gallery;
+  const mediaBusy = inlineBusy.vi || inlineBusy.en || inlineBusy.gallery || inlineBusy.document;
 
   useEffect(() => { onDirtyChange?.(dirty); }, [dirty, onDirtyChange]);
   useEffect(() => {
@@ -70,6 +71,13 @@ export default function NewsEditorForm({
   return (
     <div className="space-y-5">
       <FormHeader title="Tin tức" onDelete={onDelete} />
+      <NewsDocumentImporter
+        value={value}
+        token={token}
+        onChange={onChange}
+        onUploaded={onUploaded}
+        onBusyChange={(document) => setInlineBusy((current) => ({ ...current, document }))}
+      />
       <div><Input label="Tiêu đề" value={value.title} onChange={onTitleChange} />{errors.title && <p className="mt-1 text-xs font-semibold text-red-600">{errors.title}</p>}</div>
       <Input label="Tiêu đề EN" value={value.titleEn} onChange={(titleEn) => onChange({ ...value, titleEn })} />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
