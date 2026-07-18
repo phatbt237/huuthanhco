@@ -1,7 +1,9 @@
 import { CMS_API_BASE_URL } from "@/lib/siteApi";
+import { readJsonBody, RequestBodyTooLargeError } from "@/lib/server/requestSecurity";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+const MAX_LOGIN_REQUEST_SIZE = 8 * 1024;
 
 async function forwardAuthResponse(response: Response) {
   return new Response(await response.text(), {
@@ -14,7 +16,15 @@ async function forwardAuthResponse(response: Response) {
 }
 
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => ({}))) as { email?: string; password?: string };
+  let body: { email?: string; password?: string };
+  try {
+    body = await readJsonBody(request, MAX_LOGIN_REQUEST_SIZE);
+  } catch (error) {
+    if (error instanceof RequestBodyTooLargeError) {
+      return Response.json({ error: "Dữ liệu đăng nhập quá lớn." }, { status: 413 });
+    }
+    return Response.json({ error: "Dữ liệu đăng nhập không hợp lệ." }, { status: 400 });
+  }
 
   const external = await fetch(`${CMS_API_BASE_URL}/api/auth/login`, {
     method: "POST",

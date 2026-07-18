@@ -1,10 +1,20 @@
 import { CMS_API_BASE_URL } from "@/lib/siteApi";
+import { readRequestBytes, RequestBodyTooLargeError } from "@/lib/server/requestSecurity";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+const MAX_LOGOUT_REQUEST_SIZE = 16 * 1024;
 
 export async function POST(request: Request) {
-  const body = await request.text();
+  let body: string;
+  try {
+    body = new TextDecoder().decode(await readRequestBytes(request, MAX_LOGOUT_REQUEST_SIZE));
+  } catch (error) {
+    if (error instanceof RequestBodyTooLargeError) {
+      return Response.json({ error: "Dữ liệu đăng xuất quá lớn." }, { status: 413 });
+    }
+    return Response.json({ error: "Dữ liệu đăng xuất không hợp lệ." }, { status: 400 });
+  }
   const external = await fetch(`${CMS_API_BASE_URL}/api/auth/logout`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

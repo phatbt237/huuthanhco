@@ -4,11 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight, Home, Link2, Share2, X } from "lucide-react";
 import { mediaFileUrl } from "@/lib/siteApi";
-import { news } from "@/data/news";
 import type { NewsItem } from "@/data/news";
 import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById } from "@/lib/cmsContent";
 import { useCmsContent } from "@/lib/useCmsContent";
 import { getNewsDetailHref, getNewsSlug } from "@/lib/news";
 import NewsRichContent from "@/components/news/NewsRichContent";
@@ -24,7 +22,7 @@ export default function NewsDetailPage({
 }) {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent(undefined, !item);
-  const allNews = mergeById(news, cmsContent.news, true);
+  const allNews = cmsContent.news;
   const activeItem = item ?? allNews.find((newsItem) => getNewsSlug(newsItem) === slug || newsItem.id === slug);
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);

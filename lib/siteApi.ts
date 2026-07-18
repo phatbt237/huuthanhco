@@ -331,11 +331,31 @@ export type VimeoNormalization = {
 };
 
 export async function normalizeVimeo(token: string, url: string) {
-  return requestJson<VimeoNormalization>("/api/media/vimeo/normalize", {
+  const normalized = await requestJson<VimeoNormalization>("/api/media/vimeo/normalize", {
     method: "POST",
     headers: authHeaders(token),
     body: JSON.stringify({ url }),
   });
+
+  if (normalized.provider !== "vimeo" || !/^\d{6,12}$/.test(normalized.videoId)) {
+    throw new Error("Phản hồi Vimeo không hợp lệ.");
+  }
+
+  const playerUrl = new URL(normalized.playerUrl);
+  if (
+    playerUrl.protocol !== "https:"
+    || playerUrl.hostname !== "player.vimeo.com"
+    || playerUrl.pathname !== `/video/${normalized.videoId}`
+  ) {
+    throw new Error("Địa chỉ trình phát Vimeo không hợp lệ.");
+  }
+
+  const hash = normalized.hash || playerUrl.searchParams.get("h") || undefined;
+  if (hash && !/^[A-Za-z0-9_-]{6,64}$/.test(hash)) {
+    throw new Error("Hash Vimeo không hợp lệ.");
+  }
+
+  return { ...normalized, hash };
 }
 
 export async function createProject(token: string, data: Project) {

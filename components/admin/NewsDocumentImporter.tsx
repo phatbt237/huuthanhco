@@ -77,7 +77,7 @@ export default function NewsDocumentImporter({
     setWarnings([]);
     setProgress("Đang tải tài liệu từ Google Docs…");
     try {
-      const file = await downloadGoogleDocx(googleDocsUrl.trim());
+      const file = await downloadGoogleDocx(googleDocsUrl.trim(), token);
       setIsImporting(false);
       onBusyChange?.(false);
       await importFile(file);

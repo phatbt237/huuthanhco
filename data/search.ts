@@ -1,6 +1,5 @@
 import { equipment } from "@/data/equipment";
 import type { NewsItem } from "@/data/news";
-import { news } from "@/data/news";
 import type { Project } from "@/data/projects";
 import { projects } from "@/data/projects";
 import { getProjectDetailHref } from "@/lib/projects";
@@ -178,7 +177,6 @@ export function searchSite(query: string, lang: Lang, extras?: { projects?: Proj
     ...baseRawSearchItems,
     ...projectItems.map(projectToSearchItem),
     ...(legacyContentFallbackEnabled ? equipment.map(equipmentToSearchItem) : []),
-    ...(legacyContentFallbackEnabled ? news.map(newsToSearchItem) : []),
     ...(extras?.news ?? []).map(newsToSearchItem),
   ];
 

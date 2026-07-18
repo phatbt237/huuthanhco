@@ -140,10 +140,13 @@ export async function importNewsDocx({
   };
 }
 
-export async function downloadGoogleDocx(url: string) {
+export async function downloadGoogleDocx(url: string, token: string) {
   const response = await fetch("/api/news/import-google-doc", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify({ url }),
   });
   if (!response.ok) {

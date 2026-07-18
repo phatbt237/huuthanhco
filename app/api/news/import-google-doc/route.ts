@@ -1,9 +1,16 @@
+import { authenticateAdminRequest } from "@/lib/server/adminRouteAuth";
+import { readJsonBody, RequestBodyTooLargeError } from "@/lib/server/requestSecurity";
+
 const GOOGLE_DOC_PATTERN = /^https:\/\/docs\.google\.com\/document\/d\/([A-Za-z0-9_-]+)(?:\/|$)/;
 const MAX_DOCX_SIZE = 20 * 1024 * 1024;
+const MAX_REQUEST_SIZE = 4 * 1024;
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as { url?: unknown };
+    const auth = await authenticateAdminRequest(request);
+    if (auth.response) return auth.response;
+
+    const body = await readJsonBody<{ url?: unknown }>(request, MAX_REQUEST_SIZE);
     const url = typeof body.url === "string" ? body.url.trim() : "";
     const match = url.match(GOOGLE_DOC_PATTERN);
     if (!match) return Response.json({ error: "Link Google Docs không hợp lệ." }, { status: 400 });
@@ -35,7 +42,12 @@ export async function POST(request: Request) {
       clearTimeout(timeout);
     }
   } catch (error) {
-    const message = error instanceof Error && error.name === "AbortError" ? "Google Docs phản hồi quá lâu." : "Không thể xử lý link Google Docs.";
-    return Response.json({ error: message }, { status: 400 });
+    if (error instanceof RequestBodyTooLargeError) {
+      return Response.json({ error: "Dữ liệu yêu cầu quá lớn." }, { status: 413 });
+    }
+    const message = error instanceof Error && error.name === "AbortError"
+      ? "Google Docs phản hồi quá lâu."
+      : "Không thể xử lý link Google Docs.";
+    return Response.json({ error: message }, { status: 400, headers: { "Cache-Control": "no-store" } });
   }
 }

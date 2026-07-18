@@ -5,6 +5,23 @@ import { mediaFileUrl } from "@/lib/siteApi";
 
 const VIDEO_ID_PATTERN = /^\d{6,12}$/;
 const VIDEO_HASH_PATTERN = /^[A-Za-z0-9_-]{6,64}$/;
+const BLOCKED_TAGS = new Set([
+  "audio", "base", "button", "canvas", "embed", "form", "iframe", "input", "link", "math", "meta",
+  "object", "option", "script", "select", "source", "style", "svg", "textarea", "video",
+]);
+
+function stripUnsafeAttributes(node: Element) {
+  for (const name of Object.keys(node.attribs)) {
+    if (/^on/i.test(name) || ["srcdoc", "formaction", "xmlns"].includes(name.toLowerCase())) {
+      delete node.attribs[name];
+    }
+  }
+
+  const style = node.attribs.style;
+  if (style && /(?:expression\s*\(|url\s*\(|@import|-moz-binding)/i.test(style)) {
+    delete node.attribs.style;
+  }
+}
 
 function textFromNode(node: DOMNode | { type: string; data?: string; children?: unknown[] }): string {
   if (node.type === "text") return node.data ?? "";
@@ -66,7 +83,8 @@ export default function NewsRichContent({ content, className = "" }: { content: 
             replace(domNode) {
               if (!(domNode instanceof Element)) return;
               const tagName = domNode.name.toLowerCase();
-              if (["script", "iframe", "object", "embed", "style"].includes(tagName)) return <></>;
+              if (BLOCKED_TAGS.has(tagName)) return <></>;
+              stripUnsafeAttributes(domNode);
 
               if (tagName === "p") {
                 const meaningfulChildren = domNode.children.filter(
@@ -99,6 +117,12 @@ export default function NewsRichContent({ content, className = "" }: { content: 
               if (tagName === "a") {
                 const href = domNode.attribs.href ?? "";
                 if (!/^(https?:\/\/|mailto:|tel:|\/|#)/i.test(href)) return <>{domToReact(domNode.children as DOMNode[])}</>;
+                const opensNewTab = domNode.attribs.target === "_blank";
+                return (
+                  <a href={href} target={opensNewTab ? "_blank" : undefined} rel={opensNewTab ? "noopener noreferrer" : undefined}>
+                    {domToReact(domNode.children as DOMNode[])}
+                  </a>
+                );
               }
             },
           })}

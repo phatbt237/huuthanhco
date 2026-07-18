@@ -4,17 +4,16 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Search, ArrowRight, Home } from "lucide-react";
 import Link from "next/link";
-import { news } from "@/data/news";
 import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { mergeById, type CmsContent } from "@/lib/cmsContent";
+import type { CmsContent } from "@/lib/cmsContent";
 import { useCmsContent } from "@/lib/useCmsContent";
 import { getNewsDetailHref } from "@/lib/news";
 
 export default function NewsPage({ initialContent }: { initialContent?: CmsContent }) {
   const { lang, t } = useLanguage();
   const cmsContent = useCmsContent(initialContent);
-  const newsItems = mergeById(news, cmsContent.news, true).sort((a, b) => b.date.localeCompare(a.date));
+  const newsItems = [...cmsContent.news].sort((a, b) => b.date.localeCompare(a.date));
   const [query, setQuery] = useState("");
 
   const filtered = newsItems.filter((n) => {
