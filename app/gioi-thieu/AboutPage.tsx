@@ -28,7 +28,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <>
+    <main className="about-page-document overflow-x-clip">
       {/* Hero */}
       <section
         className="relative py-32 flex items-center"
@@ -93,7 +93,7 @@ export default function AboutPage() {
               <div className="mt-8 space-y-6 text-[17px] leading-8 text-slate-600">
                 <p>
                   {t(
-                    "Công ty Cổ phần Xây dựng Hữu Thành là một trong những doanh nghiệp hàng đầu về xây dựng các công trình giao thông hàng hải, cảng biển; cảng thủy nội địa; thủy lợi; đê, kè và các công trình cơ sở hạ tầng của Việt Nam, được thành lập năm 2009.",
+                    "Công ty Cổ phần Xây dựng Hữu Thành là một trong những doanh nghiệp hàng đầu về xây dựng các công trình giao thông hàng hải, cảng biển, cảng thủy nội địa, thủy lợi, đê kè và các công trình cơ sở hạ tầng của Việt Nam, được thành lập năm 2009.",
                     "Huu Thanh Construction Joint Stock Company, established in 2009, is one of Vietnam's leading enterprises in maritime transport works, seaports, inland waterway ports, hydraulic structures, dikes, embankments and infrastructure projects."
                   )}
                 </p>
@@ -285,6 +285,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }

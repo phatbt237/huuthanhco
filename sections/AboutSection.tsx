@@ -29,7 +29,7 @@ export default function AboutSection() {
   ];
 
   return (
-    <section className="py-24 bg-white">
+    <section className="about-section-document bg-white py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -60,8 +60,8 @@ export default function AboutSection() {
               label={t("Về chúng tôi", "About Us")}
               title={t("XÂY DỰNG NỀN TẢNG VỮNG CHẮC CHO TƯƠNG LAI", "BUILDING A SOLID FOUNDATION FOR THE FUTURE")}
               subtitle={t(
-                "Công ty Cổ phần Xây dựng Hữu Thành được thành lập năm 2009, chuyên thi công các công trình thủy công, cảng biển, kè sông và hạ tầng giao thông trải dài từ Bắc vào Nam.",
-                "Huu Thanh Construction Joint Stock Company was established in 2009, specializing in hydraulic engineering, port construction, riverbank reinforcement and transportation infrastructure projects across Vietnam from North to South."
+                "Công ty Cổ phần Xây dựng Hữu Thành là một trong những doanh nghiệp hàng đầu về xây dựng các công trình giao thông hàng hải, cảng biển, cảng thủy nội địa, thủy lợi, đê kè và các công trình cơ sở hạ tầng của Việt Nam, được thành lập năm 2009.",
+                "Established in 2009, Huu Thanh Construction Joint Stock Company is one of Vietnam's leading contractors for maritime transport works, seaports, inland waterway ports, irrigation works, dikes, embankments and infrastructure projects."
               )}
             />
 

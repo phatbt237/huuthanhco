@@ -87,6 +87,14 @@ textarea {
 .news-article-document :where(h1, h2, h3, h4, h5, h6, p, li, a, span, time, figcaption, blockquote, td, th, strong, em) {
   font-family: Arial, "Helvetica Neue", sans-serif !important;
 }
+.about-section-document,
+.about-section-document :where(h1, h2, h3, h4, h5, h6, p, li, a, span, strong, em, button) {
+  font-family: Arial, "Helvetica Neue", sans-serif !important;
+}
+.about-page-document,
+.about-page-document :where(h1, h2, h3, h4, h5, h6, p, li, a, span, time, figcaption, strong, em, button, input, select, textarea) {
+  font-family: Arial, "Helvetica Neue", sans-serif !important;
+}
 .news-rich-content .news-image, .news-rich-content .news-video { margin-block: 2rem; }
 .news-rich-content figcaption { margin-top: .75rem; text-align: center; color: #64748b; font-size: .875rem; line-height: 1.5; font-style: italic; }
 .news-rich-content--preview > * + * { margin-top: 1.5rem; }
