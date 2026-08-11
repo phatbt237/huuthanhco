@@ -1,25 +1,27 @@
 import type { AdminRole } from "@/lib/siteApi";
 
-type Tab = "news" | "projects" | "jobs" | "contacts" | "applications" | "accounts" | "settings";
+type Tab =
+  | "news" | "projects" | "jobs" | "contacts" | "applications" | "accounts" | "settings"
+  | "employees" | "equipment" | "attendance";
 
 const ACCESS: Record<AdminRole, Tab[]> = {
-  super_admin: ["news", "projects", "jobs", "contacts", "applications", "accounts", "settings"],
+  super_admin: ["news", "projects", "jobs", "contacts", "applications", "accounts", "settings", "employees", "equipment", "attendance"],
   editor:      ["news", "projects", "settings"],
-  hr:          ["jobs", "contacts", "applications"],
+  hr:          ["jobs", "contacts", "applications", "employees", "equipment", "attendance"],
   viewer:      ["contacts", "applications"],
 };
 
 const WRITE: Record<AdminRole, Tab[]> = {
-  super_admin: ["news", "projects", "jobs", "contacts", "applications", "accounts", "settings"],
+  super_admin: ["news", "projects", "jobs", "contacts", "applications", "accounts", "settings", "employees", "equipment", "attendance"],
   editor:      ["news", "projects", "settings"],
-  hr:          ["jobs", "contacts", "applications"],
+  hr:          ["jobs", "contacts", "applications", "employees", "equipment", "attendance"],
   viewer:      [],
 };
 
 const DELETE_PERM: Record<AdminRole, Tab[]> = {
-  super_admin: ["news", "projects", "jobs", "contacts", "applications", "accounts"],
+  super_admin: ["news", "projects", "jobs", "contacts", "applications", "accounts", "employees", "equipment", "attendance"],
   editor:      ["news", "projects"],
-  hr:          ["jobs"],
+  hr:          ["jobs", "employees", "equipment", "attendance"],
   viewer:      [],
 };
 

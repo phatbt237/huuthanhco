@@ -38,6 +38,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local HR/equipment/attendance runtime data (see lib/server/localStore.ts)
+/data/store/*.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

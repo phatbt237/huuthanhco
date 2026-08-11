@@ -6,7 +6,10 @@ import {
   AlertCircle,
   Briefcase,
   CheckCircle2,
+  Clock,
   FolderOpen,
+  HardHat,
+  IdCard,
   Inbox,
   Lock,
   Eye,
@@ -589,6 +592,13 @@ function AdminDashboard({ session, onLogout }: { session: Session; onLogout: () 
               {canAccess(role, "applications") && <SideNavItem icon={<UserCheck size={16} />} label="Ứng tuyển" active={activeTab === "applications"} onClick={() => changeTab("applications")} />}
             </NavSection>
           )}
+          {(canAccess(role, "employees") || canAccess(role, "equipment") || canAccess(role, "attendance")) && (
+            <NavSection label="Nhân sự & Thiết bị">
+              {canAccess(role, "employees") && <SideNavItem icon={<IdCard size={16} />} label="Nhân viên" active={activeTab === "employees"} onClick={() => changeTab("employees")} />}
+              {canAccess(role, "equipment") && <SideNavItem icon={<HardHat size={16} />} label="Thiết bị" active={activeTab === "equipment"} onClick={() => changeTab("equipment")} />}
+              {canAccess(role, "attendance") && <SideNavItem icon={<Clock size={16} />} label="Chấm công" active={activeTab === "attendance"} onClick={() => changeTab("attendance")} />}
+            </NavSection>
+          )}
           {(canAccess(role, "accounts") || canAccess(role, "settings")) && (
             <NavSection label="Hệ thống">
               {canAccess(role, "accounts") && <SideNavItem icon={<Users size={16} />} label="Tài khoản" active={activeTab === "accounts"} onClick={() => changeTab("accounts")} />}
@@ -863,6 +873,9 @@ function tabTitle(tab: Tab) {
   if (tab === "accounts") return "Quản lý tài khoản";
   if (tab === "contacts") return "Thông tin liên hệ";
   if (tab === "applications") return "Hồ sơ ứng tuyển";
+  if (tab === "employees") return "Quản lý nhân viên";
+  if (tab === "equipment") return "Quản lý thiết bị";
+  if (tab === "attendance") return "Chấm công";
   return "Cài đặt website";
 }
 
