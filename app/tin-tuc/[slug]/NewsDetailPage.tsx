@@ -130,7 +130,7 @@ export default function NewsDetailPage({
         <div className="mx-auto grid max-w-[1600px] gap-10 px-4 pb-20 pt-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-12 lg:px-8 lg:pt-16">
           <article className="min-w-0">
             <header className="border-b border-slate-200 pb-7">
-              <h1 className="max-w-5xl text-left text-3xl font-bold uppercase leading-[1.24] text-[#173c7a] sm:text-4xl lg:text-[48px]">
+              <h1 className="max-w-5xl text-left text-3xl font-bold uppercase leading-[1.24] text-sky-800 sm:text-4xl lg:text-[48px]">
                 {title}
               </h1>
               <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-3 text-base text-slate-500">
@@ -139,7 +139,7 @@ export default function NewsDetailPage({
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 font-medium text-slate-800 transition hover:text-[#173c7a]"
+                  className="inline-flex items-center gap-2 font-medium text-slate-800 transition hover:text-sky-800"
                 >
                   <Share2 size={17} className="text-sky-500" />
                   Facebook
@@ -282,7 +282,7 @@ export default function NewsDetailPage({
                       />
                     </div>
                     <p className="mt-3 text-sm text-slate-400">{formatDate(newsItem.date)}</p>
-                    <h3 className="mt-2 text-lg font-normal leading-[1.35] text-[#173c7a] transition group-hover:text-sky-600">
+                    <h3 className="mt-2 text-lg font-normal leading-[1.35] text-sky-800 transition group-hover:text-sky-600">
                       {relatedTitle}
                     </h3>
                   </Link>

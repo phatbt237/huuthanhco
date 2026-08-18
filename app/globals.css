@@ -3,6 +3,22 @@
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
+  --brand-blue: #2982CB;
+}
+
+/* Primary Brand Blue standardization — all UI "sky" shades derive from --brand-blue (#2982CB). */
+@theme {
+  --color-sky-50: #f4f8fb;
+  --color-sky-100: #e7f1f9;
+  --color-sky-200: #c9e0f3;
+  --color-sky-300: #9bc6e9;
+  --color-sky-400: #5fa4dd;
+  --color-sky-500: #4294d7;
+  --color-sky-600: var(--brand-blue);
+  --color-sky-700: #216dab;
+  --color-sky-800: #195a8f;
+  --color-sky-900: #154a75;
+  --color-sky-950: #0d314f;
 }
 
 html {
@@ -71,11 +87,11 @@ textarea {
 .tiptap ul, .news-rich-content ul { list-style: disc; padding-left: 1.5rem; }
 .tiptap ol, .news-rich-content ol { list-style: decimal; padding-left: 1.5rem; }
 .tiptap li, .news-rich-content li { margin-top: .45rem; line-height: 1.75; }
-.tiptap blockquote, .news-rich-content blockquote { border-left: 4px solid #0284c7; background: #f0f9ff; padding: 1rem 1.25rem; color: #334155; font-style: italic; }
+.tiptap blockquote, .news-rich-content blockquote { border-left: 4px solid var(--brand-blue); background: var(--color-sky-50); padding: 1rem 1.25rem; color: #334155; font-style: italic; }
 .tiptap pre, .news-rich-content pre { overflow-x: auto; border-radius: .75rem; background: #0f172a; padding: 1rem; color: #e2e8f0; }
 .tiptap code, .news-rich-content code { border-radius: .25rem; background: #f1f5f9; padding: .12rem .3rem; font-size: .9em; }
 .tiptap pre code, .news-rich-content pre code { background: transparent; padding: 0; }
-.tiptap a, .news-rich-content a { color: #0369a1; text-decoration: underline; text-underline-offset: 3px; }
+.tiptap a, .news-rich-content a { color: var(--brand-blue); text-decoration: underline; text-underline-offset: 3px; }
 .tiptap img, .news-rich-content img { display: block; max-width: 100%; height: auto; margin-inline: auto; }
 .tiptap table, .news-rich-content table { width: 100%; border-collapse: collapse; display: block; overflow-x: auto; }
 .tiptap th, .tiptap td, .news-rich-content th, .news-rich-content td { min-width: 8rem; border: 1px solid #cbd5e1; padding: .65rem .8rem; text-align: left; }

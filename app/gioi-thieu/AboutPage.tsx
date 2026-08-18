@@ -70,21 +70,21 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <span className="inline-flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.18em] text-[#003b8f]">
-                <span className="h-5 w-1 rounded-full bg-[#003b8f]" aria-hidden="true" />
+              <span className="inline-flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.18em] text-sky-600">
+                <span className="h-5 w-1 rounded-full bg-sky-600" aria-hidden="true" />
                 {t("Tổng quan công ty", "Company Overview")}
               </span>
               <h2 className="mt-5 max-w-3xl text-[32px] font-extrabold uppercase leading-[1.08] sm:text-[40px] lg:text-[46px]">
                 {lang === "en" ? (
                   <>
                     <span className="block text-[#d71920]">Huu Thanh</span>
-                    <span className="block text-[#003b8f]">Construction Corporation</span>
+                    <span className="block text-sky-600">Construction Corporation</span>
                   </>
                 ) : (
                   <>
-                    <span className="block text-[#003b8f]">Công ty Cổ phần</span>
+                    <span className="block text-sky-600">Công ty Cổ phần</span>
                     <span className="block whitespace-nowrap">
-                      <span className="text-[#003b8f]">Xây dựng </span>
+                      <span className="text-sky-600">Xây dựng </span>
                       <span className="text-[#d71920]">Hữu Thành</span>
                     </span>
                   </>
