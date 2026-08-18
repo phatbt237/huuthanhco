@@ -42,7 +42,7 @@ export default function NewsPage({ initialContent }: { initialContent?: CmsConte
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-600 text-xs font-bold uppercase tracking-widest">
               {t("Cập nhật", "Updates")}
             </span>
             <h1 className="mt-4 text-4xl font-bold uppercase tracking-wide text-white md:text-5xl">
@@ -82,7 +82,7 @@ export default function NewsPage({ initialContent }: { initialContent?: CmsConte
                   placeholder={t("Tìm kiếm tin tức...", "Search news...")}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm"
+                  className="w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-600 text-slate-700 text-sm"
                 />
               </div>
 

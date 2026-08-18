@@ -92,7 +92,7 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-600 text-xs font-bold uppercase tracking-widest">
               {t("Gia nhập đội ngũ", "Join Our Team")}
             </span>
             <h1 className="mt-4 text-4xl font-bold uppercase tracking-wide text-white md:text-5xl">
@@ -131,14 +131,14 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                     </h2>
                     <div className="flex flex-wrap gap-4 text-sm text-slate-500">
                       <span className="flex items-center gap-1.5">
-                        <MapPin size={14} className="text-sky-500" /> {job.location}
+                        <MapPin size={14} className="text-sky-600" /> {job.location}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <Briefcase size={14} className="text-sky-500" />
+                        <Briefcase size={14} className="text-sky-600" />
                         {lang === "vi" ? job.type : job.typeEn}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <DollarSign size={14} className="text-sky-500" /> {job.salary}
+                        <DollarSign size={14} className="text-sky-600" /> {job.salary}
                       </span>
                     </div>
                   </div>
@@ -182,10 +182,10 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                             <div className="space-y-3">
                               {applicationError && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{applicationError}</div>}
                               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                <input required value={applicationForm.fullName} onChange={(e) => setApplicationForm({ ...applicationForm, fullName: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-500" placeholder={t("Họ và tên", "Full name")} />
-                                <input required value={applicationForm.phone} onChange={(e) => setApplicationForm({ ...applicationForm, phone: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-500" placeholder={t("Số điện thoại", "Phone")} />
+                                <input required value={applicationForm.fullName} onChange={(e) => setApplicationForm({ ...applicationForm, fullName: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-600" placeholder={t("Họ và tên", "Full name")} />
+                                <input required value={applicationForm.phone} onChange={(e) => setApplicationForm({ ...applicationForm, phone: e.target.value })} className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-600" placeholder={t("Số điện thoại", "Phone")} />
                               </div>
-                              <input type="email" value={applicationForm.email} onChange={(e) => setApplicationForm({ ...applicationForm, email: e.target.value })} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-500" placeholder="Email" />
+                              <input type="email" value={applicationForm.email} onChange={(e) => setApplicationForm({ ...applicationForm, email: e.target.value })} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-600" placeholder="Email" />
                               <label className="block rounded-lg border border-dashed border-slate-300 bg-white px-3 py-3 text-sm text-slate-600">
                                 <span className="mb-2 block font-semibold text-slate-800">{t("Tải file CV", "Upload CV file")}</span>
                                 <input
@@ -209,7 +209,7 @@ export default function CareersPage({ initialContent }: { initialContent?: CmsCo
                                   </div>
                                 )}
                               </label>
-                              <textarea value={applicationForm.message} onChange={(e) => setApplicationForm({ ...applicationForm, message: e.target.value })} rows={3} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-500" placeholder={t("Lời nhắn", "Message")} />
+                              <textarea value={applicationForm.message} onChange={(e) => setApplicationForm({ ...applicationForm, message: e.target.value })} rows={3} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-600" placeholder={t("Lời nhắn", "Message")} />
                               <button
                                 disabled={isSubmitting || !applicationForm.fullName || !applicationForm.phone}
                                 onClick={() => void handleApply(job)}

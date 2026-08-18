@@ -108,7 +108,7 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
           <button
             onClick={prev}
             disabled={false}
-            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-500 hover:text-sky-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-600 hover:text-sky-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
           >
             <ChevronLeft size={18} />
           </button>
@@ -129,7 +129,7 @@ export default function ProjectsSection({ initialContent }: { initialContent?: C
           <button
             onClick={next}
             disabled={false}
-            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-500 hover:text-sky-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-600 hover:text-sky-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
           >
             <ChevronRight size={18} />
           </button>

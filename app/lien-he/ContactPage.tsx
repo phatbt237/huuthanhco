@@ -90,7 +90,7 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-600 text-xs font-bold uppercase tracking-widest">
               {t("Liên hệ", "Contact")}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
@@ -193,7 +193,7 @@ export default function ContactPage() {
                         type="text"
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm"
+                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-600 text-slate-700 text-sm"
                         placeholder={t("Nguyễn Văn A", "John Smith")}
                       />
                     </div>
@@ -206,7 +206,7 @@ export default function ContactPage() {
                         type="tel"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm"
+                        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-600 text-slate-700 text-sm"
                         placeholder={getSetting(settings, "company.phone")}
                       />
                     </div>
@@ -217,7 +217,7 @@ export default function ContactPage() {
                       type="email"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm"
+                      className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-600 text-slate-700 text-sm"
                       placeholder="email@example.com"
                     />
                   </div>
@@ -230,7 +230,7 @@ export default function ContactPage() {
                       rows={5}
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-500 text-slate-700 text-sm resize-none"
+                      className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-600/30 focus:border-sky-600 text-slate-700 text-sm resize-none"
                       placeholder={t("Mô tả dự án bạn cần tư vấn...", "Describe the project you need consultation for...")}
                     />
                   </div>

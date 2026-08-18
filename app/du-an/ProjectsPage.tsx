@@ -92,7 +92,7 @@ export default function ProjectsPage({ initialContent }: { initialContent?: CmsC
                 <select
                   value={activeCategory}
                   onChange={(event) => setActiveCategory(event.target.value)}
-                  className="h-14 w-full border border-slate-200 bg-white px-5 text-base font-semibold text-slate-700 outline-none transition-colors focus:border-sky-500"
+                  className="h-14 w-full border border-slate-200 bg-white px-5 text-base font-semibold text-slate-700 outline-none transition-colors focus:border-sky-600"
                 >
                   {categories.map((cat) => (
                     <option key={cat.key} value={cat.key}>
@@ -108,7 +108,7 @@ export default function ProjectsPage({ initialContent }: { initialContent?: CmsC
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder={t("Tìm kiếm", "Search")}
-                  className="h-14 w-full border border-slate-200 bg-white px-5 pr-16 text-base text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-sky-500"
+                  className="h-14 w-full border border-slate-200 bg-white px-5 pr-16 text-base text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-sky-600"
                 />
                 <span className="absolute right-0 top-0 flex h-14 w-16 items-center justify-center bg-sky-600 text-white">
                   <Search size={22} />

@@ -82,7 +82,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-white/60 hover:text-sky-500 text-sm transition-colors duration-200 flex items-center gap-2"
+                    className="text-white/60 hover:text-sky-600 text-sm transition-colors duration-200 flex items-center gap-2"
                   >
                     <span className="w-1 h-1 rounded-full bg-sky-600 inline-block" />
                     {link.label}
@@ -114,28 +114,28 @@ export default function Footer() {
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <Building2 size={16} className="text-sky-500 mt-0.5 shrink-0" />
+                <Building2 size={16} className="text-sky-600 mt-0.5 shrink-0" />
                 <span className="text-white/60 text-sm">
                   <span className="block font-semibold text-white/75">{t("Trụ sở", "Head Office")}</span>
                   {headOffice}
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin size={16} className="text-sky-500 mt-0.5 shrink-0" />
+                <MapPin size={16} className="text-sky-600 mt-0.5 shrink-0" />
                 <span className="text-white/60 text-sm">
                   <span className="block font-semibold text-white/75">{t("Văn phòng giao dịch", "Transaction Office")}</span>
                   {transactionOffice}
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone size={16} className="text-sky-500 shrink-0" />
-                <a href={`tel:${String(getSetting(settings, "company.phone")).replace(/\D/g, "")}`} className="text-white/60 hover:text-sky-500 text-sm transition-colors">
+                <Phone size={16} className="text-sky-600 shrink-0" />
+                <a href={`tel:${String(getSetting(settings, "company.phone")).replace(/\D/g, "")}`} className="text-white/60 hover:text-sky-600 text-sm transition-colors">
                   {getSetting(settings, "company.phone")}
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail size={16} className="text-sky-500 shrink-0" />
-                <a href={`mailto:${getSetting(settings, "company.email")}`} className="text-white/60 hover:text-sky-500 text-sm transition-colors">
+                <Mail size={16} className="text-sky-600 shrink-0" />
+                <a href={`mailto:${getSetting(settings, "company.email")}`} className="text-white/60 hover:text-sky-600 text-sm transition-colors">
                   {getSetting(settings, "company.email")}
                 </a>
               </li>

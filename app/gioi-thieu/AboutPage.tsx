@@ -44,7 +44,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-600 text-xs font-bold uppercase tracking-widest">
               {t("Về chúng tôi", "About Us")}
             </span>
             <h1 className="mt-4 text-4xl font-bold uppercase leading-tight tracking-wide text-white md:text-5xl">

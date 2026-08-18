@@ -107,11 +107,11 @@ export default function ProjectDetailPage({
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex flex-wrap items-center gap-2 text-sm text-white/60">
-            <Link href="/" className="hover:text-sky-500">
+            <Link href="/" className="hover:text-sky-600">
               {t("Trang chủ", "Home")}
             </Link>
             <span>/</span>
-            <Link href="/du-an" className="hover:text-sky-500">
+            <Link href="/du-an" className="hover:text-sky-600">
               {t("Dự án", "Projects")}
             </Link>
             <span>/</span>
@@ -124,7 +124,7 @@ export default function ProjectDetailPage({
             transition={{ duration: 0.55 }}
             className="max-w-4xl"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-sky-500/40 bg-sky-600/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-sky-300">
+            <span className="inline-flex items-center gap-2 rounded-full border border-sky-600/40 bg-sky-600/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-sky-600">
               {category}
             </span>
             <h1 className="mt-6 text-4xl font-black leading-tight text-white md:text-6xl">
@@ -170,7 +170,7 @@ export default function ProjectDetailPage({
                       <button
                         onClick={() => setGalleryPage((p) => p - 1)}
                         disabled={galleryPage === 0}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-sky-500 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-30"
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-sky-600 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-30"
                       >
                         <ChevronLeft size={16} />
                       </button>
@@ -180,7 +180,7 @@ export default function ProjectDetailPage({
                       <button
                         onClick={() => setGalleryPage((p) => p + 1)}
                         disabled={galleryPage === totalPages - 1}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-sky-500 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-30"
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-sky-600 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-30"
                       >
                         <ChevronRight size={16} />
                       </button>
@@ -304,7 +304,7 @@ export default function ProjectDetailPage({
 
             <Link
               href="/du-an"
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 py-4 text-sm font-black text-slate-700 transition-colors hover:border-sky-500 hover:text-sky-600"
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 py-4 text-sm font-black text-slate-700 transition-colors hover:border-sky-600 hover:text-sky-600"
             >
               <ArrowLeft size={16} />
               {t("Quay lại danh sách dự án", "Back to Projects")}
@@ -325,7 +325,7 @@ export default function ProjectDetailPage({
                   {t("Công trình cùng lĩnh vực", "Works in the Same Sector")}
                 </h2>
               </div>
-              <Link href="/du-an" className="text-sm font-black text-sky-600 hover:text-sky-700">
+              <Link href="/du-an" className="text-sm font-black text-sky-600">
                 {t("Xem tất cả", "View All")}
               </Link>
             </div>

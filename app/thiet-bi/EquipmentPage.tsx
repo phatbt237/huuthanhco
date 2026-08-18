@@ -27,7 +27,7 @@ export default function EquipmentPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-sky-500 text-xs font-bold uppercase tracking-widest">
+            <span className="text-sky-600 text-xs font-bold uppercase tracking-widest">
               {t("Phương tiện & Máy móc", "Vehicles & Machinery")}
             </span>
             <h1 className="mt-4 text-4xl font-bold uppercase tracking-wide text-white md:text-5xl">

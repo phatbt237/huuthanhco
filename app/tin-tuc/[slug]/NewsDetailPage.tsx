@@ -96,7 +96,7 @@ export default function NewsDetailPage({
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/92 via-slate-950/70 to-slate-950/25" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <span className="text-xs font-bold uppercase tracking-widest text-sky-500">
+          <span className="text-xs font-bold uppercase tracking-widest text-sky-600">
             {t("Cập nhật", "Updates")}
           </span>
           <h2 className="mt-4 text-4xl font-bold uppercase tracking-wide text-white md:text-5xl">
@@ -130,7 +130,7 @@ export default function NewsDetailPage({
         <div className="mx-auto grid max-w-[1600px] gap-10 px-4 pb-20 pt-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-12 lg:px-8 lg:pt-16">
           <article className="min-w-0">
             <header className="border-b border-slate-200 pb-7">
-              <h1 className="max-w-5xl text-left text-3xl font-bold uppercase leading-[1.24] text-sky-800 sm:text-4xl lg:text-[48px]">
+              <h1 className="max-w-5xl text-left text-3xl font-bold uppercase leading-[1.24] text-sky-600 sm:text-4xl lg:text-[48px]">
                 {title}
               </h1>
               <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-3 text-base text-slate-500">
@@ -139,9 +139,9 @@ export default function NewsDetailPage({
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 font-medium text-slate-800 transition hover:text-sky-800"
+                  className="inline-flex items-center gap-2 font-medium text-slate-800 transition hover:text-sky-600"
                 >
-                  <Share2 size={17} className="text-sky-500" />
+                  <Share2 size={17} className="text-sky-600" />
                   Facebook
                 </a>
               </div>
@@ -205,7 +205,7 @@ export default function NewsDetailPage({
               <button
                 type="button"
                 onClick={copyArticleLink}
-                className="inline-flex items-center gap-2 font-bold text-sky-700 hover:text-sky-900"
+                className="inline-flex items-center gap-2 font-bold text-sky-600"
               >
                 {copied ? <Check size={16} /> : <Link2 size={16} />}
                 {copied ? t("Đã sao chép", "Copied") : t("Sao chép liên kết", "Copy link")}
@@ -282,7 +282,7 @@ export default function NewsDetailPage({
                       />
                     </div>
                     <p className="mt-3 text-sm text-slate-400">{formatDate(newsItem.date)}</p>
-                    <h3 className="mt-2 text-lg font-normal leading-[1.35] text-sky-800 transition group-hover:text-sky-600">
+                    <h3 className="mt-2 text-lg font-normal leading-[1.35] text-sky-600 transition">
                       {relatedTitle}
                     </h3>
                   </Link>

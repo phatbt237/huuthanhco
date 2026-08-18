@@ -209,7 +209,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
             onClick={() => goTo(i)}
             className={`transition-all duration-300 rounded-full ${
               i === current
-                ? "w-6 h-2 bg-sky-500"
+                ? "w-6 h-2 bg-sky-600"
                 : "w-2 h-2 bg-white/40 hover:bg-white/70"
             }`}
             aria-label={`Slide ${i + 1}`}

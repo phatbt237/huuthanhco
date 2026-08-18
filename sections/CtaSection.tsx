@@ -23,13 +23,13 @@ export default function CtaSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
-          <span className="inline-block text-sky-500 text-xs font-bold uppercase tracking-widest mb-6 border border-sky-500/30 px-4 py-2 rounded-full">
+          <span className="inline-block text-sky-600 text-xs font-bold uppercase tracking-widest mb-6 border border-sky-600/30 px-4 py-2 rounded-full">
             {t("Hợp tác với chúng tôi", "Partner With Us")}
           </span>
           <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
             {t("Đồng hành cùng những", "Building Together for")}
             <br />
-            <span className="text-sky-500">
+            <span className="text-sky-600">
               {t("công trình bền vững", "a Sustainable Future")}
             </span>
           </h2>

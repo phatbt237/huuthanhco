@@ -123,7 +123,7 @@ export default function CompanyProfileFlipbook() {
             <a
               href={PDF_URL}
               download
-              className="inline-flex items-center justify-center gap-2 rounded border border-slate-300 px-5 py-3 text-sm font-bold text-slate-800 transition-colors hover:border-sky-600 hover:text-sky-700"
+              className="inline-flex items-center justify-center gap-2 rounded border border-slate-300 px-5 py-3 text-sm font-bold text-slate-800 transition-colors hover:border-sky-600 hover:text-sky-600"
             >
               <Download size={18} />
               {t("Tải hồ sơ", "Download")}

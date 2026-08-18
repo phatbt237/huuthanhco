@@ -122,7 +122,7 @@ export default function GroundbreakingCarousel() {
       <button
         type="button"
         onClick={() => move(-1)}
-        className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/40 bg-slate-950/35 text-white opacity-100 backdrop-blur-sm transition hover:bg-slate-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+        className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/40 bg-slate-950/35 text-white opacity-100 backdrop-blur-sm transition hover:bg-slate-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
         aria-label={t("Ảnh trước", "Previous image")}
       >
         <ChevronLeft size={22} aria-hidden="true" />
@@ -131,7 +131,7 @@ export default function GroundbreakingCarousel() {
       <button
         type="button"
         onClick={() => move(1)}
-        className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/40 bg-slate-950/35 text-white opacity-100 backdrop-blur-sm transition hover:bg-slate-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+        className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md border border-white/40 bg-slate-950/35 text-white opacity-100 backdrop-blur-sm transition hover:bg-slate-950/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
         aria-label={t("Ảnh tiếp theo", "Next image")}
       >
         <ChevronRight size={22} aria-hidden="true" />
@@ -146,7 +146,7 @@ export default function GroundbreakingCarousel() {
             key={slide.src}
             type="button"
             onClick={() => goTo(index)}
-            className={`h-2.5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
+            className={`h-2.5 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 ${
               index === current ? "w-7 bg-sky-600" : "w-2.5 bg-white/75 hover:bg-white"
             }`}
             aria-label={t(`Xem ảnh ${index + 1}`, `View image ${index + 1}`)}

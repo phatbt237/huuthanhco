@@ -23,7 +23,7 @@ export default function SearchPage() {
           style={{ backgroundImage: "url('/images/hero/Flash-5_132827290406613154.jpg')" }}
         />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <span className="text-xs font-bold uppercase tracking-[0.25em] text-sky-500">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-sky-600">
             {t("Tìm kiếm", "Search")}
           </span>
           <h1 className="mt-4 text-4xl font-bold text-white md:text-5xl">

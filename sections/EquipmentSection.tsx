@@ -95,7 +95,7 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
         <div className="flex items-center justify-center gap-4 mt-10">
           <button
             onClick={prev}
-            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-500 hover:text-sky-600 transition-all duration-200"
+            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-600 hover:text-sky-600 transition-all duration-200"
           >
             <ChevronLeft size={18} />
           </button>
@@ -115,7 +115,7 @@ export default function EquipmentSection({ initialSettings }: { initialSettings?
 
           <button
             onClick={next}
-            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-500 hover:text-sky-600 transition-all duration-200"
+            className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-sky-600 hover:text-sky-600 transition-all duration-200"
           >
             <ChevronRight size={18} />
           </button>
