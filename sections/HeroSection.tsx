@@ -193,7 +193,7 @@ export default function HeroSection({ initialSettings }: { initialSettings?: Set
             { value: "200+", label: t("Thiết bị công trình", "Equipment Units") },
           ].map((stat) => (
             <div key={stat.label} className="min-w-0 border-l border-white/25 pl-3 sm:pl-4">
-              <div className="text-2xl font-bold text-sky-300 md:text-3xl">{stat.value}</div>
+              <div className="text-2xl font-bold text-sky-600 md:text-3xl">{stat.value}</div>
               <div className="mt-1 text-[11px] text-white/70">{stat.label}</div>
             </div>
           ))}
