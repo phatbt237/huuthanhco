@@ -55,7 +55,7 @@ export default function Footer() {
             </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               {t(
-                "Công ty Cổ phần Xây dựng Hữu Thành - Đơn vị thi công công trình thủy công, cảng biển và hạ tầng uy tín tại Việt Nam.",
+                "Công ty Cổ phần Xây dựng Hữu Thành. Chuyên thi công các công trình thủy, cảng biển và hạ tầng trên toàn quốc.",
                 "Huu Thanh Construction Joint Stock Company — A trusted contractor for hydraulic works, port construction and infrastructure in Vietnam."
               )}
             </p>
