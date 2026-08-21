@@ -99,17 +99,17 @@ textarea {
 .tiptap .selectedCell { background: #fee2e2; }
 .tiptap .ProseMirror-selectednode { outline: 3px solid #fca5a5; outline-offset: 3px; }
 .news-rich-content { min-width: 0; overflow-wrap: anywhere; color: #334155; }
-.news-article-document { font-family: Arial, "Helvetica Neue", sans-serif; }
+.news-article-document { font-family: inherit; }
 .news-article-document :where(h1, h2, h3, h4, h5, h6, p, li, a, span, time, figcaption, blockquote, td, th, strong, em) {
-  font-family: Arial, "Helvetica Neue", sans-serif !important;
+  font-family: inherit !important;
 }
 .about-section-document,
 .about-section-document :where(h1, h2, h3, h4, h5, h6, p, li, a, span, strong, em, button) {
-  font-family: Arial, "Helvetica Neue", sans-serif !important;
+  font-family: inherit !important;
 }
 .about-page-document,
 .about-page-document :where(h1, h2, h3, h4, h5, h6, p, li, a, span, time, figcaption, strong, em, button, input, select, textarea) {
-  font-family: Arial, "Helvetica Neue", sans-serif !important;
+  font-family: inherit !important;
 }
 .news-rich-content .news-image, .news-rich-content .news-video { margin-block: 2rem; }
 .news-rich-content figcaption { margin-top: .75rem; text-align: center; color: #64748b; font-size: .875rem; line-height: 1.5; font-style: italic; }
