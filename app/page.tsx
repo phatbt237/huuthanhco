@@ -15,7 +15,9 @@ import { SITE_URL } from "@/lib/siteMetadata";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Công ty Cổ phần Xây dựng Hữu Thành | Trang chủ",
+  title: "Công ty xây dựng cầu cảng, cảng biển | Hữu Thành",
+  description:
+    "Công ty Cổ phần Xây dựng Hữu Thành chuyên thi công cầu cảng, cảng biển, công trình hàng hải, thủy công và hạ tầng kỹ thuật trên toàn quốc.",
   alternates: {
     canonical: SITE_URL,
   },

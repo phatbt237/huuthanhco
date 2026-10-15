@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCmsContent } from "@/lib/useCmsContent";
 import { getNewsDetailHref, getNewsSlug } from "@/lib/news";
+import { absoluteSiteUrl } from "@/lib/siteMetadata";
 import NewsRichContent from "@/components/news/NewsRichContent";
 
 export default function NewsDetailPage({
@@ -73,7 +74,7 @@ export default function NewsDetailPage({
     activeItem.imageCaption ||
     activeItem.imageCaptionEn ||
     title;
-  const canonicalUrl = `https://huuthanhco.vercel.app${getNewsDetailHref(activeItem)}`;
+  const canonicalUrl = absoluteSiteUrl(getNewsDetailHref(activeItem));
   const galleryImages = Array.from(new Set([thumbnail, ...(activeItem.galleryImages ?? [])].filter(Boolean)));
   const additionalImages = galleryImages.slice(1);
   const hasInlineMedia = /<(?:img|figure)\b/i.test(content);

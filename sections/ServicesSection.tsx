@@ -21,7 +21,7 @@ export default function ServicesSection({ initialSettings }: { initialSettings?:
       nameEn: "Marine Transportation Works",
       description: "Thi công cảng biển, cảng nội địa, cầu cảng và các công trình phục vụ giao thông hàng hải.",
       descriptionEn: "Construction of seaports, inland ports, wharves and marine transportation facilities.",
-      href: "/du-an?loai=giao-thong-hang-hai",
+      href: "/thi-cong-cau-cang",
     },
     {
       ...serviceItems.find((service) => service.id === "5") ?? services[4],

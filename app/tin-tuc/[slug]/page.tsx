@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import NewsDetailPage from "./NewsDetailPage";
 import { fetchPublicCmsContent } from "@/lib/cmsContent";
-import { findNewsBySlug, getRelatedNews } from "@/lib/news";
+import { findNewsBySlug, getNewsDetailHref, getRelatedNews } from "@/lib/news";
+import { absoluteSiteUrl } from "@/lib/siteMetadata";
 
 type Props = PageProps<"/tin-tuc/[slug]">;
 
@@ -27,9 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: item.title,
     description: item.excerpt,
+    alternates: {
+      canonical: absoluteSiteUrl(getNewsDetailHref(item)),
+    },
     openGraph: {
       title: item.title,
       description: item.excerpt,
+      url: absoluteSiteUrl(getNewsDetailHref(item)),
       images: [item.thumbnail],
     },
   };

@@ -10,6 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: SITE_URL, lastModified, priority: 1 },
     { url: `${SITE_URL}/gioi-thieu`, lastModified, priority: 0.8 },
     { url: `${SITE_URL}/du-an`, lastModified, priority: 0.9 },
+    { url: `${SITE_URL}/thi-cong-cau-cang`, lastModified, priority: 0.9 },
     { url: `${SITE_URL}/thiet-bi`, lastModified, priority: 0.7 },
     { url: `${SITE_URL}/tin-tuc`, lastModified, priority: 0.8 },
     { url: `${SITE_URL}/tuyen-dung`, lastModified, priority: 0.6 },
