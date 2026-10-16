@@ -35,6 +35,7 @@ import ProjectEditorForm from "@/components/admin/ProjectEditorForm";
 import { canAccess, canDelete, canWrite, defaultTab } from "@/lib/permissions";
 import type { Job } from "@/data/jobs";
 import type { NewsItem } from "@/data/news";
+import { DEFAULT_NEWS_CATEGORY } from "@/lib/newsCategories";
 import type { Project } from "@/data/projects";
 import { fetchCmsContent, type CmsContent } from "@/lib/cmsContent";
 import {
@@ -72,8 +73,8 @@ const blankNews: NewsItem = {
   titleEn: "",
   slug: "",
   date: new Date().toISOString().slice(0, 10),
-  category: "Tin tức",
-  categoryEn: "News",
+  category: DEFAULT_NEWS_CATEGORY.value,
+  categoryEn: DEFAULT_NEWS_CATEGORY.valueEn,
   thumbnail: "",
   galleryImages: [],
   imageCaption: "",
