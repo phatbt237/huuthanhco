@@ -48,8 +48,10 @@ export const metadata: Metadata = {
     description: "Đơn vị thi công công trình thủy công, cảng biển và hạ tầng giao thông uy tín tại Việt Nam.",
     images: [
       {
-        url: absoluteSiteUrl("/images/hero/Flash-4_132827290261925965.jpg"),
-        alt: "Công ty Cổ phần Xây dựng Hữu Thành",
+        url: absoluteSiteUrl("/images/huu-thanh-logo.png?v=20261017"),
+        width: 1080,
+        height: 1080,
+        alt: "Logo Công ty Cổ phần Xây dựng Hữu Thành",
       },
     ],
   },
@@ -57,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Công ty Cổ phần Xây dựng Hữu Thành",
     description: "Đơn vị thi công công trình chuyên nghiệp tại Việt Nam.",
-    images: [absoluteSiteUrl("/images/hero/Flash-4_132827290261925965.jpg")],
+    images: [absoluteSiteUrl("/images/huu-thanh-logo.png?v=20261017")],
   },
   robots: {
     index: true,
